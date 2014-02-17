@@ -1,0 +1,11 @@
+Package: bib
+Type: Package
+Title: BIrd Breeding, field work planner
+Version: 1.0
+Date: 2014-Feb-17
+Author: Mihai Valcu
+Maintainer: Mihai Valcu <valcu@orn.mpg.de>
+Depends: methods, sp
+Suggests: knitr, shiny
+Description: Field work planner during breeding season in a population breeding in nest-boxes
+License: CC-BY
