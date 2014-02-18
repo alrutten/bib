@@ -1,0 +1,40 @@
+
+
+# BUGS & WARNINGS
+bugs <- function(year, warnings = FALSE) {
+	
+  ff = list.files(system.file('westerholz', 'SQL', package = 'bib'), full.names = TRUE)
+  
+	if(warnings) f = ff[grep('WARNINGS', ff)] else f = ff[grep('BUGS', ff)]
+	
+	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
+	d = d[!is.na(d$boxes), ]
+	
+	if(nrow(d) == 0) d = data.frame(info =   if(warnings)   "There are no warnings for now." else "There are no bugs for now." )
+	row.names(d) = NULL
+	d
+ }
+ 
+ 
+ 
+ 
+ # MESSAGES
+dataSummaries <- function(input, ...) { 
+	d = dataFetch(year = input$year, month  = input$month, day = input$day, 
+              stagesNFO = stagesInfo, stages = input$nestStages, 
+              safeHatchCheck = input$safeHatchCheck, 
+              youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
+        )
+	
+	# pred hatch: dist from laying date + CS date mean and range
+	d1 = d[which(d$maxClutch > 6), ]
+	x = round(difftime(d1$predHatchDate  ,  as.Date(d1$firstEggDate) + d1$maxClutch , units = 'days'))
+	
+	predhatch = paste('<strong style="color:sienna;text-decoration:underline;"> ', 
+					'Predicted days of incubation (day 0 = last egg day): Mean = ', round(mean(x, na.rm = T), 1), 'days', '; range= (', paste(round(range(x, na.rm = T),1), collapse = ','), ")"   , 
+					'</strong>' )
+	cat(predhatch)
+	
+	
+	
+	}
