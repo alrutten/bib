@@ -24,8 +24,9 @@ Q <- function(year, query, ...) {
   if(year == format(Sys.Date(), format = "%Y") ) db = 'FIELD_BTatWESTERHOLZ' else db = paste('FIELD', year, 'BTatWESTERHOLZ', sep = "_")
   
   CON = dbcon(user = "bt", password = "bt", database = db)
-  
+
   on.exit(  closeCon (CON)  )
+
   return(dbq(CON, query))
 }
 

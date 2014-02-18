@@ -76,7 +76,9 @@ dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, s
 	
 	
 	# adults
-	O$caught = ifelse( is.na(O$maleID) & is.na(O$femaleID),   'none', (ifelse (!is.na(O$maleID) & is.na(O$femaleID), 'male', (ifelse(!is.na(O$maleID) & is.na(O$femaleID), 'female', 'both')))))
+	O$caught = ifelse( is.na(O$maleID) & is.na(O$femaleID),   'none', (
+    ifelse (!is.na(O$maleID) & is.na(O$femaleID), 'male', (
+      ifelse(!is.na(O$maleID) & is.na(O$femaleID), 'female', 'both')))))
 	
 	# selected young age
 	  if(youngAgeYN == 'SELECT') {

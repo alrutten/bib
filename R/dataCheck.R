@@ -3,22 +3,22 @@
 # BUGS & WARNINGS
 bugs <- function(year, warnings = FALSE) {
 	
-  ff = list.files(system.file('westerholz', 'SQL', package = 'bib'), full.names = TRUE)
+  ff = list.files(system.file('SQL', package = 'bib'), full.names = TRUE)
   
 	if(warnings) f = ff[grep('WARNINGS', ff)] else f = ff[grep('BUGS', ff)]
 	
-	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
+  
+  strg = paste(readLines(con = f, warn = FALSE), collapse = " ")
+	d = Q(year = year, strg)
 	d = d[!is.na(d$boxes), ]
 	
 	if(nrow(d) == 0) d = data.frame(info =   if(warnings)   "There are no warnings for now." else "There are no bugs for now." )
 	row.names(d) = NULL
 	d
- }
+ } 
+  
  
- 
- 
- 
- # MESSAGES
+# MESSAGES
 dataSummaries <- function(input, ...) { 
 	d = dataFetch(year = input$year, month  = input$month, day = input$day, 
               stagesNFO = stagesInfo, stages = input$nestStages, 
@@ -35,6 +35,4 @@ dataSummaries <- function(input, ...) {
 					'</strong>' )
 	cat(predhatch)
 	
-	
-	
-	}
+}

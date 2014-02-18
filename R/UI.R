@@ -19,7 +19,7 @@ links <-function(nam) {
 
 westerholz <- function() {
   require(shiny)
-  shiny::runApp(system.file('UI', 'westerholz', package = 'bib'))
+  shiny::runApp(system.file('UI', package = 'bib'))
 }
 
 

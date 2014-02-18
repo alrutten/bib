@@ -65,7 +65,7 @@ shinyUI(pageWithSidebar(
 	),
    
    #help popup
-	includeHTML('data_entry_help.html'),
+	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
 
    
    hr(),
