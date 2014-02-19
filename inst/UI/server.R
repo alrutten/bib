@@ -4,10 +4,8 @@
 
 shinyServer( function(input, output) {
  	
-	load(system.file('map', 'spatial', package = 'bib'))
-	load(system.file('hatchEstimation', 'hatchDateGLM', package = 'bib'))
-
 	source( system.file('settings.R', package = 'bib') )
+
 
 	
   output$bugs <- renderTable({

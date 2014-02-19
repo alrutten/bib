@@ -1,4 +1,7 @@
 
+load(system.file('map', 'spatial', package = 'bib'))
+load(system.file('hatchEstimation', 'hatchDateGLM', package = 'bib'))
+
 # nest stages
 stagesInfo = data.frame(
   nest_stage = c( "U", "LT" , "R" ,  "B"  , "BC" , "C" , "LIN"  ,  "E"  , "WE", "Y", "NOTA", "WSP") ,
