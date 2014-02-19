@@ -30,9 +30,9 @@ dataSummaries <- function(input, ...) {
 	d1 = d[which(d$maxClutch > 6), ]
 	x = round(difftime(d1$predHatchDate  ,  as.Date(d1$firstEggDate) + d1$maxClutch , units = 'days'))
 	
-	predhatch = paste('<strong style="color:sienna;text-decoration:underline;"> ', 
+	predhatch = paste('<p> <strong style="color:sienna;text-decoration:underline;"> ', 
 					'Predicted days of incubation (day 0 = last egg day): Mean = ', round(mean(x, na.rm = T), 1), 'days', '; range= (', paste(round(range(x, na.rm = T),1), collapse = ','), ")"   , 
-					'</strong>' )
+					'</strong> </p> ' )
 	cat(predhatch)
 	
 }

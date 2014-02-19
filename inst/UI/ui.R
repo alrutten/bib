@@ -42,8 +42,8 @@ shinyUI(pageWithSidebar(
 	div(class="span1", icon("book")),
 	div(HTML( 	   
 		paste("<ul", 
-		 paste('class="nav nav-pills"><li class="active"><a href=', links("man"), 'target="_blank">Field manual </a> </li>'),
-		 paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Field journal </a></li>'), 
+		 paste('class="nav nav-pills"><li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
+		 paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
 		 paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
 		paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
 		  "</ul>")
@@ -99,18 +99,18 @@ shinyUI(pageWithSidebar(
 		div(class="span2 control-group success",selectInput("month", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference month.">Month:</a>'), 
 			choices = 3:7, 
-			selected = as.numeric(format(Sys.time(), "%m")))), 
+			selected = focusMonth()   )), 
 		
 		div(class="span2 control-group success",selectInput("day", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference day.">Day:</a>'), 
 			choices = 1:31, 
-			selected = as.numeric(format(Sys.time(), "%d"))+0 ) ), 
+			selected = focusDay()  ) ), 
 		
 		
 		div(class="span2 control-group success",selectInput ("year", 
 			label = HTML('<a href="#" data-toggle="tooltip" class="label label-info" title="Reference year.">Year: </a>'), 
 			choices = 2007:format(Sys.Date(), format = "%Y"), 
-			selected = format(Sys.Date(), format = "%Y")) )
+			selected = focusYear()  ) )
 		),
 	
 	tags$style(type='text/css', "#month { width: 55px; color: black}"),

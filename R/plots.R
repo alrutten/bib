@@ -88,11 +88,7 @@
 		
 		if( input$year < as.numeric(format(Sys.Date(), format = "%Y"))  ) mtext(input$year, side = 2, line = -6, cex = 8, col = "grey80", font = 4)
 		
-		# chance of rain
-		W = try( WGWeather("Germany/Landsberg") , silent = TRUE)
-		if(!is.null(W) && inherits( W, 'data.frame') && inherits( W$date, 'POSIXct') && any(as.Date(W$date_)%in%as.Date(rfd)) )
-			try( legend(x = rain.pos[1],y = rain.pos[2], legend = paste(W$dtp, paste(W$rainprob, "%", sep = '')), title = 'Chance of rain:', bty = "n", text.col = 'grey30'), silent = TRUE)
-		
+
 		
 	if(pdf)  dev.off()
 	 

@@ -1,20 +1,10 @@
-require(shiny)
-require(sdb)
-require(rgdal)
-require(nlme)
-
-# GIS
-load(system.file('map', 'spatial', package = 'bib'))
-load(system.file('hatchEstimation', 'hatchDateGLM', package = 'bib'))
-
-
 
 # nest stages
 stagesInfo = data.frame(
   nest_stage = c( "U", "LT" , "R" ,  "B"  , "BC" , "C" , "LIN"  ,  "E"  , "WE", "Y", "NOTA", "WSP") ,
   stageCol   =  c("#EEE9BF", "#8DB6CD", "#8B7E66", "#7CFC00", "#4CBB17", "#426F42", "#9B2CEE" , "#FFD700", "#EE7600", "#EE0000", "#E5E5E5", "#FF3399"), 
   stageRank  =  1:12,
-  stringsAsFactors=FALSE)
+	stringsAsFactors = FALSE)
 
 # map
 	setmap = list(
@@ -52,7 +42,7 @@ stagesInfo = data.frame(
 
 info.pos     = c(x = 4417700, y = 5335000)
 legend.pos   = c(x = 4417250, y = 5335020)
-rain.pos   = c(x = 4417130, y = 5335020)
+
 
 
 
