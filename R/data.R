@@ -1,12 +1,8 @@
 
 # Lying, incubation, young
 
-dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
-	
-	date_ = refDate(month, day, year)
-	
-	# data
-	O = Q(year = year, paste(
+dataQuery <- function(date_) {
+paste(
 	"SELECT DISTINCT A.box, A.date_time, DATEDIFF(" ,shQuote(date_), ",A.date_time) last_check, 
 			N.nest_stage, N.eggs clutch, N.chicks, N.guessed, 
 			
@@ -36,7 +32,19 @@ dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, s
 			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) maleID FROM ADULTS WHERE sex = 1 AND date_time_caught <=  ",shQuote(date_), ")  E ON A.box = E.box
 			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) femaleID FROM ADULTS WHERE sex = 2 AND date_time_caught <=  ",shQuote(date_), ")  F ON A.box = F.box
 			
-		"))				
+		")
+
+	}
+
+
+
+
+dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
+	
+	date_ = refDate(month, day, year)
+	
+	# data
+	O = Q(year = year, dataQuery(date_)   )				
 	
 	if(nrow(O) == 0) stop("There are no data available. Did you choose an invalid date?") 
 					 

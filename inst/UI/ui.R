@@ -37,21 +37,6 @@ shinyUI(pageWithSidebar(
  
  sidebarPanel = sidebarPanel(
 	
-	# HTML('<div class = ng-app row><input class = "span3" id = "author" type="text" ng-model="yourName" placeholder="Enter your name!">{{yourName}}</div>'),
-	
-	# DATA ENTRY
-	div(class="row", p(" "),
-	div(class="span1", icon("edit")),
-	HTML(' <a href="http://scicomp.orn.mpg.de/BTatWESTERHOLZ_DataEntry/NESTS.php" target="_blank" class="btn btn-large btn-success">DATA ENTRY</a>'),
-	HTML(' <a href="http://scicomp.orn.mpg.de:3838/APPS/SNBatWESTERHOLZ/" data-toggle="tooltip" title="Questions to Anne &darr; (arutten@orn.mpg.de)" target="_blank" class="btn btn-large   btn-primary  ">SNB MAPS</a>')
-		
-		
-	),
-	 
-	
-	
-	
-	
 	# LINKS/HELP/...
 	div(class="row", p(" "),
 	div(class="span1", icon("book")),
@@ -59,14 +44,14 @@ shinyUI(pageWithSidebar(
 		paste("<ul", 
 		 paste('class="nav nav-pills"><li class="active"><a href=', links("man"), 'target="_blank">Field manual </a> </li>'),
 		 paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Field journal </a></li>'), 
-		 paste('<li class="active"> <a data-toggle="modal" title="Data entry aditional options" href= "#dataEntry" >Help</a></li>'), 
+		 paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
+		paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
 		  "</ul>")
 		))
 	),
    
    #help popup
 	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
-
    
    hr(),
    
@@ -227,7 +212,7 @@ shinyUI(pageWithSidebar(
 		div(class="span2", HTML( '<p><a <span class="badge"> Questions&rarr; valcu@orn.mpg.de </span> </a></p>')) ) ,
 	
 	div(class="row", p(" "), div(class="span1", icon("globe")), 
-	 div(class="span10",  HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny'), 'Weather API: wunderground</small></p>' ) )  )
+	 div(class="span10",  HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny')) )  )
 	 )
 	   
 
