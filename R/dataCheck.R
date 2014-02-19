@@ -19,7 +19,7 @@ bugs <- function(year, warnings = FALSE) {
   
  
 # MESSAGES
-dataSummaries <- function(input, ...) { 
+predHatchDate <- function(input, ...) { 
 	d = dataFetch(year = input$year, month  = input$month, day = input$day, 
               stagesNFO = stagesInfo, stages = input$nestStages, 
               safeHatchCheck = input$safeHatchCheck, 
@@ -30,9 +30,23 @@ dataSummaries <- function(input, ...) {
 	d1 = d[which(d$maxClutch > 6), ]
 	x = round(difftime(d1$predHatchDate  ,  as.Date(d1$firstEggDate) + d1$maxClutch , units = 'days'))
 	
-	predhatch = paste('<p> <strong style="color:sienna;text-decoration:underline;"> ', 
-					'Predicted days of incubation (day 0 = last egg day): Mean = ', round(mean(x, na.rm = T), 1), 'days', '; range= (', paste(round(range(x, na.rm = T),1), collapse = ','), ")"   , 
-					'</strong> </p> ' )
+	predhatch = paste('Predicted days of incubation (day 0 = last egg day): Mean = ', 
+                    round(mean(x, na.rm = T), 1), 'days', '; range= (', 
+                    paste(round(range(x, na.rm = T),1), collapse = ','), ')' )
 	cat(predhatch)
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
