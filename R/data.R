@@ -117,4 +117,4 @@ phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 	}
 	
 	
-	ggplot(d, aes(x= d[, nam] , fill = Year)) + geom_density(alpha = 0.7) + xlab(nam)
+	# ggplot(d, aes(x= d[, nam] , fill = Year)) + geom_density(alpha = 0.7) + xlab(nam)
