@@ -245,7 +245,7 @@ phenoGraph <- function(input, pdf = FALSE, ...) {
 	
 	
 	if(pdf) pdf(..., width = 8.3, height = 11.7) 
-	print(ggplot(d, aes(x= var , fill = Year)) + 
+	print(ggplot(d, aes(x= var , fill = Year), environment=environment()) + 
 									geom_density(alpha = 0.7) + 
 									xlab( paste(what, "(day 1 = April 1st)" ) ))
  
