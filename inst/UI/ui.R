@@ -8,7 +8,7 @@ shinyUI(pageWithSidebar(
 	
 	if(is.breeding() ) 
 	HTML( paste('<h6>WESTERHOLZ field work BREEDING SEASON [', format(Sys.Date(), "%d-%b-%Y"), '] </h6>') ) else 
-	HTML( paste('<h6>WESTERHOLZ field work <a class="alert alert-danger"> NON-BREEDING SEASON [Start date is ',
+	HTML( paste('<h6>WESTERHOLZ field work <a class="alert alert-danger"> NON-BREEDING SEASON [Reference date was set to ',
 		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,'] </a> </h6>') )
 
 	
@@ -67,16 +67,26 @@ shinyUI(pageWithSidebar(
    	
 	div(class="span3  control-group success", radioButtons("tools", 
 			label = HTML('<a data-toggle="tooltip" class="label label-success" title=  "Settings (e.g. year) apply to both Nest history and Mapping" >TOOLS:</a>'),
-			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
+			choices = c("PHENOLOGY", "ID HISTORY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
 	
 	# PHENOLOGY
 	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
 				
-		selectInput("phenoType", label = HTML('<a class="label label-info" ">Map type:</a>'), 
+		selectInput("phenoType", label = HTML('<a class="label label-info" "> Select:</a>'), 
 			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
 	
 		) , 	
 		
+	# ID
+	conditionalPanel(condition = "input.tools == 'ID HISTORY'",
+	                 
+	                 selectInput("idType", label = HTML('<a class="label label-info" ">Select:</a>'), 
+	                             list('ring number' = 'ID', 'Transponder'= 'transp' , 'color rings'= 'combo'), "ID")
+	                 
+	) , 	
+  
+  
+  
 	# Nest history
 	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
 				
@@ -101,7 +111,8 @@ shinyUI(pageWithSidebar(
    tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
    tags$style(type='text/css', "#tools { font-size: 11pt}"),
    tags$style(type='text/css', "#mapType { width: 75px; }"),
-   tags$style(type='text/css', "#phenoType { width: 75px; }"),
+   tags$style(type='text/css', "#phenoType { width: 100px; }"),
+	 tags$style(type='text/css', "#idType { width: 100px; }"),
 	hr(),
 
   

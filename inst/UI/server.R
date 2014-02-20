@@ -14,7 +14,6 @@ shinyServer( function(input, output) {
   output$warnings <- renderTable({
     bugs(year = input$year,  warnings = TRUE) }, include.rownames = FALSE, include.colnames = FALSE )	
 	
-		
 	
   output$messages <- renderPrint({
 

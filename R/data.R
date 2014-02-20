@@ -115,29 +115,35 @@ phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 	d
 	}
 
-idDataFetch <- function(id) {
+idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
+# TODO
+  # transp = '67A741F9C66F0001'; id = 'B2F5444'
+  
+  if( !missing(transp) ) {
+    ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
+                          from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
+                            JOIN SEX s ON a.ID = s.ID where transponder = ", shQuote(transp) ), db = db)
+    id = ids$ID[1]
+    }
+    
+  if( !missing(id) ) {
+    ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
+                          from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
+                          JOIN SEX s ON a.ID = s.ID where a.ID = ", shQuote(id) ), db = db)
+  }
+  
+  if( !missing(combo) ) {
+    stop("selecting by color combination not yet implemented!")
+  }
+  
+  
+  d =  Q(query = paste("select * from (
+    SELECT box, date_time date_ , 0 age, 'capture' recorded FROM CHICKS a  where ID = ", shQuote(id),
+    "UNION
+    SELECT box, capture_date_time date_, age,'capture' recorded  FROM ADULTS a where ID = ", shQuote(id), " ) x 
+    order by date_ asc"), db = db)
 
- # 1) match all ID-s  + sex table; based on  input$IDtype == 'zzz'
- # 2) select capture( ADULTS & CHICKS)
- # 3) select breeding (BREEDING)
- # 4) 
-
-
-
-
-
-# select by ID, transponer or labID
-
-
-# choose male example
-# select count(ID) fr, ID from ADULTS group by ID having count(ID) > 3 and ID in (select ID from CHICKS)  and ID in (select father from PATERNITY where epy = 1)
-
-
-
-# SELECT capture_date_time captureDate, ID, transponder, FUNCTIONS.combo(UL,LL,UR,LR) combo, age, author from BTatWESTERHOLZ.ADULTS a where ID = 'B2F5444'
-
-# SELECT ID,date_time,transponder,author from BTatWESTERHOLZ.CHICKS a  where ID = 'B2F5444'
-
+  list(ids, d)
 
 
 }
