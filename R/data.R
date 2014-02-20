@@ -114,4 +114,33 @@ phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 	 d$Year = factor(d$year_)
 	d
 	}
+
+idDataFetch <- function(id) {
+
+ # 1) match all ID-s  + sex table; based on  input$IDtype == 'zzz'
+ # 2) select capture( ADULTS & CHICKS)
+ # 3) select breeding (BREEDING)
+ # 4) 
+
+
+
+
+
+# select by ID, transponer or labID
+
+
+# choose male example
+# select count(ID) fr, ID from ADULTS group by ID having count(ID) > 3 and ID in (select ID from CHICKS)  and ID in (select father from PATERNITY where epy = 1)
+
+
+
+# SELECT capture_date_time captureDate, ID, transponder, FUNCTIONS.combo(UL,LL,UR,LR) combo, age, author from BTatWESTERHOLZ.ADULTS a where ID = 'B2F5444'
+
+# SELECT ID,date_time,transponder,author from BTatWESTERHOLZ.CHICKS a  where ID = 'B2F5444'
+
+
+
+}
+
+
 	
