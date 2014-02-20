@@ -253,7 +253,6 @@ phenoGraph <- function(input, pdf = FALSE, ...) {
 
 }	
 	
-	
 #  PLOT SWITCH
 	PLOT <- function(input, pdf = FALSE, ...) {
 

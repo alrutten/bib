@@ -1,7 +1,7 @@
 Package: bib
 Type: Package
 Title: BIrd Breeding, field work planner
-Version: 1.1
+Version: 1.2
 Date: 2014-Feb-20
 Author: Mihai Valcu
 Maintainer: Mihai Valcu <valcu@orn.mpg.de>

@@ -4,8 +4,16 @@ require(bib)
 shinyUI(pageWithSidebar(
 
   headerPanel = headerPanel(
-	HTML( paste('<h6>WESTERHOLZ field work [', format(Sys.Date(), "%d-%b-%Y"), '</strong>]</h6>') )
+	
+	
+	if(is.breeding() ) 
+	HTML( paste('<h6>WESTERHOLZ field work BREEDING SEASON [', format(Sys.Date(), "%d-%b-%Y"), '] </h6>') ) else 
+	HTML( paste('<h6>WESTERHOLZ field work <a class="alert alert-danger"> NON-BREEDING SEASON [Start date is ',
+		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,'] </a> </h6>') )
 
+	
+	
+	
   ), 
   		
   mainPanel = mainPanel(
