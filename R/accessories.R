@@ -36,18 +36,18 @@ focusYear <- function() {
 	
 	}
 	
-	
-	
 add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
 	}
 
-	
+## query function
 
-Q <- function(year, query, ...) {
-  
-  if(missing(year)) year = format(Sys.Date(), format = "%Y")
-  if(year == format(Sys.Date(), format = "%Y") ) db = 'FIELD_BTatWESTERHOLZ' else db = paste('FIELD', year, 'BTatWESTERHOLZ', sep = "_")
-  
+Q <- function(year, query, db) {
+    
+  if(missing(db)) {
+	if(missing(year)) year = format(Sys.Date(), format = "%Y")
+	if(year == format(Sys.Date(), format = "%Y") ) db = 'FIELD_BTatWESTERHOLZ' else db = paste('FIELD', year, 'BTatWESTERHOLZ', sep = "_")
+	}
+	
   CON = dbcon(user = "bt", password = "bt", database = db)
 
   on.exit(  closeCon (CON)  )

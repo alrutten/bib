@@ -23,7 +23,7 @@
 		par(mai = c(0,0,0,0) )# , bg = if(!pdf) "whitesmoke" else "white")
 	 
 		# fetch data
-		d = dataFetch(year = input$year, month  = input$month, day = input$day, 
+		d = nestDataFetch(year = input$year, month  = input$month, day = input$day, 
 					stagesNFO = stagesInfo, stages = input$nestStages, 
 					safeHatchCheck = input$safeHatchCheck, 
 					youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
@@ -213,7 +213,7 @@
 		
 		# stop("there is a bug! forecasting will be available soon")
 		
-		d = dataFetch(year = input$year, month  = input$month, day = input$day, 
+		d = nestDataFetch(year = input$year, month  = input$month, day = input$day, 
 					stagesNFO = stagesInfo, stages = input$nestStages, 
 					safeHatchCheck = input$safeHatchCheck, 
 					youngAgeYN = input$youngAgeYN, youngAge = input$youngAge

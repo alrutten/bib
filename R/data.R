@@ -1,7 +1,6 @@
 
 # Lying, incubation, young
-
-dataQuery <- function(date_) {
+nestDataQuery <- function(date_) {
 paste(
 	"SELECT DISTINCT A.box, A.date_time, DATEDIFF(" ,shQuote(date_), ",A.date_time) last_check, 
 			N.nest_stage, N.eggs clutch, N.chicks, N.guessed, 
@@ -36,15 +35,12 @@ paste(
 
 	}
 
-
-
-
-dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
+nestDataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
 	
 	date_ = refDate(month, day, year)
 	
 	# data
-	O = Q(year = year, dataQuery(date_)   )				
+	O = Q(year = year, nestDataQuery(date_)   )				
 	
 	if(nrow(O) == 0) stop("There are no data available. Did you choose an invalid date?") 
 					 
@@ -104,3 +100,21 @@ dataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, s
 
 	}
 	
+phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
+
+	nam =paste0(what, "_April_Day") 
+	
+	d = Q(query = 
+		paste("select year_, 
+		dayofyear(", what, ") - dayofyear(STR_TO_DATE( concat_WS('-', year(",what,"), 'Apr-1'), '%Y-%M-%d'))", nam,
+			"FROM BREEDING 
+				where", what ,"is not NULL")
+				, 
+		db = db)
+	
+	 d$Year = factor(d$year_)
+	
+	}
+	
+	
+	ggplot(d, aes(x= d[, nam] , fill = Year)) + geom_density(alpha = 0.7) + xlab(nam)

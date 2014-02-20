@@ -20,7 +20,7 @@ bugs <- function(year, warnings = FALSE) {
  
 # MESSAGES
 predHatchDate <- function(input, ...) { 
-	d = dataFetch(year = input$year, month  = input$month, day = input$day, 
+	d = nestDataFetch(year = input$year, month  = input$month, day = input$day, 
               stagesNFO = stagesInfo, stages = input$nestStages, 
               safeHatchCheck = input$safeHatchCheck, 
               youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
