@@ -102,19 +102,16 @@ nestDataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInf
 	
 phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
-	nam =paste0(what, "_April_Day") 
-	
 	d = Q(query = 
 		paste("select year_, 
-		dayofyear(", what, ") - dayofyear(STR_TO_DATE( concat_WS('-', year(",what,"), 'Apr-1'), '%Y-%M-%d'))", nam,
+		dayofyear(", what, ") - dayofyear(STR_TO_DATE( concat_WS('-', year(",what,"), 'Apr-1'), '%Y-%M-%d')) as var ",
 			"FROM BREEDING 
-				where", what ,"is not NULL")
+				where", what ,
+					"is not NULL")
 				, 
 		db = db)
 	
 	 d$Year = factor(d$year_)
-	
+	d
 	}
 	
-	
-	# ggplot(d, aes(x= d[, nam] , fill = Year)) + geom_density(alpha = 0.7) + xlab(nam)

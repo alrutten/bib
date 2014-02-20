@@ -1,11 +1,11 @@
 Package: bib
 Type: Package
 Title: BIrd Breeding, field work planner
-Version: 1.0
-Date: 2014-Feb-17
+Version: 1.1
+Date: 2014-Feb-20
 Author: Mihai Valcu
 Maintainer: Mihai Valcu <valcu@orn.mpg.de>
 Depends: methods, sp, sdb
-Suggests: knitr, shiny
+Suggests: knitr, shiny, ggplot
 Description: Breeding season field work planner
 License: CC-BY

@@ -17,7 +17,8 @@ shinyServer( function(input, output) {
 		
 	
   output$messages <- renderPrint({
-    
+
+
   cat( paste(length(input$nestStages), 'out of', nrow(stagesInfo) , 'stages selected! <br>'))
       
   cat( paste('Hatch check is set to', abs(as.numeric(input$safeHatchCheck)), ' days in advance! <br>'))  		 

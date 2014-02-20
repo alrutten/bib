@@ -4,8 +4,8 @@ require(bib)
 shinyUI(pageWithSidebar(
 
   headerPanel = headerPanel(
-	HTML( paste('<h6>WESTERHOLZ field work [', format(Sys.Date(), "%d-%b-%Y"), '</strong>]</h6>') ) 
-  
+	HTML( paste('<h6>WESTERHOLZ field work [', format(Sys.Date(), "%d-%b-%Y"), '</strong>]</h6>') )
+
   ), 
   		
   mainPanel = mainPanel(
@@ -17,8 +17,7 @@ shinyUI(pageWithSidebar(
 		<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
 		"),
   
-  
-    
+   
 	# messages
 	 HTML('<span class="label label-info">MESSAGES</span>' ),
 	htmlOutput("messages"),
@@ -60,8 +59,17 @@ shinyUI(pageWithSidebar(
    	
 	div(class="span3  control-group success", radioButtons("tools", 
 			label = HTML('<a data-toggle="tooltip" class="label label-success" title=  "Settings (e.g. year) apply to both Nest history and Mapping" >TOOLS:</a>'),
-			choices = c("NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
+			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
 	
+	# PHENOLOGY
+	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
+				
+		selectInput("phenoType", label = HTML('<a class="label label-info" ">Map type:</a>'), 
+			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
+	
+		) , 	
+		
+	# Nest history
 	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
 				
 		div(class="span6", sliderInput("NestId", 
@@ -73,14 +81,9 @@ shinyUI(pageWithSidebar(
 						
 		numericInput("NestIdEntry", HTML('<a data-toggle="tooltip" class = "label label" title = "Type a box number here. Delete entry here to activate back the slider" >Type Box: </a>'), NULL)
 						
-						
-						
-						
 		) , 
 		
-#conditionalPanel(condition = "input.tools == 'NEST HISTORY'", HTML( '<div class = span3> <ul class= pager>  <li class= next>  <a id= "nextNestId" href="#">Next box &rarr;</a> </li> </ul> </div>  ')
-
-		
+	# Mapping	
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
 		selectInput("mapType", label = HTML('<a class="label label-info" ">Map type:</a>'), list('active' = 'activeMap', 'base'= 'baseMap'), "activeMap") )
 	
@@ -90,6 +93,7 @@ shinyUI(pageWithSidebar(
    tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
    tags$style(type='text/css', "#tools { font-size: 11pt}"),
    tags$style(type='text/css', "#mapType { width: 75px; }"),
+   tags$style(type='text/css', "#phenoType { width: 75px; }"),
 	hr(),
 
   
@@ -163,13 +167,6 @@ shinyUI(pageWithSidebar(
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Show caught parents on the curent map." >Parents:</a>'),
 			choices = c("YES", "NO") , selected = "NO" ) )
 				
-
-		
-		
-		
-		
-		
-		
 			
 	),
 	

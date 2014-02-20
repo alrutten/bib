@@ -237,15 +237,33 @@
 		
 	}
 	
+#phenology graphs
+phenoGraph <- function(input, pdf = FALSE, ...) {
+	require(ggplot2)
+	what = input$phenoType
+	d = phenologyDataFetch(what)
+	
+	
+	if(pdf) pdf(..., width = 8.3, height = 11.7) 
+	print(ggplot(d, aes(x= var , fill = Year)) + 
+									geom_density(alpha = 0.7) + 
+									xlab( paste(what, "(day 1 = April 1st)" ) ))
+ 
+	if(pdf)  dev.off()
+
+}	
+	
+	
 #  PLOT SWITCH
 	PLOT <- function(input, pdf = FALSE, ...) {
+
+		if(input$tools == 'PHENOLOGY')  phenoGraph(input, pdf = pdf, ...)
 		
 		if(input$tools == 'MAPPING' && input$mapType == 'activeMap')  	map(input = input, pdf = pdf, ...)
 		if(input$tools == 'MAPPING' && input$mapType == 'baseMap')  	basemap(input = input, pdf = pdf, ...)
 
 		if(input$tools == 'NEST HISTORY')  nestGraph(input = input, pdf = pdf, ...)
 		if(input$tools == 'FORECASTING')  forecastGraph(input, pdf = pdf, ...)
-		
 		
 		
 	}
