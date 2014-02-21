@@ -74,16 +74,30 @@ basicPage(
    	
 	radioButtons("tools", 
 			label = HTML('<a data-toggle="tooltip" class="label label-success" title=  "Settings (e.g. year) apply to both Nest history and Mapping" >TOOLS:</a>'),
+<<<<<<< HEAD
 			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" ), 
+=======
+			choices = c("PHENOLOGY", "ID HISTORY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
+>>>>>>> e41047b6491bcc01bb079c7ce905321e355dd553
 	
 	# PHENOLOGY
 	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
 				
-		selectInput("phenoType", label = HTML('<a class="label label-info" ">Map type:</a>'), 
+		selectInput("phenoType", label = HTML('<a class="label label-info" "> Select:</a>'), 
 			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
 	
 		) , 	
 		
+	# ID
+	conditionalPanel(condition = "input.tools == 'ID HISTORY'",
+	                 
+	                 selectInput("idType", label = HTML('<a class="label label-info" ">Select:</a>'), 
+	                             list('ring number' = 'ID', 'Transponder'= 'transp' , 'color rings'= 'combo'), "ID")
+	                 
+	) , 	
+  
+  
+  
 	# Nest history
 	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
 				
@@ -105,6 +119,17 @@ basicPage(
 	
    ,
 
+<<<<<<< HEAD
+=======
+   tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
+   tags$style(type='text/css', "#tools { font-size: 11pt}"),
+   tags$style(type='text/css', "#mapType { width: 75px; }"),
+   tags$style(type='text/css', "#phenoType { width: 100px; }"),
+	 tags$style(type='text/css', "#idType { width: 100px; }"),
+	hr(),
+
+  
+>>>>>>> e41047b6491bcc01bb079c7ce905321e355dd553
   # date
 	icon("pencil"),
 		selectInput("month", 
