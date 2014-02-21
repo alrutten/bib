@@ -4,36 +4,22 @@ require(bib)
 shinyUI(pageWithSidebar(
   headerPanel = headerPanel(
 
-  
+	#TITLE
 	if(is.breeding() ) 
 	HTML( paste('<h6>WESTERHOLZ field work BREEDING SEASON [', format(Sys.Date(), "%d-%b-%Y"), '] </h6>') ) else 
-	HTML( paste('<h6>WESTERHOLZ field work <a class="alert alert-danger"> NON-BREEDING SEASON [Start date is ',
-		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,'] </a> </h6>') )
-
-	
-	
-	
+	HTML( paste('<h6> WESTERHOLZ field work: NON-BREEDING SEASON [Start date is ',
+		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,']  </h6>') )
   ), 
   		
   mainPanel = mainPanel(
-    # js scripts	
-	HTML("
-		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js'></script>
-		<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
-
-		<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
-		"),
-  
-   
+      
 	# messages
-	 HTML('<span class="label label-info">MESSAGES</span>' ),
-	htmlOutput("messages"),
+	HTML('<blockquote>'), 
+		htmlOutput("messages"),
+	HTML('</blockquote>'), 
 	
-	# bugs 
-	HTML('<span class="label label-warning">BUGS</span>' ),
-	HTML('<div id="bugs" class = "table table-striped table-condensed shiny-html-output"> </div>'),
-	HTML('<span class="label label-important">WARNINGS</span>' ),
-	HTML('<div id="warnings" class = "table table-striped table-condensed shiny-html-output"> </div>'),
+	HTML('<blockquote> <div id="bugs" class = "table table-striped table-condensed shiny-html-output"> </div> </blockquote>'),
+	HTML('<blockquote> <div id="warnings" class = "table table-striped table-condensed shiny-html-output"> </div> </blockquote>'),
 	
 	# plot
 	div(class="span12", plotOutput("PLOT"))
@@ -42,6 +28,7 @@ shinyUI(pageWithSidebar(
  
  
  sidebarPanel = sidebarPanel(
+	
 	
 	# LINKS/HELP/...
 	div(class="row", p(" "),
@@ -56,10 +43,6 @@ shinyUI(pageWithSidebar(
 		))
 	),
    
-   #help popup
-	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
-   
-   hr(),
    
    # TOOLS
    div(class="row", p(" "), div(class="span1", icon("flag")) ,
@@ -97,10 +80,7 @@ shinyUI(pageWithSidebar(
 	
    ),
 
-   tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
-   tags$style(type='text/css', "#tools { font-size: 11pt}"),
-   tags$style(type='text/css', "#mapType { width: 75px; }"),
-   tags$style(type='text/css', "#phenoType { width: 75px; }"),
+
 	hr(),
 
   
@@ -123,10 +103,6 @@ shinyUI(pageWithSidebar(
 			choices = 2007:format(Sys.Date(), format = "%Y"), 
 			selected = focusYear()  ) )
 		),
-	
-	tags$style(type='text/css', "#month { width: 55px; color: black}"),
-	tags$style(type='text/css', "#day { width: 55px; ; color: red }"),
-	tags$style(type='text/css', "#year { width: 70px; }"),
 	
 	hr(),
 	
@@ -177,12 +153,7 @@ shinyUI(pageWithSidebar(
 			
 	),
 	
-	tags$style(type='text/css', "#nestStages { width: 150px;}"),
-	tags$style(type='text/css', "#safeHatchCheck { width: 55px;}"),
-	tags$style(type='text/css', "#CI_hatchEst { width: 55px;}"),
-	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} "),
-
-		hr(),
+	hr(),
 	
 	# MAP settings
 	# text & box size
@@ -217,9 +188,32 @@ shinyUI(pageWithSidebar(
 	
 	div(class="row", p(" "), div(class="span1", icon("globe")), 
 	 div(class="span10",  HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny')) )  )
-	 )
-	   
+	 ),
+	 
+############### ADD ONS	 
+   #help popup
+	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
+	 
+	# js scripts	
+	HTML("
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js'></script>
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
 
+	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
+	"), 
+	   
+	# inline style
+	tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
+	tags$style(type='text/css', "#tools { font-size: 11pt}"),
+	tags$style(type='text/css', "#mapType { width: 75px; }"),
+	tags$style(type='text/css', "#phenoType { width: 75px; }"),
+	tags$style(type='text/css', "#month { width: 55px; color: black}"),
+	tags$style(type='text/css', "#day { width: 55px; ; color: red }"),
+	tags$style(type='text/css', "#year { width: 70px; }"),
+	tags$style(type='text/css', "#nestStages { width: 150px;}"),
+	tags$style(type='text/css', "#safeHatchCheck { width: 55px;}"),
+	tags$style(type='text/css', "#CI_hatchEst { width: 55px;}"),
+	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} ") 
   
 )
 ))
