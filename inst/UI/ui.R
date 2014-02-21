@@ -1,37 +1,21 @@
  
 require(bib)
 
-shinyUI(
-basicPage(
-  
-  
-  HTML('
-  <nav class="navbar navbar-default" role="navigation">
-   <div class="container-fluid">
+shinyUI(pageWithSidebar(
+  headerPanel = headerPanel(
 
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Brand</a>
-	</div>
-    </div>
-	
-	
-  </nav>
-  '),
   
- 
 	if(is.breeding() ) 
 	HTML( paste('<h6>WESTERHOLZ field work BREEDING SEASON [', format(Sys.Date(), "%d-%b-%Y"), '] </h6>') ) else 
 	HTML( paste('<h6>WESTERHOLZ field work <a class="alert alert-danger"> NON-BREEDING SEASON [Start date is ',
-		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,'] </a> </h6>') ),
+		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,'] </a> </h6>') )
 
 	
-
+	
+	
+  ), 
+  		
+  mainPanel = mainPanel(
     # js scripts	
 	HTML("
 		<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js'></script>
@@ -51,18 +35,26 @@ basicPage(
 	HTML('<span class="label label-important">WARNINGS</span>' ),
 	HTML('<div id="warnings" class = "table table-striped table-condensed shiny-html-output"> </div>'),
 	
+	# plot
+	div(class="span12", plotOutput("PLOT"))
+  ), 
+ 
+ 
+ 
+ sidebarPanel = sidebarPanel(
 	
 	# LINKS/HELP/...
-	icon("book"),
-	HTML( 	   
+	div(class="row", p(" "),
+	div(class="span1", icon("book")),
+	div(HTML( 	   
 		paste("<ul", 
 		 paste('class="nav nav-pills"><li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
 		 paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
 		 paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
 		paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
 		  "</ul>")
-		),
-
+		))
+	),
    
    #help popup
 	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
@@ -70,43 +62,29 @@ basicPage(
    hr(),
    
    # TOOLS
-   icon("flag") ,
+   div(class="row", p(" "), div(class="span1", icon("flag")) ,
    	
-	radioButtons("tools", 
+	div(class="span3  control-group success", radioButtons("tools", 
 			label = HTML('<a data-toggle="tooltip" class="label label-success" title=  "Settings (e.g. year) apply to both Nest history and Mapping" >TOOLS:</a>'),
-<<<<<<< HEAD
-			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" ), 
-=======
-			choices = c("PHENOLOGY", "ID HISTORY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
->>>>>>> e41047b6491bcc01bb079c7ce905321e355dd553
+			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
 	
 	# PHENOLOGY
 	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
 				
-		selectInput("phenoType", label = HTML('<a class="label label-info" "> Select:</a>'), 
+		selectInput("phenoType", label = HTML('<a class="label label-info" ">Map type:</a>'), 
 			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
 	
 		) , 	
 		
-	# ID
-	conditionalPanel(condition = "input.tools == 'ID HISTORY'",
-	                 
-	                 selectInput("idType", label = HTML('<a class="label label-info" ">Select:</a>'), 
-	                             list('ring number' = 'ID', 'Transponder'= 'transp' , 'color rings'= 'combo'), "ID")
-	                 
-	) , 	
-  
-  
-  
 	# Nest history
 	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
 				
-		sliderInput("NestId", 
+		div(class="span6", sliderInput("NestId", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Press play or use the slider to choose a box ">Box: </a>')),
 						min = 1, max = 277, value = 1, step = 1, ticks = FALSE,
 						animate  =  animationOptions(interval = 1300, loop = FALSE, 
 						playButton = div(HTML('<button class="btn btn-mini btn-primary" type="button">Play</button>')), 
-						pauseButton = div(HTML('<button class="btn btn-mini btn-danger" type="button">Stop</button>')))), 
+						pauseButton = div(HTML('<button class="btn btn-mini btn-danger" type="button">Stop</button>')))) ), 
 						
 		numericInput("NestIdEntry", HTML('<a data-toggle="tooltip" class = "label label" title = "Type a box number here. Delete entry here to activate back the slider" >Type Box: </a>'), NULL)
 						
@@ -117,46 +95,45 @@ basicPage(
 		selectInput("mapType", label = HTML('<a class="label label-info" ">Map type:</a>'), list('active' = 'activeMap', 'base'= 'baseMap'), "activeMap") )
 	
 	
-   ,
+   ),
 
-<<<<<<< HEAD
-=======
    tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
    tags$style(type='text/css', "#tools { font-size: 11pt}"),
    tags$style(type='text/css', "#mapType { width: 75px; }"),
-   tags$style(type='text/css', "#phenoType { width: 100px; }"),
-	 tags$style(type='text/css', "#idType { width: 100px; }"),
+   tags$style(type='text/css', "#phenoType { width: 75px; }"),
 	hr(),
 
   
->>>>>>> e41047b6491bcc01bb079c7ce905321e355dd553
   # date
-	icon("pencil"),
-		selectInput("month", 
+	div(class="row", p(" "),
+		div(class="span1", icon("pencil")),
+		div(class="span2 control-group success",selectInput("month", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference month.">Month:</a>'), 
 			choices = 3:7, 
-			selected = focusMonth() ), 
+			selected = focusMonth()   )), 
 		
-		selectInput("day", 
+		div(class="span2 control-group success",selectInput("day", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference day.">Day:</a>'), 
 			choices = 1:31, 
-			selected = focusDay()  ), 
+			selected = focusDay()  ) ), 
 		
 		
-		selectInput ("year", 
+		div(class="span2 control-group success",selectInput ("year", 
 			label = HTML('<a href="#" data-toggle="tooltip" class="label label-info" title="Reference year.">Year: </a>'), 
 			choices = 2007:format(Sys.Date(), format = "%Y"), 
-			selected = focusYear()  )
-	,
+			selected = focusYear()  ) )
+		),
 	
-
+	tags$style(type='text/css', "#month { width: 55px; color: black}"),
+	tags$style(type='text/css', "#day { width: 55px; ; color: red }"),
+	tags$style(type='text/css', "#year { width: 70px; }"),
 	
 	hr(),
-
-  
+	
 	# DATA settings
 	# nest stages
-	icon("pencil"),
+	div(class="row", p(" "),
+		div(class="span1", icon("pencil")),
 		HTML('<div class="span2 control-group">
               <label class="control-label" for="nestStages"><a data-toggle="tooltip" class="text-info" title=  "Nest stages" >Stages:</a></label>
               <input name="nestStages" type="checkbox" value="U"/> <a data-toggle="tooltip" class="text-success" title=  "Used" > U </a> <br/>
@@ -173,45 +150,54 @@ basicPage(
               <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Wasp nest" >WSP</a> <br/> </div>'),
 			  
 		#hatching estimation
-		selectInput("safeHatchCheck", 
+		div(class = "span3 control-group success",
+			selectInput("safeHatchCheck", 
 				label = HTML('<a data-toggle="tooltip" class="label label-info" title=" How many days in advance to check for hatching. 0 selects the predicted hatching date" > Hatch check: </a>'), 
 				choices = 0:-3, selected =  -3), 
-		
-		checkboxInput("hatchNow", 
+				hr(),
+			checkboxInput("hatchNow", 
 				label = div(class = "control-group success", HTML('<a data-toggle="tooltip" class="label label-info" title="Emphasise boxes where hatching is imminent">Hatching NOW:</a>')), 
-				value = TRUE), 
+				value = TRUE)), 
 		
 		#young age
-			radioButtons("youngAgeYN", 
+			div(class="span3 control-group success", radioButtons("youngAgeYN", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Check  SELECT to select nests with particular young ages." >Young age:</a>'),
 			choices = c("ALL", "SELECT") , selected = "ALL" ), 
 	
 	conditionalPanel(condition = "input.youngAgeYN == 'SELECT'",		
 		selectInput("youngAge", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES!">Age on map:</a>'), 
-				choices = 1:25, selected = 14, multiple =  TRUE) ), 
+				choices = 1:25, selected = 14, multiple =  TRUE) ) ), 
 				
 		# parents
-		radioButtons("parents", 
+		div(class="span1 control-group success", radioButtons("parents", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Show caught parents on the curent map." >Parents:</a>'),
-			choices = c("YES", "NO") , selected = "NO" ),
+			choices = c("YES", "NO") , selected = "NO" ) )
+				
+			
+	),
+	
+	tags$style(type='text/css', "#nestStages { width: 150px;}"),
+	tags$style(type='text/css', "#safeHatchCheck { width: 55px;}"),
+	tags$style(type='text/css', "#CI_hatchEst { width: 55px;}"),
+	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} "),
 
 		hr(),
 	
 	# MAP settings
 	# text & box size
-	icon("wrench"),
-	sliderInput("textCex", 
+	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+		div(class="span5", sliderInput("textCex", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Size of the text on screen map, it will also affect the pdf maps.">Text size: </a>')), 
-						min = 0.5, max = 1.5, value = 0.8, step = 0.05), 
-	sliderInput("boxCex", 
+						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
+		div(class="span5", sliderInput("boxCex", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label"  title="Size of the box symbols on screen map, it will also affect the pdf maps.">Box size: </a>')), 
-						min = 0.5, max = 3, value = 2, step = 0.25),
+						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
 						
-	icon("wrench"),
-	sliderInput("transp", 
+	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+		div(class="span5", sliderInput("transp", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label" title="box transparency.">Transparency: </a>')), 
-						min = 0, max = .95, value = 0.5, step = 0.05), 
+						min = 0, max = .95, value = 0.5, step = 0.05) ) ), 
 
 						
 						
@@ -220,44 +206,24 @@ basicPage(
 	
 	hr(),
 	
-	
-
-	
-	
 	# downloads
-	icon("print"),
-	downloadButton('pdf', HTML('<button class="btn btn-large btn-primary" type="button"> PDF </button>') ),
+	div(class="row", p(" "), div(class="span1", icon("print")),
+	div(class="span1", downloadButton('pdf', HTML('<button class="btn btn-large btn-primary" type="button"> PDF </button>') ) ) ),
 	 
 	# footnote
 	hr(),
-	icon("question-sign"),
-	 HTML( '<p><a <span class="badge"> Questions&rarr; valcu@orn.mpg.de </span> </a></p>') ,
+	div(class="row", p(" "), div(class="span1", icon("question-sign")),
+		div(class="span2", HTML( '<p><a <span class="badge"> Questions&rarr; valcu@orn.mpg.de </span> </a></p>')) ) ,
 	
-	 icon("globe"), 
-	 HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny')) ),
+	div(class="row", p(" "), div(class="span1", icon("globe")), 
+	 div(class="span10",  HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny')) )  )
+	 )
 	   
-		# plot
-	plotOutput("PLOT"),
-	
-	
- #INLINE STYLE
-	tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
-   tags$style(type='text/css', "#tools { font-size: 11pt}"),
-   tags$style(type='text/css', "#mapType { width: 75px; }"),
-   tags$style(type='text/css', "#phenoType { width: 75px; }"),
-	tags$style(type='text/css', "#month { width: 55px; color: black}"),
-	tags$style(type='text/css', "#day { width: 55px; ; color: red }"),
-	tags$style(type='text/css', "#year { width: 70px; }"),
-	tags$style(type='text/css', "#nestStages { width: 150px;}"),
-	tags$style(type='text/css', "#safeHatchCheck { width: 55px;}"),
-	tags$style(type='text/css', "#CI_hatchEst { width: 55px;}"),
-	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} ") 
-	
-	
 
-
-
+  
+)
 ))
+
 
 
 
