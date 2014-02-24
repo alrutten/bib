@@ -75,10 +75,10 @@ shinyUI(pageWithSidebar(
 		
 	# Mapping	
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
-		selectInput("mapType", label = HTML('<a class="label label-info" ">Map type:</a>'), list('active' = 'activeMap', 'base'= 'baseMap'), "activeMap") )
+		selectInput("mapType", label = HTML('<a class="label label-info" ">Map type:</a>'), list('active' = 'activeMap', 'base'= 'baseMap'), "activeMap")
+		),
 	
-	
-   ),
+
 
 
 	hr(),
