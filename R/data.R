@@ -1,5 +1,5 @@
 
-# Lying, incubation, young
+# Lying, incubation, young ----
 nestDataQuery <- function(date_) {
 paste(
 	"SELECT DISTINCT A.box, A.date_time, DATEDIFF(" ,shQuote(date_), ",A.date_time) last_check, 
@@ -99,7 +99,8 @@ nestDataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInf
 	O
 
 	}
-	
+
+# phenology ----
 phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
 	d = Q(query = 
@@ -115,6 +116,7 @@ phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 	d
 	}
 
+# ID ----
 idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
 # TODO
   # transp = '67A741F9C66F0001'; id = 'B2F5444'
@@ -148,5 +150,41 @@ idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
 
 }
 
+# 1st egg Predict ----
 
-	
+ldPredictDataFetch <- function() { 
+    d = Q(query = "SELECT  F.year_, firstEgg, firstEgg_AprilDay, avg_temp FROM 
+    ( SELECT year(firstEgg) year_, firstEgg, dayofyear(firstEgg) - 
+  			dayofyear(STR_TO_DATE( concat_WS('-', year(firstEgg), 'Apr-1'), '%Y-%M-%d'))+1 firstEgg_AprilDay
+  				FROM ( select date(min(firstEgg)) firstEgg, year_ from BTatWESTERHOLZ.BREEDING group by year_) x ) F
+  JOIN 
+  
+  ( select avg(temperature_min) avg_temp, year_  from LOGGERSatWESTERHOLZ.ENVIRONMENTAL
+    where 
+       dayofyear(date_) BETWEEN 81 AND 100 group by year_ ) T
+        
+  ON 
+  F.year_= T.year_")
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

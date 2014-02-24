@@ -252,7 +252,25 @@ phenoGraph <- function(input, pdf = FALSE, ...) {
 	if(pdf)  dev.off()
 
 }	
-	
+
+
+# 1st egg predict [TODO: add to UI]
+egg1Graph <- function(input, pdf = FALSE) {
+  require(ggplot2)
+  d =ldPredictDataFetch()
+ 
+  ggplot(d, aes(x = avg_temp, y = firstEgg_AprilDay, label= year_)) + theme_bw() + 
+    geom_text(vjust= -0.5, hjust = -0.4, size = 4) + 
+    geom_point(size = 5)  + 
+    ylab("First Egg (day 1 = 1st April)") + 
+    xlab("Average minimum daily temperature [14 Mar-1Apr]")+ 
+    scale_y_continuous(breaks=seq(1, 20, 1)) + 
+    xlim(-4,5)
+
+  
+}
+  
+  
 #  PLOT SWITCH
 	PLOT <- function(input, pdf = FALSE, ...) {
 
