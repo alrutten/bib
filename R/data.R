@@ -21,15 +21,18 @@ paste(
 				FROM (SELECT box, max(date_time) date_time FROM NESTS  WHERE date_time <=  ",shQuote(date_),"  GROUP BY box ORDER BY box) A
 			LEFT JOIN  NESTS N ON A.box = N.box AND A.date_time = N.date_time
 			
-			LEFT JOIN (SELECT box, DAYOFYEAR(date_time) firstEgg, date_time firstEggDate FROM NESTS WHERE laying_START is not NULL and date_time <=  ",shQuote(date_), ")     B ON A.box = B.box 
+			LEFT JOIN (SELECT box, DAYOFYEAR(date_time) firstEgg, date_time firstEggDate FROM NESTS WHERE laying_START is not NULL and date_time <=  ",shQuote(date_), ") B 
+        ON A.box = B.box 
 			
 			LEFT JOIN (SELECT box, DAYOFYEAR(date_time) firstYoung, date_time firstYoungDate, DATEDIFF(",shQuote(date_),", date_time) youngAge FROM 
 					NESTS WHERE hatching_START is not NULL and date_time <=  ",shQuote(date_), ") C ON A.box = C.box 
 			
 			LEFT JOIN (SELECT box, max(eggs) maxClutch FROM NESTS WHERE COALESCE(guessed,0) = 0 AND date_time <=  ",shQuote(date_), "GROUP BY box)  D ON A.box = D.box
 			
-			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) maleID FROM ADULTS WHERE sex = 1 AND date_time_caught <=  ",shQuote(date_), ")  E ON A.box = E.box
-			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) femaleID FROM ADULTS WHERE sex = 2 AND date_time_caught <=  ",shQuote(date_), ")  F ON A.box = F.box
+			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) maleID FROM ADULTS WHERE sex = 1 AND 
+          date_time_caught BETWEEN (SELECT min(date_time) from NESTS) AND  ",shQuote(date_), ")  E ON A.box = E.box
+			LEFT JOIN (SELECT box, FUNCTIONS.combo(UL, LL, UR, LR) femaleID FROM ADULTS WHERE sex = 2 AND
+          date_time_caught BETWEEN (SELECT min(date_time) from NESTS) AND  ",shQuote(date_), ")  F ON A.box = F.box
 			
 		")
 
