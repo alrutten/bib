@@ -216,7 +216,7 @@ shinyUI(pageWithSidebar(
 	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} ") 
   
 )
-))
+)))
 
 
 
