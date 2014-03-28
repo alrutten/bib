@@ -1,8 +1,9 @@
 
 
 # BUGS & WARNINGS
-bugs <- function(year, warnings = FALSE) {
-	
+bugs <- function(input, warnings = FALSE) {
+	date_ = input$date 
+	year = as.numeric(strftime(date_, format = "%Y"))
   ff = list.files(system.file('SQL', package = 'bib'), full.names = TRUE)
   
 	if(warnings) f = ff[grep('WARNINGS', ff)] else f = ff[grep('BUGS', ff)]
@@ -12,7 +13,7 @@ bugs <- function(year, warnings = FALSE) {
 	d = Q(year = year, strg)
 	d = d[!is.na(d$boxes), ]
 	
-	if(nrow(d) == 0) d = data.frame(info =   if(warnings)   "There are no warnings for now." else "There are no bugs for now." )
+	if(nrow(d) == 0) d = data.frame(info =   if(warnings)   "There are no warnings for now." else "There are no bugs for now.", date = input$date )
 	row.names(d) = NULL
 	d
  } 
@@ -20,7 +21,7 @@ bugs <- function(year, warnings = FALSE) {
  
 # MESSAGES
 predHatchDate <- function(input, ...) { 
-	d = nestDataFetch(year = input$year, month  = input$month, day = input$day, 
+	d = nestDataFetch(date_ = input$date, 
               stagesNFO = stagesInfo, stages = input$nestStages, 
               safeHatchCheck = input$safeHatchCheck, 
               youngAgeYN = input$youngAgeYN, youngAge = input$youngAge

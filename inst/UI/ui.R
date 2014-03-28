@@ -1,112 +1,99 @@
- 
-require(bib)
 
-shinyUI(pageWithSidebar(
-  headerPanel = headerPanel(
+ 
+shinyUI(
+fluidPage(style="padding-top: 80px;",
+	# js	
+	HTML("
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
+	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
+	"),
 
-	#TITLE
-	if(is.breeding() ) 
-	HTML( paste('<h6>WESTERHOLZ field work BREEDING SEASON [', format(Sys.Date(), "%d-%b-%Y"), '] </h6>') ) else 
-	HTML( paste('<h6> WESTERHOLZ field work: NON-BREEDING SEASON [Start date is ',
-		paste(focusDay(), focusMonth(), focusYear(), sep = "-") ,']  </h6>') )
-  ), 
-  		
-  mainPanel = mainPanel(
-      
-	# messages
-	HTML('<blockquote>'), 
-		htmlOutput("messages"),
-	HTML('</blockquote>'), 
+	# html bricks 
+	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
+
+# top fixed bar start >>>>>>>>>>>>>>>>
+absolutePanel(
+    top = 0, left = 0, right = 0,
+    fixed = TRUE,
+    div(style="padding: 8px; border-bottom: 1px solid #CCC; background: #FFFFEE;",
+	 class="row-fluid",
+
+	div(class = "span12", 
 	
-	HTML('<blockquote> <div id="bugs" class = "table table-striped table-condensed shiny-html-output"> </div> </blockquote>'),
-	HTML('<blockquote> <div id="warnings" class = "table table-striped table-condensed shiny-html-output"> </div> </blockquote>'),
-	
-	# plot
-	div(class="span12", plotOutput("PLOT"))
-  ), 
- 
- 
- 
- sidebarPanel = sidebarPanel(
-	
-	
-	# LINKS/HELP/...
-	div(class="row", p(" "),
-	div(class="span1", icon("book")),
-	div(HTML( 	   
-		paste("<ul", 
-		 paste('class="nav nav-pills"><li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
-		 paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
-		 paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
-		paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
-		  "</ul>")
-		))
-	),
-   
-   
-   # TOOLS
-   div(class="row", p(" "), div(class="span1", icon("flag")) ,
-   	
-	div(class="span3  control-group success", radioButtons("tools", 
-			label = HTML('<a data-toggle="tooltip" class="label label-success" title=  "Settings (e.g. year) apply to both Nest history and Mapping" >TOOLS:</a>'),
-			choices = c("PHENOLOGY", "NEST HISTORY", "MAPPING", "FORECASTING") , selected = "MAPPING" )), 
-	
-	# PHENOLOGY
-	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
-				
-		selectInput("phenoType", label = HTML('<a class="label label-info" ">Map type:</a>'), 
-			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
-	
-		) , 	
+	HTML( 	   
+		paste('<ul class="nav nav-pills">', 
+			paste('<li > <a > WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
+			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
+			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
+			paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
+			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
+		 "</ul>")
+		)
+
+	)
+	)), #  top fixed bar end <<<<<<<<<
+
+
+fluidRow(
+column(9, 
+# TABSET menu
+	tabsetPanel(type = "tabs", id = "tools",
+
+		tabPanel("MAPPING", plotOutput("maps",  height = 1000, width = 1000) ), 
+		tabPanel("NEST HISTORY", plotOutput( 'nestGraph',height = 1000, width = 1300)  ) , 
+		tabPanel("FORECASTING", plotOutput( 'forecastGraph',height = 1000, width = 1300)  ) , 
+		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
+		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
+		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 500, width = 1000 )  ), 
+		tabPanel("FIRST_EGG", plotOutput( 'firstEggPrediction',  height = 500, width = 1000 )  ), 
+		tabPanel("info", htmlOutput("info") )
 		
-	# Nest history
-	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
-				
-		div(class="span6", sliderInput("NestId", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Press play or use the slider to choose a box ">Box: </a>')),
-						min = 1, max = 277, value = 1, step = 1, ticks = FALSE,
-						animate  =  animationOptions(interval = 1300, loop = FALSE, 
-						playButton = div(HTML('<button class="btn btn-mini btn-primary" type="button">Play</button>')), 
-						pauseButton = div(HTML('<button class="btn btn-mini btn-danger" type="button">Stop</button>')))) ), 
-						
-		numericInput("NestIdEntry", HTML('<a data-toggle="tooltip" class = "label label" title = "Type a box number here. Delete entry here to activate back the slider" >Type Box: </a>'), NULL)
-						
-		) , 
-		
-	# Mapping	
+
+		)
+	), 
+
+
+column(3,
+	## REFERENCE DATE
+	   dateInput('date', 
+		label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
+		min = '2007-03-01', max = Sys.Date()+7,
+		format = "dd-M-yyy",
+		value = Sys.Date(), 
+		startview = "decade"
+		) ,
+
+	
+	
+	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
-		selectInput("mapType", label = HTML('<a class="label label-info" ">Map type:</a>'), list('active' = 'activeMap', 'base'= 'baseMap'), "activeMap")
-		),
 	
-
-
-
-	hr(),
-
-  
-  # date
-	div(class="row", p(" "),
-		div(class="span1", icon("pencil")),
-		div(class="span2 control-group success",selectInput("month", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference month.">Month:</a>'), 
-			choices = 3:7, 
-			selected = focusMonth()   )), 
-		
-		div(class="span2 control-group success",selectInput("day", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Reference day.">Day:</a>'), 
-			choices = 1:31, 
-			selected = focusDay()  ) ), 
-		
-		
-		div(class="span2 control-group success",selectInput ("year", 
-			label = HTML('<a href="#" data-toggle="tooltip" class="label label-info" title="Reference year.">Year: </a>'), 
-			choices = 2007:format(Sys.Date(), format = "%Y"), 
-			selected = focusYear()  ) )
-		),
+	# map type
+	selectInput("mapType", 
+		label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Map type: interactive or a simple base map with no decorations." > Map type: </a>'), 
+		choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
+		selected = "activeMap"), 
+	# PDF
+	downloadButton('pdf', HTML('<button class="btn btn-primary" type="button"> PDF </button>') ),
 	
-	hr(),
+	#  visual settings start >>>>>>>>>>>>>>>>>>>
+	# text & box size
+	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+		div(class="span5", sliderInput("textCex", 
+						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Size of the text on screen map, it will also affect the pdf maps.">Text size: </a>')), 
+						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
+		div(class="span5", sliderInput("boxCex", 
+						label = div(HTML('<a data-toggle="tooltip" class="label label"  title="Size of the box symbols on screen map, it will also affect the pdf maps.">Box size: </a>')), 
+						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
+	#transparency					
+	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+		div(class="span5", sliderInput("transp", 
+						label = div(HTML('<a data-toggle="tooltip" class="label label" title="box transparency.">Transparency: </a>')), 
+						min = 0, max = .95, value = 0.5, step = 0.05) ) ),
+	#  visual settings end <<<<<<<<<<<<<<<<<<<<<
 	
-	# DATA settings
+	#  active map start >>>>>>>>>>>>>>>>>>>
+	conditionalPanel(condition = "input.mapType == 'activeMap'", 
 	# nest stages
 	div(class="row", p(" "),
 		div(class="span1", icon("pencil")),
@@ -149,73 +136,46 @@ shinyUI(pageWithSidebar(
 		div(class="span1 control-group success", radioButtons("parents", 
 			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Show caught parents on the curent map." >Parents:</a>'),
 			choices = c("YES", "NO") , selected = "NO" ) )
+	)	
+	)
+	#  active map end <<<<<<<<<<<<<<<<<
+
+	), # MAPPING MENU end <<<<<<<<<<<<<<<<<
+
+	
+	# PHENOLOGY MENU start >>>>>>>>>>>>
+	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
 				
-			
+		selectInput("phenoType", label = HTML('<a class="label label-info" ">Phenology:</a>'), 
+			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
 	),
-	
-	hr(),
-	
-	# MAP settings
-	# text & box size
-	div(class="row", p(" ") , div(class="span1", icon("wrench")),
-		div(class="span5", sliderInput("textCex", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Size of the text on screen map, it will also affect the pdf maps.">Text size: </a>')), 
-						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
-		div(class="span5", sliderInput("boxCex", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label"  title="Size of the box symbols on screen map, it will also affect the pdf maps.">Box size: </a>')), 
-						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
-						
-	div(class="row", p(" ") , div(class="span1", icon("wrench")),
-		div(class="span5", sliderInput("transp", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label" title="box transparency.">Transparency: </a>')), 
-						min = 0, max = .95, value = 0.5, step = 0.05) ) ), 
+	# PHENOLOGY MENU end  <<<<<<<<<<<<<<
 
+	# Nest history start >>>>>>>>>>>>
+	conditionalPanel(condition = "input.tools == 'NEST HISTORY'",
+				
+		sliderInput("NestId", 
+						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Press play or use the slider to choose a box ">Box: </a>')),
+						min = 1, max = 277, value = 1, step = 1, ticks = FALSE,
+						animate  =  animationOptions(interval = 1300, loop = FALSE, 
+						playButton = div(HTML('<button class="btn btn-mini btn-primary" type="button">Play</button>')), 
+						pauseButton = div(HTML('<button class="btn btn-mini btn-danger" type="button">Stop</button>')))), 
 						
+		numericInput("NestIdEntry", 
+				label= HTML('<a data-toggle="tooltip" class = "label label" title = "Type a box number here. Delete entry here to activate back the slider" >Type Box: </a>'), 
+				value = NULL)
 						
-						
-						
+		) 
 	
-	hr(),
+	# Nest history end  <<<<<<<<<<<<<<
 	
-	# downloads
-	div(class="row", p(" "), div(class="span1", icon("print")),
-	div(class="span1", downloadButton('pdf', HTML('<button class="btn btn-large btn-primary" type="button"> PDF </button>') ) ) ),
-	 
-	# footnote
-	hr(),
-	div(class="row", p(" "), div(class="span1", icon("question-sign")),
-		div(class="span2", HTML( '<p><a <span class="badge"> Questions&rarr; valcu@orn.mpg.de </span> </a></p>')) ) ,
 	
-	div(class="row", p(" "), div(class="span1", icon("globe")), 
-	 div(class="span10",  HTML(paste('<p><small>', strsplit(R.version$version.string, "\\(")[[1]][1], '& shiny', packageVersion('shiny')) )  )
-	 ),
-	 
-############### ADD ONS	 
-   #help popup
-	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
-	 
-	# js scripts	
-	HTML("
-	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js'></script>
-	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
+	
+	
+	
 
-	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
-	"), 
-	   
-	# inline style
-	tags$style(type='text/css', "#NestIdEntry { width: 30px; height: 10px; color: black}"),
-	tags$style(type='text/css', "#tools { font-size: 11pt}"),
-	tags$style(type='text/css', "#mapType { width: 75px; }"),
-	tags$style(type='text/css', "#phenoType { width: 75px; }"),
-	tags$style(type='text/css', "#month { width: 55px; color: black}"),
-	tags$style(type='text/css', "#day { width: 55px; ; color: red }"),
-	tags$style(type='text/css', "#year { width: 70px; }"),
-	tags$style(type='text/css', "#nestStages { width: 150px;}"),
-	tags$style(type='text/css', "#safeHatchCheck { width: 55px;}"),
-	tags$style(type='text/css', "#CI_hatchEst { width: 55px;}"),
-	tags$style(type='text/css', "#youngAge   { width: 55px; height: 150px} ") 
-  
-)
+) # tool right bar end <<<<<<<<<
+
 )))
 
 
@@ -231,15 +191,23 @@ shinyUI(pageWithSidebar(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

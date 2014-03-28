@@ -1,7 +1,5 @@
 
-refDate <- function(month, day, year) { 
-	strptime(paste(month, day, year, sep = "/"), "%m/%d/%Y") 
-	}
+
 	
 dayOfyear = function(date) {
 	as.numeric(strftime(as.POSIXct(date), format = "%j"))
@@ -18,23 +16,7 @@ is.breeding	<- function() {
 	if(d %in% 3:5) TRUE else FALSE
 	}
 	
-focusDay <- function() { 
-	if(is.breeding () )
-	 as.numeric(format(Sys.time(), "%d") ) else 15
-	
-	}
-	
-focusMonth <- function() { 
-	if(is.breeding () )
-		as.numeric(format(Sys.time(), "%m")) else 5
-	
-	}
-	
-focusYear <- function() { 
-	y = as.numeric( format(Sys.Date(), format = "%Y") )
-	if(is.breeding () ) y else y-1
-	
-	}
+
 	
 add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
 	}

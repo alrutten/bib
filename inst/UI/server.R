@@ -1,57 +1,68 @@
 
-
-    
-
 shinyServer( function(input, output) {
  	
-	source( system.file('settings.R', package = 'bib') )
-
-
+   source( system.file('settings.R', package = 'bib') )
 	
-  output$bugs <- renderTable({
-    bugs(year = input$year) }, include.rownames = FALSE, include.colnames = FALSE )	
-
-  output$warnings <- renderTable({
-    bugs(year = input$year,  warnings = TRUE) }, include.rownames = FALSE, include.colnames = FALSE )	
+  output$bugs <- renderDataTable({ bugs(input = input) } )	
+  output$warnings <- renderDataTable({ bugs(input = input,  warnings = TRUE) } )	
+		
 	
-	
-  output$messages <- renderPrint({
-
-
-  cat( paste(length(input$nestStages), 'out of', nrow(stagesInfo) , 'stages selected! <br>'))
+  output$info <- renderPrint({
+    
+   cat( paste(length(input$nestStages), 'out of', nrow(stagesInfo) , 'stages selected! <br>'))
       
   cat( paste('Hatch check is set to', abs(as.numeric(input$safeHatchCheck)), ' days in advance! <br>'))  		 
    predHatchDate(input =input)
-  	 
-
+   
+   cat('<hr> Internal info, for debugging only: <br>')
+   a = reactiveValuesToList(input, all.names = TRUE)
+   lapply(a, function(x) cat(x, "<br>") )
 	
   })
   
-
-
-  output$PLOT <- renderPlot({
-		
-	PLOT(input = input)
-	
-   } 
-  
-  ,width  = 210*4 , height = 297*3.2
-  )
+  output$maps <- renderPlot( {maps(input = input)}  )
+  output$phenoGraph <- renderPlot( {phenoGraph(input = input)}  )
+  output$nestGraph <- renderPlot( {nestGraph(input = input)}  )
+  output$firstEggPrediction <- renderPlot( {egg1Graph(input = input)}  )
+  output$forecastGraph <- renderPlot( {forecastGraph(input = input)}  )
   
    
-    output$pdf <- downloadHandler(
+  output$pdf <- downloadHandler(
 		filename = tempfile(fileext='.pdf'),
 		content = function(file) {
-		PLOT(input = input, pdf = TRUE, file = file)
-		
-	
-	}
-  )
+		maps(input = input, pdf = TRUE, file = file)
+	})
 
   
   
   
  })
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  

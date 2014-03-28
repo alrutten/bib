@@ -38,10 +38,9 @@ paste(
 
 	}
 
-nestDataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
+nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
 	
-	date_ = refDate(month, day, year)
-	
+	year = as.numeric(strftime(date_, format = "%Y"))
 	# data
 	O = Q(year = year, nestDataQuery(date_)   )				
 	
@@ -102,7 +101,7 @@ nestDataFetch <- function(year, month, day, stages = NULL, stagesNFO = stagesInf
 	O
 
 	}
-
+	
 # phenology ----
 phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
@@ -119,7 +118,7 @@ phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 	d
 	}
 
-# ID ----
+# ID  (TO DO add to UI)----
 idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
 # TODO
   # transp = '67A741F9C66F0001'; id = 'B2F5444'
@@ -154,7 +153,6 @@ idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
 }
 
 # 1st egg Predict ----
-
 ldPredictDataFetch <- function() { 
     d = Q(query = "SELECT  F.year_, firstEgg, firstEgg_AprilDay, avg_temp FROM 
     ( SELECT year(firstEgg) year_, firstEgg, dayofyear(firstEgg) - 

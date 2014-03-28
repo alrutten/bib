@@ -1,5 +1,15 @@
 
-require(bib)
+
+{  # runApp
+westerholz()
+shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
+shiny::runApp('/home/valcu/tests/')
+
+}
+
+{ # egg protocol: 2014
+
+ require(bib)
 
 d = lapply(2007:2013, function(x) Q(x, "select S1.box, S1.dt1, S2.dt2, DATEDIFF(S2.dt2, S1.dt1) diffDate FROM 
 
@@ -23,7 +33,7 @@ x$prop = round(x$TRUE. / x$N,2)*100
 z = lapply(d, function(x)  data.frame( Min = min(x$dt2, na.rm = T), Max = max(x$dt1)  ) )
 z = data.frame( do.call(rbind, z) )
 z$dltD = difftime(z$Max, z$Min)
-
+}
 
 
 
