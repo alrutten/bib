@@ -9,6 +9,7 @@ shinyServer( function(input, output) {
 # data tables	
 	output$bugs <- renderDataTable({ bugs(input = input) } )	
 	output$warnings <- renderDataTable({ bugs(input = input,  warnings = TRUE) } )	
+  output$colComments <- renderDataTable({ getComments(input = input) } )
 		
 # print
 	output$info <- renderPrint({

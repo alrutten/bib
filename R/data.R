@@ -102,6 +102,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 
 	}
 	
+
 # phenology ----
 phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
@@ -169,7 +170,18 @@ ldPredictDataFetch <- function() {
 
 }
 
+# get table comments
 
+getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
+  
+  year = as.numeric(strftime(date_, format = "%Y"))
+  if(year < 2014) stop("for years < 2013 go to the corresponding databsed and check columns_dafinition table.")
+
+  x = Q(year = year, paste("show full columns from", tab) )
+  
+  x[, c("Field" , "Comment")]
+  
+  }
 
 
 

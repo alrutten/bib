@@ -3,7 +3,7 @@
 {  # runApp
 westerholz()
 shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
-shiny::runApp('/home/valcu/tests/')
+shiny::runApp('/home/mihai/gitHub/bib/inst/UI/')
 
 }
 

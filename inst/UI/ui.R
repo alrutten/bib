@@ -58,7 +58,8 @@ column(9,
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("info", htmlOutput("info") )
+		tabPanel("info", htmlOutput("info") ), 
+		tabPanel("HELP", dataTableOutput("colComments") )
 		
 
 		)
