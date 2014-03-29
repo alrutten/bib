@@ -54,7 +54,7 @@ addMarks <- function(marks, x_0 = 4500013L, y_0 = -8L) {
 	m = boxes[boxes$box%in%marks[[1]], ]
 	m = spTransform(m, 
 		CRS(paste0("+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=",x_0," +y_0=",y_0," +datum=potsdam +units=m +no_defs") ) )
-	points(m, pch = pchMark, col = marks[[2]], cex = 1.7)
+	points(m, pch = 15, col = marks[[2]], cex = 1.7)
 	text(m, labels = marks[[3]], cex = .8, col = 'white')
 	
 	
