@@ -103,7 +103,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 	}
 	
 # phenology ----
-phenologyDataFetch	 <- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
+phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
 	d = Q(query = 
 		paste("select year_, 

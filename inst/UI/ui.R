@@ -1,5 +1,13 @@
 
- 
+# SITE SCHEME
+# fluidPage
+# 	absolutePanel
+#	fluidRow
+#		column(9, tabsetPanel + tabPanel)
+#		column(3, right setting panel:
+#			tools common for all panels
+# 			conditionalPanel(condition = "input.tools == 'tab panel name'"
+
 shinyUI(
 fluidPage(style="padding-top: 80px;",
 	# js	
@@ -44,8 +52,7 @@ column(9,
 		tabPanel("FORECASTING", plotOutput( 'forecastGraph',height = 1000, width = 1300)  ) , 
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
-		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 500, width = 1000 )  ), 
-		tabPanel("FIRST_EGG", plotOutput( 'firstEggPrediction',  height = 500, width = 1000 )  ), 
+		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
 		tabPanel("info", htmlOutput("info") )
 		
 
@@ -146,7 +153,7 @@ column(3,
 	# PHENOLOGY MENU start >>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'PHENOLOGY'",
 				
-		selectInput("phenoType", label = HTML('<a class="label label-info" ">Phenology:</a>'), 
+		selectInput("phenoType", label = HTML('<a class="label label-info" ">Paramerer:</a>'), 
 			list('firstEgg' = 'firstEgg', 'hatchDate'= 'hatchDate' , 'fledgeDate'= 'fledgeDate'), "firstEgg")
 	),
 	# PHENOLOGY MENU end  <<<<<<<<<<<<<<

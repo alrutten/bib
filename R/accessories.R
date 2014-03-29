@@ -1,6 +1,4 @@
 
-
-	
 dayOfyear = function(date) {
 	as.numeric(strftime(as.POSIXct(date), format = "%j"))
 }
@@ -16,13 +14,10 @@ is.breeding	<- function() {
 	if(d %in% 3:5) TRUE else FALSE
 	}
 	
-
-	
 add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
 	}
 
 ## query function
-
 Q <- function(year, query, db) {
     
   if(missing(db)) {
@@ -37,7 +32,12 @@ Q <- function(year, query, db) {
   return(dbq(CON, query))
 }
 
-
+# ...
+getInputCopy <- function() {
+	if( ! exists('inputCopy', .GlobalEnv) )
+	source( system.file('settings.R', package = 'bib') )
+	return(inputCopy)
+	}
 
 
 

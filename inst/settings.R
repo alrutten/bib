@@ -1,7 +1,4 @@
 
-load(system.file('map', 'spatial', package = 'bib'))
-load(system.file('hatchEstimation', 'hatchDateGLM', package = 'bib'))
-
 # nest stages
 stagesInfo = data.frame(
   nest_stage = c( "U", "LT" , "R" ,  "B"  , "BC" , "C" , "LIN"  ,  "E"  , "WE", "Y", "NOTA", "WSP") ,
@@ -13,12 +10,12 @@ stagesInfo = data.frame(
 	setmap = list(
 				# BASE MAP
 				box.pch = 19,         # box symbol  type
-				box.cex = 1,        # box symbol size
+				box.cex = 1,          # box symbol size
 				box.col = "grey50",   # default box color
 				box.offset = 0.3,     # distance from box to text  
 				
 				text.cex = 0.5,       # box label size
-				text.pos = 4,    # box name placement
+				text.pos = 4,    	  # box name placement
 				
 				#  working maps
 				evol.cex   = 1.2,     # nest evolution arrow
@@ -46,7 +43,23 @@ stagesInfo = data.frame(
 info.pos     = c(x = 4417700, y = 5335000)
 legend.pos   = c(x = 4417250, y = 5335020)
 
-
+# UI (content of input list as used by shiny, useful when running functions outside shiny)
+inputCopy = list(
+	transp = 0.5,
+	textCex = 0.8 ,
+	parents = "NO",
+	tools = "MAPPING",
+	NestIdEntry = NA,
+	nestStages = stagesInfo$nest_stage,
+	mapType = "activeMap",
+	phenoType = "firstEgg",
+	NestId = 1,
+	hatchNow = TRUE,
+	youngAge = 14,
+	youngAgeYN = "ALL", 
+	boxCex = 2,
+	safeHatchCheck = "-3",
+	date = Sys.Date() )
 
 
 

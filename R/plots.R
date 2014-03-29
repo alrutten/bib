@@ -1,7 +1,8 @@
 
 # mapping
 	basemap <- function(input, pdf = FALSE,...) {
-
+		if(missing(input)) input = getInputCopy()
+		
 		if(pdf) pdf(..., width = 8.3, height = 11.7)
 		 par(mai = c(0,0,0,0))
 			plot(boxes, pch = setmap$box.pch, col = add.alpha('#C0C0C0', input$transp), cex = input$boxCex)
@@ -13,7 +14,7 @@
 		}
 
 	map <- function(input, pdf = FALSE, ...) {
-		 
+		 if(missing(input)) input = getInputCopy()
 		 if(pdf) pdf(..., width = 8.3, height = 11.7) 
 
 			
@@ -95,22 +96,17 @@
 
 		}
 
-#  maps
+#  active and base map
 	maps <- function(input, pdf = FALSE, ...) {
 
 			if(input$mapType == 'activeMap')  	map(input = input, pdf = pdf, ...)
 			if(input$mapType == 'baseMap')  	basemap(input = input, pdf = pdf, ...)
-
-			# if(input$tools == 'NEST HISTORY')  nestGraph(input = input, pdf = pdf, ...)
-			# if(input$tools == 'FORECASTING')  forecastGraph(input, pdf = pdf, ...)
-			
 			
 		}	
 		
-		
 # Nest history
 	nestGraph <- function(input, pdf = FALSE, ...) {
-			
+	if(missing(input)) input = getInputCopy()		
 			box1 = input$NestId
 			box2 = input$NestIdEntry 
 			
@@ -221,7 +217,7 @@
 
 # Forecasting graphs
 	forecastGraph <- function(input, pdf = FALSE, ...) {
-			
+	if(missing(input)) input = getInputCopy()		
 			d = nestDataFetch(date_ = input$date, 
 						stagesNFO = stagesInfo, stages = input$nestStages, 
 						safeHatchCheck = input$safeHatchCheck, 
@@ -246,54 +242,38 @@
 			
 		}
 		
-#phenology graphs
+# phenology graphs
 	phenoGraph <- function(input) {
+		if(missing(input)) input = getInputCopy()
+		
 		require(ggplot2)
+		require(gridExtra)
+		
 		what = input$phenoType
 		d = phenologyDataFetch(what)
 		
-		print(ggplot(d, aes(x= var , fill = Year), environment=environment()) + 
+		P = ggplot(d, aes(x= var , fill = Year), environment=environment()) + 
 										geom_density(alpha = 0.7) + 
-										xlab( paste(what, "(day 1 = April 1st)" ) ))
-	 
+										xlab( paste(what, "(day 1 = April 1st)" ) )
+		
+		#first egg prediction based on Apr temperature
+		if( what == 'firstEgg') {
+		d = ldPredictDataFetch()
+		p2 = ggplot(d, aes(x = avg_temp, y = firstEgg_AprilDay, label= year_)) + theme_bw() + 
+			geom_text(vjust= -0.5, hjust = -0.4, size = 4) + 
+			geom_point(size = 5)  + 
+			ylab("First Egg (day 1 = 1st April)") + 
+			xlab("Average minimum daily temperature [14 Mar-1Apr]")+ 
+			scale_y_continuous(breaks=seq(1, 20, 1)) + 
+			xlim(-4,5)
+		}
+		
+		if( what == 'firstEgg')
+			grid.arrange(P, p2) else print(P) 
+		
 
 
 	}	
 
 
-# 1st egg predict [TODO: add to UI]
-	egg1Graph <- function(input) {
-	  require(ggplot2)
-	  d =ldPredictDataFetch()
-	 
-	  p = ggplot(d, aes(x = avg_temp, y = firstEgg_AprilDay, label= year_)) + theme_bw() + 
-		geom_text(vjust= -0.5, hjust = -0.4, size = 4) + 
-		geom_point(size = 5)  + 
-		ylab("First Egg (day 1 = 1st April)") + 
-		xlab("Average minimum daily temperature [14 Mar-1Apr]")+ 
-		scale_y_continuous(breaks=seq(1, 20, 1)) + 
-		xlim(-4,5)
-	 print(p)
-	 
-	 }
-	  
-	  
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
