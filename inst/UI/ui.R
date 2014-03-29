@@ -31,9 +31,8 @@ absolutePanel(
 	HTML( 	   
 		paste('<ul class="nav nav-pills">', 
 			paste('<li >', 
-				paste('<a data-toggle="tooltip" title=', 
-				shQuote(print(xtable::xtable(data.frame(info = unlist(packageDescription('bib')))), type = 'html')) , '>'), 
-				'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
+				paste('<a data-toggle="tooltip" title=', shQuote(bibDesciption()) , '>'), 
+				 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
 			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
 			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
 			paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 

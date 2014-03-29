@@ -39,6 +39,10 @@ getInputCopy <- function() {
 	return(inputCopy)
 	}
 
-
+bibDesciption <-function() {
+	x = packageDescription('bib', fields=c('Package', 'Type', 'Version', 'Date', 'Maintainer', 'Depends', 'Suggests','Description')) 
+	
+	print(xtable::xtable(data.frame(info = unlist(x))), type = 'html')
+}
 
 
