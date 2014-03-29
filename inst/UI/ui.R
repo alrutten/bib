@@ -16,9 +16,6 @@ fluidPage(style="padding-top: 80px;",
 	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>
 	"),
 
-	# html bricks 
-	includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
-
 # top fixed bar start >>>>>>>>>>>>>>>>
 absolutePanel(
     top = 0, left = 0, right = 0,
@@ -30,13 +27,12 @@ absolutePanel(
 	
 	HTML( 	   
 		paste('<ul class="nav nav-pills">', 
-			paste('<li >', 
-				paste('<a data-toggle="tooltip" title=', shQuote(bib::bibDescription()) , '>'), 
+			paste('<li>', 
+				paste('<a data-toggle="tooltip" title=', shQuote(bib::bibDescription(), type ="sh") , '>'), 
 				 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
 			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
 			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
-			paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
-			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
+			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a> </li>'), 
 		 "</ul>")
 		)
 		
@@ -50,16 +46,16 @@ absolutePanel(
 fluidRow(
 column(9, 
 # TABSET menu
-	tabsetPanel(type = "tabs", id = "tools",
-
+	tabsetPanel(type = "tabs", id = "tools",selected = "MAPPING", 
+	  tabPanel("HELP", dataTableOutput("colComments") ),
 		tabPanel("MAPPING", plotOutput("maps",  height = 1000, width = 1000) ), 
 		tabPanel("NEST HISTORY", plotOutput( 'nestGraph',height = 1000, width = 1300)  ) , 
 		tabPanel("FORECASTING", plotOutput( 'forecastGraph',height = 1000, width = 1300)  ) , 
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("info", htmlOutput("info") ), 
-		tabPanel("HELP", dataTableOutput("colComments") )
+		tabPanel("info", htmlOutput("info") ) 
+
 		
 
 		)
@@ -77,8 +73,23 @@ column(3,
 		startview = "decade"
 		)) ,
 
-	
-	
+	# HELP MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
+	conditionalPanel(condition = "input.tools == 'HELP'", 
+ # data entry help
+ includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
+ hr(), 
+ HTML('<button type="button" class="btn btn-primary btn-lg active" data-toggle="modal" href= "#dataEntry"> Data entry setup </button>'),
+ hr(),                 
+ # table name
+ div(class="span3",
+ selectInput("tabNamHelp", 
+                 label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Select a table!" > Table name: </a>'), 
+                 choices = list('NESTS' = 'NESTS', 'ADULTS'= 'ADULTS', 'CHICKS', 'AUTHORS'), 
+                 selected = "NESTS")  
+   )
+	),
+	# HELP MENU end >>>>>>>>>>>>>>>>>>>>>>>>>>>
+  
 	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
 	
@@ -119,8 +130,6 @@ list(
 			</div>') )	
 			
 	),	
-		
-		
 		
 	#  add marks end <<<<<<<<<<<<<<<<<<<<<
 	
@@ -224,6 +233,7 @@ list(
 	
 	# Nest history end  <<<<<<<<<<<<<<
 	
+  
 	
 	
 	

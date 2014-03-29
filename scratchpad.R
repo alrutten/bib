@@ -5,6 +5,9 @@ westerholz()
 shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
 shiny::runApp('/home/mihai/gitHub/bib/inst/UI/')
 
+require(shiny); require(bib)
+runApp('~/git/bib/inst/UI/')
+
 }
 
 { # egg protocol: 2014

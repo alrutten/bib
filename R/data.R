@@ -170,12 +170,12 @@ ldPredictDataFetch <- function() {
 
 }
 
-# get table comments
+# get table comments ----
 
 getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
   
   year = as.numeric(strftime(date_, format = "%Y"))
-  if(year < 2014) stop("for years < 2013 go to the corresponding databsed and check columns_dafinition table.")
+  if(year < 2014) stop("For all years < 2014 go to the corresponding database and check `columns_dafinition´ table.")
 
   x = Q(year = year, paste("show full columns from", tab) )
   
