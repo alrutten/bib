@@ -13,7 +13,7 @@ fluidPage(style="padding-top: 80px;",
 	# js	
 	HTML("
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
-	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>
+	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>
 	"),
 
 	# html bricks 
@@ -30,13 +30,19 @@ absolutePanel(
 	
 	HTML( 	   
 		paste('<ul class="nav nav-pills">', 
-			paste('<li > <a > WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
+			paste('<li >', 
+				paste('<a data-toggle="tooltip" title=', 
+				shQuote(print(xtable::xtable(data.frame(info = unlist(a))), type = 'html')) , '>'), 
+				'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
 			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
 			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
 			paste('<li class="active"> <a data-toggle="modal" href= "#dataEntry" >Data entry</a></li>'), 
 			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a></li>'), 
 		 "</ul>")
 		)
+		
+	#	
+		
 
 	)
 	)), #  top fixed bar end <<<<<<<<<
