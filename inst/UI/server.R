@@ -19,7 +19,7 @@ shinyServer( function(input, output) {
 	predHatchDate(input =input)
 
 	# input content
-	a = reactiveValuesToList(input, all.names = TRUE)
+	a = reactiveValuesToList(input, all.names = FALSE)
 	x = data.frame(what = names(unlist(a)), v = unlist(a))
 	row.names(x) = NULL
 

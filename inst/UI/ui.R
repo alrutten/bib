@@ -67,26 +67,68 @@ column(9,
 
 column(3,
 	## REFERENCE DATE
+	   div(class="row", p(" ") , div(class="span1", icon("wrench")),
 	   dateInput('date', 
 		label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
 		min = '2007-03-01', max = Sys.Date()+7,
 		format = "dd-M-yyy",
 		value = Sys.Date(), 
 		startview = "decade"
-		) ,
+		)) ,
 
 	
 	
 	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
 	
+	div(class="row", p(" ") , div(class="span1", icon("wrench")),
 	# map type
-	selectInput("mapType", 
-		label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Map type: interactive or a simple base map with no decorations." > Map type: </a>'), 
-		choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
-		selected = "activeMap"), 
-	# PDF
-	downloadButton('pdf', HTML('<button class="btn btn-primary" type="button"> PDF </button>') ),
+	div(class="span3", 
+		selectInput("mapType", 
+			label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Map type: 
+					interactive or a simple base map with no decorations." > Map type: </a>'), 
+			choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
+			selected = "activeMap") ), 
+			
+	# add marks
+	div(class="span3", 
+		radioButtons("marks", 
+			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Add user defined markers to the current map." >
+				Add marks:</a>'),
+			choices = c("Yes", "No") , selected = "No" )
+			)
+	),
+	
+
+	#  add marks start >>>>>>>>>>>>>>>>>>>
+	conditionalPanel(condition = "input.marks == 'Yes'",		
+			
+	div(class="row", p(" "), div(class="span1", icon("pencil")),
+		HTML('<div class="span2 control-group">
+			  <a data-toggle="tooltip" class="label label-info" 
+			  title=  "Add markers using a list with 3 components: box, color, text. Follow the template in the box." >
+			  Define markers:</a>
+			  <textarea id="marksList" rows="10" cols="30">
+list( 
+	box = c(65, 137, 271, 277), 
+	col = c("red", "blue"), 
+	text = ( c(1,2,"x") )
+	)
+			  </textarea>
+			</div>') )	
+			
+	),	
+		
+		
+		
+	#  add marks end <<<<<<<<<<<<<<<<<<<<<
+	
+	# PDF start >>>> 
+	div(class="row", p(" "), div(class="span1", icon("print")),
+		div(class="span1", 
+		downloadButton('pdf', HTML('<button class="btn btn-small btn-primary" type="button"> PDF </button>') ) ) ), 
+	# PDF end <<<
+		
 	
 	#  visual settings start >>>>>>>>>>>>>>>>>>>
 	# text & box size

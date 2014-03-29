@@ -1,4 +1,5 @@
 
+
 # mapping
 	basemap <- function(input, pdf = FALSE,...) {
 		if(missing(input)) input = getInputCopy()
@@ -9,12 +10,16 @@
 			text(boxes, labels = boxes$box, pos = setmap$text.pos, cex = input$textCex, offset = setmap$box.offset)
 			plot(streets, col = "grey", add = T)
 			plot(roads, add = T, col = "grey")
+		
+		if(input$marks == "Yes" ) addMarks(marks = eval(parse(text = input$marksList)) )
+		
 		  if(pdf) dev.off()
 
 		}
 
-	map <- function(input, pdf = FALSE, ...) {
+	map <- function(input,  pdf = FALSE, ...) {
 		 if(missing(input)) input = getInputCopy()
+		 
 		 if(pdf) pdf(..., width = 8.3, height = 11.7) 
 
 			
@@ -87,7 +92,8 @@
 			if(as.numeric(strftime(input$date, format = "%Y"))  < as.numeric(format(Sys.Date(), format = "%Y"))  ) 
 				mtext(strftime(input$date, format = "%Y"), side = 2, line = -6, cex = 8, col = "grey80", font = 4)
 			
-
+	# marks
+	if(input$marks == "Yes" ) addMarks(marks = eval(parse(text = input$marksList)) )
 			
 		if(pdf)  dev.off()
 		 

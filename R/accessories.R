@@ -45,4 +45,17 @@ bibDescription <-function() {
 	print(xtable::xtable(data.frame(info = unlist(x))), type = 'html')
 }
 
-
+# marks is a list with 3 elements (box, col, text)
+# marks is an optional argument for basemap() and map()
+# e.g. marks = list( c(28,29,44), c(2,2,2), c(5,6,7) )
+addMarks <- function(marks, x_0 = 4500013L, y_0 = -8L) {
+	require(rgdal)
+	
+	m = boxes[boxes$box%in%marks[[1]], ]
+	m = spTransform(m, 
+		CRS(paste0("+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=",x_0," +y_0=",y_0," +datum=potsdam +units=m +no_defs") ) )
+	points(m, pch = pchMark, col = marks[[2]], cex = 1.7)
+	text(m, labels = marks[[3]], cex = .8, col = 'white')
+	
+	
+	}
