@@ -75,19 +75,18 @@ column(3,
 
 	# HELP MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'HELP'", 
- # data entry help
- includeHTML(system.file('HTML', 'data_entry_help.html', package = 'bib')),
- hr(), 
- HTML('<button type="button" class="btn btn-primary btn-lg active" data-toggle="modal" href= "#dataEntry"> Data entry setup </button>'),
- hr(),                 
- # table name
- div(class="span3",
- selectInput("tabNamHelp", 
-                 label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Select a table!" > Table name: </a>'), 
-                 choices = list('NESTS' = 'NESTS', 'ADULTS'= 'ADULTS', 'CHICKS', 'AUTHORS'), 
-                 selected = "NESTS")  
-   )
-	),
+
+   # table name
+   selectInput("tabNamHelp", 
+               label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Select a table!" > Table name: </a>'), 
+               choices = list('NESTS' = 'NESTS', 'ADULTS'= 'ADULTS', 'CHICKS', 'AUTHORS'), 
+               selected = "NESTS"),                    
+  # data entry help
+   includeHTML(system.file('UI', 'txt', 'block1.html', package = 'bib') ),
+  # NOTES                
+  includeMarkdown(system.file('UI', 'txt', 'block2.md', package = 'bib') )
+          
+ ),
 	# HELP MENU end >>>>>>>>>>>>>>>>>>>>>>>>>>>
   
 	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -102,14 +101,25 @@ column(3,
 			choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
 			selected = "activeMap") ), 
 			
+	
+	# display experiments
+	div(class="span3", 
+	    selectInput("experiments", 
+	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
+                               ">Experiments:</a>'), 
+	                choices = 1:3, selected = 1:3, 
+                  multiple =  TRUE) ), 
+  
 	# add marks
 	div(class="span3", 
-		radioButtons("marks", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Add user defined markers to the current map." >
-				Add marks:</a>'),
-			choices = c("Yes", "No") , selected = "No" )
-			)
-	),
+	    radioButtons("marks", 
+	                 label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Add user defined markers to the current map." >
+				Markers:</a>'),
+	                 choices = c("Yes", "No") , selected = "No" )
+	)
+  
+      
+  ),
 	
 
 	#  add marks start >>>>>>>>>>>>>>>>>>>
