@@ -5,15 +5,11 @@ hr <- function(...) {
 	}
 	
 
-experimentIDs = function() {
-	Q(dd2yy(Sys.Date()), "select ID from EXPERIMENTS where visible = 'YES'" )$ID
-}	
-	
-
 links <-function(nam) {
   switch(nam,
          man     = shQuote("http://scidb.orn.mpg.de/scidbwiki/westerholz/doku.php?id=current_field_manual"),
-         journal = shQuote("http://scidb.orn.mpg.de/scidbwiki/westerholz/doku.php?id=current_field_journal")
+         journal = shQuote("http://scidb.orn.mpg.de/scidbwiki/westerholz/doku.php?id=current_field_journal"), 
+         snb = shQuote("http://scicomp.orn.mpg.de:3838/shinyAPP2/SNBatWESTERHOLZ/")
   )
 }
 

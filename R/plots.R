@@ -1,12 +1,11 @@
 
 marksmap <- function(input) {
-	if(input$marks == "Yes") 
+	year = dd2yy(input$date)
+  if(input$marks == "Yes") 
 		addMarks(marks = eval(parse(text = input$marksList)) )
-	print(input$experiments)
-	if( length(input$experiments) > 0  ) {
-		print('xxxxxxxx')
-		e = getExperiments(input$date)
-		print(e)
+	
+  if( year > 2013 && length(input$experiments) > 0  ) {
+		e = getExperiments(year, input$experiments)
 		lapply(e, function(f) addMarks(f() )  )
 		}
 	

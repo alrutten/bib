@@ -1,10 +1,18 @@
 
-shinyServer( function(input, output) {
+shinyServer( function(input, output, clientData, session) {
 
 # load components	
 	source( system.file('components.R', package = 'bib') )
 	source( system.file('settings.R', package = 'bib') )
 
+# update UI based on user data
+#  observe( {
+#    expID = experimentIDs( dd2yy(input$date) )
+#    updateSelectInput(session, "experiments",
+#                choices = expID,
+#                selected = expID)
+#    })      
+  
 # data tables	
 	output$bugs      <- renderDataTable({ bugs(input = input) } )	
 	output$warnings  <- renderDataTable({ bugs(input = input,  warnings = TRUE) } )	
@@ -27,7 +35,7 @@ shinyServer( function(input, output) {
 	print(xtable::xtable(x), type="html")
 	
 	cat('<hr> ')
-	cat( length(a$experiments) )
+	
 	
 		
   })
@@ -49,10 +57,6 @@ shinyServer( function(input, output) {
 		maps(input = input, pdf = TRUE, file = file)
 	})
 
-  
-  
-  
-  
   
  })
  

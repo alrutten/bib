@@ -1,5 +1,16 @@
 
-{# content of input list as used by shiny
+{  # runApp ----
+   westerholz()
+   require(shiny); require(bib)
+   runApp('~/git/bib/inst/UI/')
+   shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
+   shiny::runApp('/home/mihai/gitHub/bib/inst/UI/')
+   
+   
+   
+}
+
+{# content of input list as used by shiny ----
 
 input = list(
 	transp = 0.5,
@@ -20,23 +31,9 @@ input = list(
 
 }
 
-{  # runApp
-westerholz()
-require(shiny); require(bib)
-shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
-shiny::runApp('/home/mihai/gitHub/bib/inst/UI/')
-
-runApp('~/git/bib/inst/UI/')
-
-}
-
-
-
-
 { # egg protocol: 2014
-
- require(bib)
-
+require(bib)
+# date of 1st nest sign vs. date of 1st egg ----
 d = lapply(2007:2013, function(x) Q(x, "select S1.box, S1.dt1, S2.dt2, DATEDIFF(S2.dt2, S1.dt1) diffDate FROM 
 
 -- 1st date of stage > B and < E
@@ -54,14 +51,42 @@ x$N = apply(x, 1, sum)
 x$year = 2007:2013
 x$prop = round(x$TRUE. / x$N,2)*100
 
-
-# in pop: last date of dt1 vs 1st date of dt2
+# in pop: last date of dt1 vs 1st date of dt2 ----
 z = lapply(d, function(x)  data.frame( Min = min(x$dt2, na.rm = T), Max = max(x$dt1)  ) )
 z = data.frame( do.call(rbind, z) )
 z$dltD = difftime(z$Max, z$Min)
+
+### clutch disr ----
+x = dbq(q = "select count(clutch) fr, clutch from  BREEDING group by clutch")
+a = sum(x[x$clutch<=10, "fr"])
+b = sum(x$fr)
+a/b
+
+40*16/100
+
+
+# sampling function
+s = function(n = 40, date) {
+  d = Q(2014,  "SELECT distinct box from NESTS where nest_stage is not NULL")
+  s = sample(d$box, n)
+  
+  out = list( box = s , col = "navy", text =  "i" ) 
+ 
+  return(out)
+ }
+
+
+
+
+
+
+
+
+
+
+
+
 }
-
-
 
 
 

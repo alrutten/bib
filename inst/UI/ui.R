@@ -32,15 +32,12 @@ absolutePanel(
 				 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
 			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
 			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
-			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a> </li>'), 
+			paste('<li class="active"><a href=', links("snb"), 'target="_blank"> SNB </a></li>'), 
 		 "</ul>")
 		)
-		
-	#	
-		
-
-	)
-	)), #  top fixed bar end <<<<<<<<<
+	 )
+  )
+), #  top fixed bar end <<<<<<<<<
 
 
 fluidRow(
@@ -104,8 +101,8 @@ column(3,
 	    selectInput("experiments", 
 	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
                                ">Experiments:</a>'), 
-	                choices = experimentIDs(), 
-					selected = experimentIDs(), 
+	                choices  = 1:5, 
+					        selected = 1:5, 
                   multiple =  TRUE) ), 
   
 	# add marks

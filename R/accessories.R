@@ -10,11 +10,10 @@ dayofyear2date <- function(dayofyear, year) {
 	
 	}
 
-dd2yy <-	function(date)  {
+dd2yy <- function(date)  {
 	as.numeric(strftime(date, format = "%Y"))
 	}	
 	
-
 ## query function
 Q <- function(year, query, db) {
     
@@ -38,9 +37,7 @@ is.breeding	<- function() {
 	
 add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
 	}
-	
-	
-	
+		
 bibDescription <-function() {
 	x = packageDescription('bib', fields=c('Package', 'Type', 'Version', 'Date', 'Maintainer', 'Depends', 'Suggests','Description')) 
 	
@@ -59,7 +56,27 @@ addMarks <- function(marks, x_0 = 4500013L, y_0 = -8L) {
 	points(m, pch = 15, col = marks[[2]], cex = 1.7)
 	text(m, labels = marks[[3]], cex = .8, col = 'white')
 	
-	
 	}
+
+
+#experimentIDs = function(year = dd2yy( Sys.Date() ) ) {
+#  res = try(Q(year, "select ID from EXPERIMENTS where visible = 'YES'" ), silent = TRUE)
+#  if(inherits(res, "data.frame") && nrow(res) > 0) res else NA
+#}	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 
