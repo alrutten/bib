@@ -43,23 +43,7 @@ stagesInfo = data.frame(
 info.pos     = c(x = 4417700, y = 5335000)
 legend.pos   = c(x = 4417250, y = 5335020)
 
-# UI (content of input list as used by shiny, useful when running functions outside shiny)
-inputCopy = list(
-	transp = 0.5,
-	textCex = 0.8 ,
-	parents = "NO",
-	tools = "MAPPING",
-	NestIdEntry = NA,
-	nestStages = stagesInfo$nest_stage,
-	mapType = "activeMap",
-	phenoType = "firstEgg",
-	NestId = 1,
-	hatchNow = TRUE,
-	youngAge = 14,
-	youngAgeYN = "ALL", 
-	boxCex = 2,
-	safeHatchCheck = "-3",
-	date = Sys.Date() )
+
 
 
 

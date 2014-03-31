@@ -1,5 +1,5 @@
 --------------
-*NOTES*  
+###NOTE  
 You can use this interface (and the software behind it)   
 independently of the `scicomp` server:    
 * Open `R`  

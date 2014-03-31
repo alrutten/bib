@@ -39,8 +39,7 @@ paste(
 	}
 
 nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
-	
-	year = as.numeric(strftime(date_, format = "%Y"))
+	year = dd2yy(date_)
 	# data
 	O = Q(year = year, nestDataQuery(date_)   )				
 	
@@ -102,7 +101,6 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 
 	}
 	
-
 # phenology ----
 phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
@@ -171,10 +169,9 @@ ldPredictDataFetch <- function() {
 }
 
 # get table comments ----
-
 getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
   
-  year = as.numeric(strftime(date_, format = "%Y"))
+  year = dd2yy(date_)
   if(year < 2014) stop("For all years < 2014 go to the corresponding database and check `columns_dafinition´ table.")
 
   x = Q(year = year, paste("show full columns from", tab) )
@@ -182,6 +179,32 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
   x[, c("Field" , "Comment")]
   
   }
+
+# get EXPERIMENT ID, functions etc  ----
+getExperiments <- function(date_ = Sys.Date() ) {
+  year = dd2yy(date_)
+	if(year < 2014) stop("For all years < 2014 check //ds/raw_data_kemp/FIELD")
+	
+	x = Q(year = year, "SELECT ID, Title, author, function fun FROM EXPERIMENTS where visible = 'YES'")
+	
+	funs = lapply(x$fun, function(x) {
+			tf = tempfile(); on.exit(file.remove(tf))
+			cat(x, file = tf)
+			try( eval( parse(file = tf ) ), silent = TRUE) }
+		)
+	names(funs)	= x$ID
+	
+	funs[sapply(funs, function(f) inherits(f, "function") )]
+
+	
+	
+	
+  }
+  
+  
+  
+  
+  
 
 
 

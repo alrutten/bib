@@ -4,10 +4,11 @@ hr <- function(...) {
  HTML("<hr>")
 	}
 	
-icon <- function(nam) { 
-	HTML( paste('<i class="icon-', nam, '"></i>', sep = ""))
 
-	}
+experimentIDs = function() {
+	Q(dd2yy(Sys.Date()), "select ID from EXPERIMENTS where visible = 'YES'" )$ID
+}	
+	
 
 links <-function(nam) {
   switch(nam,

@@ -47,7 +47,7 @@ fluidRow(
 column(9, 
 # TABSET menu
 	tabsetPanel(type = "tabs", id = "tools",selected = "MAPPING", 
-	  tabPanel("HELP", dataTableOutput("colComments") ),
+	    tabPanel("HELP", dataTableOutput("colComments") ),
 		tabPanel("MAPPING", plotOutput("maps",  height = 1000, width = 1000) ), 
 		tabPanel("NEST HISTORY", plotOutput( 'nestGraph',height = 1000, width = 1300)  ) , 
 		tabPanel("FORECASTING", plotOutput( 'forecastGraph',height = 1000, width = 1300)  ) , 
@@ -55,16 +55,13 @@ column(9,
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
 		tabPanel("info", htmlOutput("info") ) 
-
-		
-
 		)
 	), 
 
 
 column(3,
 	## REFERENCE DATE
-	   div(class="row", p(" ") , div(class="span1", icon("wrench")),
+	   div(class="row", p(" ") , div(class="span1", icon("calendar")),
 	   dateInput('date', 
 		label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
 		min = '2007-03-01', max = Sys.Date()+7,
@@ -78,8 +75,8 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Select a table!" > Table name: </a>'), 
-               choices = list('NESTS' = 'NESTS', 'ADULTS'= 'ADULTS', 'CHICKS', 'AUTHORS'), 
+               label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Data entry help for each table and column!" > DATA ENTRY HELP </a>'), 
+               choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
                selected = "NESTS"),                    
   # data entry help
    includeHTML(system.file('UI', 'txt', 'block1.html', package = 'bib') ),
@@ -92,7 +89,7 @@ column(3,
 	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
 	
-	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+	div(class="row", p(" ") , div(class="span1", icon("bars")),
 	# map type
 	div(class="span3", 
 		selectInput("mapType", 
@@ -107,7 +104,8 @@ column(3,
 	    selectInput("experiments", 
 	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
                                ">Experiments:</a>'), 
-	                choices = 1:3, selected = 1:3, 
+	                choices = experimentIDs(), 
+					selected = experimentIDs(), 
                   multiple =  TRUE) ), 
   
 	# add marks
@@ -125,7 +123,7 @@ column(3,
 	#  add marks start >>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.marks == 'Yes'",		
 			
-	div(class="row", p(" "), div(class="span1", icon("pencil")),
+	div(class="row", p(" "), div(class="span1", icon("edit")),
 		HTML('<div class="span2 control-group">
 			  <a data-toggle="tooltip" class="label label-info" 
 			  title=  "Add markers using a list with 3 components: box, color, text. Follow the template in the box." >
@@ -152,15 +150,15 @@ list(
 	
 	#  visual settings start >>>>>>>>>>>>>>>>>>>
 	# text & box size
-	div(class="row", p(" ") , div(class="span1", icon("wrench")),
-		div(class="span5", sliderInput("textCex", 
+	div(class="row", p(" ") , div(class="span1", icon("gears")),
+		div(class="span5", sliderInput("textCex",
 						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Size of the text on screen map, it will also affect the pdf maps.">Text size: </a>')), 
 						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
 		div(class="span5", sliderInput("boxCex", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label"  title="Size of the box symbols on screen map, it will also affect the pdf maps.">Box size: </a>')), 
 						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
 	#transparency					
-	div(class="row", p(" ") , div(class="span1", icon("wrench")),
+	div(class="row", p(" ") , div(class="span1", icon("gears")),
 		div(class="span5", sliderInput("transp", 
 						label = div(HTML('<a data-toggle="tooltip" class="label label" title="box transparency.">Transparency: </a>')), 
 						min = 0, max = .95, value = 0.5, step = 0.05) ) ),
@@ -170,7 +168,7 @@ list(
 	conditionalPanel(condition = "input.mapType == 'activeMap'", 
 	# nest stages
 	div(class="row", p(" "),
-		div(class="span1", icon("pencil")),
+		div(class="span1", icon("edit")),
 		HTML('<div class="span2 control-group">
               <label class="control-label" for="nestStages"><a data-toggle="tooltip" class="text-info" title=  "Nest stages" >Stages:</a></label>
               <input name="nestStages" type="checkbox" value="U"/> <a data-toggle="tooltip" class="text-success" title=  "Used" > U </a> <br/>
@@ -239,13 +237,15 @@ list(
 				label= HTML('<a data-toggle="tooltip" class = "label label" title = "Type a box number here. Delete entry here to activate back the slider" >Type Box: </a>'), 
 				value = NULL)
 						
-		) 
+		), 
 	
-	# Nest history end  <<<<<<<<<<<<<<
+	# BUGS SQL list start  >>>>>>>>>>>>>>>
+	conditionalPanel(condition = "input.tools == 'BUGS'", 
+	 includeMarkdown(system.file('UI', 'txt', 'block3.md', package = 'bib') )	
+	)
 	
-  
-	
-	
+	# BUGS SQL list end  <<<<<<<<<<<<<<
+
 	
 	
 

@@ -1,14 +1,37 @@
 
+{# content of input list as used by shiny
+
+input = list(
+	transp = 0.5,
+	textCex = 0.8 ,
+	parents = "NO",
+	tools = "MAPPING",
+	NestIdEntry = NA,
+	nestStages = stagesInfo$nest_stage,
+	mapType = "activeMap",
+	phenoType = "firstEgg",
+	NestId = 1,
+	hatchNow = TRUE,
+	youngAge = 14,
+	youngAgeYN = "ALL", 
+	boxCex = 2,
+	safeHatchCheck = "-3",
+	date = Sys.Date() )
+
+}
 
 {  # runApp
 westerholz()
+require(shiny); require(bib)
 shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
 shiny::runApp('/home/mihai/gitHub/bib/inst/UI/')
 
-require(shiny); require(bib)
 runApp('~/git/bib/inst/UI/')
 
 }
+
+
+
 
 { # egg protocol: 2014
 

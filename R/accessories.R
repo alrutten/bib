@@ -1,4 +1,5 @@
 
+# date time utils
 dayOfyear = function(date) {
 	as.numeric(strftime(as.POSIXct(date), format = "%j"))
 }
@@ -9,13 +10,10 @@ dayofyear2date <- function(dayofyear, year) {
 	
 	}
 
-is.breeding	<- function() {
-	d = as.numeric(format(Sys.time(), "%m"))
-	if(d %in% 3:5) TRUE else FALSE
-	}
+dd2yy <-	function(date)  {
+	as.numeric(strftime(date, format = "%Y"))
+	}	
 	
-add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
-	}
 
 ## query function
 Q <- function(year, query, db) {
@@ -33,12 +31,16 @@ Q <- function(year, query, db) {
 }
 
 # ...
-getInputCopy <- function() {
-	if( ! exists('inputCopy', .GlobalEnv) )
-	source( system.file('settings.R', package = 'bib') )
-	return(inputCopy)
+is.breeding	<- function() {
+	d = as.numeric(format(Sys.time(), "%m"))
+	if(d %in% 3:5) TRUE else FALSE
 	}
-
+	
+add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
+	}
+	
+	
+	
 bibDescription <-function() {
 	x = packageDescription('bib', fields=c('Package', 'Type', 'Version', 'Date', 'Maintainer', 'Depends', 'Suggests','Description')) 
 	
@@ -59,3 +61,5 @@ addMarks <- function(marks, x_0 = 4500013L, y_0 = -8L) {
 	
 	
 	}
+	
+

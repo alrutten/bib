@@ -2,13 +2,12 @@
 shinyServer( function(input, output) {
 
 # load components	
-
 	source( system.file('components.R', package = 'bib') )
 	source( system.file('settings.R', package = 'bib') )
 
 # data tables	
-	output$bugs <- renderDataTable({ bugs(input = input) } )	
-	output$warnings <- renderDataTable({ bugs(input = input,  warnings = TRUE) } )	
+	output$bugs      <- renderDataTable({ bugs(input = input) } )	
+	output$warnings  <- renderDataTable({ bugs(input = input,  warnings = TRUE) } )	
   output$colComments <- renderDataTable({ getComments(tab = input$tabNamHelp, date = input$date) } )
 		
 # print
@@ -26,6 +25,10 @@ shinyServer( function(input, output) {
 
 	cat('<hr> Current settings:')
 	print(xtable::xtable(x), type="html")
+	
+	cat('<hr> ')
+	cat( length(a$experiments) )
+	
 		
   })
  
@@ -36,6 +39,9 @@ shinyServer( function(input, output) {
 	output$firstEggPrediction <- renderPlot( {egg1Graph(input = input)}  )
 	output$forecastGraph <- renderPlot( {forecastGraph(input = input)}  )
 
+
+# DOWNLOADS	
+	
 # PDF
 	output$pdf <- downloadHandler(
 		filename = tempfile(fileext='.pdf'),
@@ -43,6 +49,8 @@ shinyServer( function(input, output) {
 		maps(input = input, pdf = TRUE, file = file)
 	})
 
+  
+  
   
   
   
