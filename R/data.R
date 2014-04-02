@@ -184,7 +184,10 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
 # get EXPERIMENT  ----
 getExperiments <- function(year, expID) {
 
-  x = Q(year = year, paste("SELECT ID, Title, author, function fun FROM EXPERIMENTS where visible = 'YES' and ID = ", expID)  )
+  x = Q(year = year, paste("SELECT ID, Title, author, function fun FROM EXPERIMENTS 
+					where visible = 'YES' and ID in (", 
+					paste(expID, collapse = "," ), ")"  ) )
+					
 	  if(nrow(x) > 0) {
   
 	   # get function

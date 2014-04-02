@@ -1,12 +1,27 @@
+addMarks <- function(marks) {
+# marks is an optional argument for basemap() and map()
+# returns a list with 3 elements (box, col, text)
+# e.g. marks = list( c(28,29,44), c(2,2,2), c(5,6,7) )
+
+	k = data.frame(marks, stringsAsFactors = FALSE)
+	m = merge( data.frame(boxes), k, by = 'box')
+	m$x = m$coords.x1+10
+	m$y = m$coords.x2-10
+	coordinates(m)  = ~ x+y
+	
+	points(m, pch = 15, col = m$col, cex = 1.7)
+	text(m, labels = m$text, cex = .8, col = 'white')
+	
+}
 
 marksmap <- function(input) {
 	year = dd2yy(input$date)
   if(input$marks == "Yes") 
 		addMarks(marks = eval(parse(text = input$marksList)) )
 	
-  if( year > 2013 && length(input$experiments) > 0  ) {
+  if(length(input$experiments) > 0  ) {
 		e = getExperiments(year, input$experiments)
-		lapply(e, function(f) addMarks(f() )  )
+		lapply(e, function(f) addMarks( f(input) )  )
 		}
 	
 }
@@ -45,7 +60,7 @@ marksmap <- function(input) {
 			plot(boxes, pch = setmap$box.pch, col = add.alpha('#C0C0C0', input$transp)  , cex = setmap$box.cex)
 			plot(streets, col = "grey", add = TRUE)
 			plot(roads, add = TRUE, col = "grey")
-			if(!pdf) box(col = "grey")
+			box(col = "grey")
 			
 			# nest stages (point)
 			points(d, col = add.alpha(d@data$stageCol, input$transp) , pch = setmap$box.pch, cex = input$boxCex)
@@ -68,7 +83,7 @@ marksmap <- function(input) {
 				text(d, labels = d$maleID, cex = input$textCex, pos = setmap$hatchEst.pos , offset = setmap$hatchEst.offset, font = 1)
 			
 				
-			#NOW hathcing  
+			#NOW hatching  
 			if(input$hatchNow) points(d[ which(d$hatch_or_youngAge < 1 & d$nest_stage == 'E') ,], pch = setmap$hatchingNow$pch,cex = setmap$hatchingNow$cex, col = setmap$hatchingNow$col )
 			
 
@@ -79,8 +94,21 @@ marksmap <- function(input) {
 			LG = unique(d@data[order(d$stageRank),c("nest_stage","stageCol")])
 			LG = merge(LG,data.frame(xtabs(~nest_stage,d)),by = "nest_stage",sort = FALSE)
 			LG$nam = paste(LG$nest_stage, " ( ", LG$Freq, ")", sep = "")
-			legend(x = legend.pos[1],y = legend.pos[2], legend = LG$nam,  col = add.alpha(LG$stageCol, input$transp), pch = setmap$box.pch, pt.cex = input$boxCex, title = "Nest stages:", bty = "n") # 
-
+			legend(x = legend.pos[1],y = legend.pos[2], 
+						legend = LG$nam,  
+						col = add.alpha(LG$stageCol, input$transp), 
+						pch = setmap$box.pch, pt.cex = input$boxCex, 
+						title = paste("Nest stages(", sum(LG$Freq), ")"), 
+						bty = "n") # 
+			
+			# TODO marks legend
+			legend(x = legend.pos[1]-100, y = legend.pos[2] , 
+				legend = c('collect', 'mark'), 
+				pch = 15, col = c('red', 'blue') , 
+				bty = "n", 
+				title = 'Egg collection'
+				)
+			
 
 			# legend symbols
 			lc = list(x = info.pos[1] ,y = info.pos[2])   
@@ -102,7 +130,7 @@ marksmap <- function(input) {
 				mtext(strftime(input$date, format = "%Y"), side = 2, line = -6, cex = 8, col = "grey80", font = 4)
 			
 	
-	marksmap(input = input)
+			marksmap(input = input)
 			
 		if(pdf)  dev.off()
 		 

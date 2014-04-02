@@ -101,8 +101,8 @@ column(3,
 	    selectInput("experiments", 
 	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
                                ">Experiments:</a>'), 
-	                choices  = 1:5, 
-					        selected = 1:5, 
+	                choices  = 1:3, 
+					        selected = 1:3, 
                   multiple =  TRUE) ), 
   
 	# add marks
