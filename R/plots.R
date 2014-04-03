@@ -1,9 +1,7 @@
-addMarks <- function(marks) {
-# marks is an optional argument for basemap() and map()
-# returns a list with 3 elements (box, col, text)
-# e.g. marks = list( c(28,29,44), c(2,2,2), c(5,6,7) )
 
-	k = data.frame(marks, stringsAsFactors = FALSE)
+addMarks <- function(marks) {
+
+	k = data.frame(marks[ c('box', 'col', 'text')], stringsAsFactors = FALSE)
 	m = merge( data.frame(boxes), k, by = 'box')
 	m$x = m$coords.x1+10
 	m$y = m$coords.x2-10
@@ -12,16 +10,19 @@ addMarks <- function(marks) {
 	points(m, pch = 15, col = m$col, cex = 1.7)
 	text(m, labels = m$text, cex = .8, col = 'white')
 	
+	if( !is.null(marks$legend) ) try(marks$legend() , silent = TRUE)
+	
+	
 }
 
 marksmap <- function(input) {
 	year = dd2yy(input$date)
   if(input$marks == "Yes") 
-		addMarks(marks = eval(parse(text = input$marksList)) )
+		try( addMarks(marks = eval(parse(text = input$marksList)) ), silent = TRUE )
 	
   if(length(input$experiments) > 0  ) {
 		e = getExperiments(year, input$experiments)
-		lapply(e, function(f) addMarks( f(input) )  )
+		lapply(e, function(f) try( addMarks( f(input) ), silent = TRUE)  )
 		}
 	
 }
@@ -101,15 +102,6 @@ marksmap <- function(input) {
 						title = paste("Nest stages(", sum(LG$Freq), ")"), 
 						bty = "n") # 
 			
-			# TODO marks legend
-			legend(x = legend.pos[1]-100, y = legend.pos[2] , 
-				legend = c('collect', 'mark'), 
-				pch = 15, col = c('red', 'blue') , 
-				bty = "n", 
-				title = 'Egg collection'
-				)
-			
-
 			# legend symbols
 			lc = list(x = info.pos[1] ,y = info.pos[2])   
 			points(lc,col   = "grey70",pch = setmap$box.pch,cex = setmap$box.cex)

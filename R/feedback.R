@@ -40,8 +40,6 @@ warnings <- function(input, n_only = FALSE) {
 	}
  }
 
-
-  
  
 # MESSAGES
 predHatchDate <- function(input, ...) { 

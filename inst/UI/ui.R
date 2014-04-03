@@ -27,8 +27,11 @@ absolutePanel(top = 2, left = 5, right = 0,fixed = FALSE,
 				'<a href=', links("snb"), 'target="_blank" class="alert alert-info"> SNB </a> '
 			)),
 	# BUGS & WARNINGS		
-	HTML('&nbsp;'), bugsHTML(2) 
+	HTML('&nbsp;'), bugsHTML(2) , HTML('&nbsp;'),
+	# TIPS
+	includeScript( system.file('UI', 'js', 'tips.js', package = 'bib') )
 
+	
 
 	)
 	
@@ -123,8 +126,8 @@ column(3,
 			  <textarea id="marksList" rows="10" cols="30">
 list( 
 	box = c(65, 137, 271, 277), 
-	col = c("red", "blue"), 
-	text = ( c(1,2,"x") )
+	col = c("red", "blue", "green", "black"), 
+	text = ( c(1,2,"y", "n") )
 	)
 			  </textarea>
 			</div>') )	

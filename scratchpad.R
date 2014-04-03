@@ -1,4 +1,8 @@
 
+	
+
+
+
 {  # runApp ----
    westerholz()
    require(shiny); require(bib)
@@ -123,12 +127,25 @@ s = function(input) {
 
 	out = list( box = d$box, col = d$col, text = d$n )
 	
+	# add legend
+	L = function() {
+			legend(x = legend.pos[1]-100, y = legend.pos[2] , 
+			legend = c('collect', 'mark'), 
+			pch = 15, col = c('red', 'blue') , 
+			bty = "n", 
+			title = 'Egg collection'
+			)
+	}
+	
+	out$legend = L
+	
+	
 	return(out)
 	
 	}
 	 
 	 
-	 uef(s, 2, 2014) 
+uef(s, 2, 2014) 
 	 
 	 
 	 
