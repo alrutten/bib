@@ -16,26 +16,10 @@ links <-function(nam) {
 
 bugsHTML <-function( size = 1) {
 	n = bugs(n_only=T)
+	
 	if(n > 0) HTML(rep( paste0('<i class="fa fa-bug fa-', size, 'x fa-spin"></i>'), n ) )
 	}
 
-tipsHTML <-function() {
-	tp = c(
-	"When printing the map of tomorrow already today remember to change the date !", 
-	"If there are bugs in the data your daily map could be wrong or incomplete!",
-	"LAYING_START and HATCHING_START columns are redundant but they serve as a double check!",
-	
-	
-	)
-	
-	sample(tp, 1)
-	
-	
-
-}	
-
-	
-	
 	
 	
 westerholz <- function() {

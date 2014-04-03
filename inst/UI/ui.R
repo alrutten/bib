@@ -97,8 +97,7 @@ column(3,
 	# display experiments
 	div(class="span3", 
 	    selectInput("experiments", 
-	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
-                               ">Experiments:</a>'), 
+	                label = HTML('<a data-toggle="tooltip" class="label label-info" title = "Experiment ID (see |EXPERIMENTS| table.)"> Experiments: </a>'), 
 	                choices  = 1:3, 
 					        selected = 1:3, 
                   multiple =  TRUE) ), 
@@ -167,15 +166,15 @@ list(
 		HTML('<div class="span2 control-group">
               <label class="control-label" for="nestStages"><a data-toggle="tooltip" class="text-info" title=  "Nest stages" >Stages:</a></label>
               <input name="nestStages" type="checkbox" value="U"/> <a data-toggle="tooltip" class="text-success" title=  "Used" > U </a> <br/>
-              <input name="nestStages" type="checkbox" value="LT"/><a data-toggle="tooltip" class="text-success" title=  "Little" >LT</a> <br/>
-              <input name="nestStages" type="checkbox" value="R" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Ring" >R</a> <br/>
-              <input name="nestStages" type="checkbox" value="B" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Bottom" >B</a><br/>
-              <input name="nestStages" type="checkbox" value="BC" checked="checked"/> <a data-toggle="tooltip" class="text-success" title= "Bottom-Cup" >BC</a><br/>
-              <input name="nestStages" type="checkbox" value="C" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Cup" >C</a><br/>
+              <input name="nestStages" type="checkbox" value="LT"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Little" >LT</a> <br/>
+              <input name="nestStages" type="checkbox" value="R"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Ring" >R</a> <br/>
+              <input name="nestStages" type="checkbox" value="B"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Bottom" >B</a><br/>
+              <input name="nestStages" type="checkbox" value="BC"  checked="checked"/> <a data-toggle="tooltip" class="text-success" title= "Bottom-Cup" >BC</a><br/>
+              <input name="nestStages" type="checkbox" value="C"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Cup" >C</a><br/>
               <input name="nestStages" type="checkbox" value="LIN" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Lining" >LIN</a><br/>
-              <input name="nestStages" type="checkbox" value="E" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Eggs" >E</a><br/>
-              <input name="nestStages" type="checkbox" value="WE" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Warm eggs" >WE</a><br/>
-              <input name="nestStages" type="checkbox" value="Y" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Young" >Y</a><br/>
+              <input name="nestStages" type="checkbox" value="E"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Eggs" >E</a><br/>
+              <input name="nestStages" type="checkbox" value="WE"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Warm eggs" >WE</a><br/>
+              <input name="nestStages" type="checkbox" value="Y"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Young" >Y</a><br/>
               <input name="nestStages" type="checkbox" value="NOTA"/><a data-toggle="tooltip" class="text-success" title=  "Not Active" >NOTA</a><br/>
               <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Wasp nest" >WSP</a> <br/> </div>'),
 			  

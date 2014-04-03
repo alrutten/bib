@@ -43,7 +43,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 	# data
 	O = Q(year = year, nestDataQuery(date_)   )				
 	
-	if(nrow(O) == 0) stop("There are no data available. Did you choose an invalid date?") 
+	if(nrow(O) == 0) stop("There are no data available on this date!") 
 					 
 	# selected nest stages
 	if(!is.null(stages) ) O = O[O$nest_stage%in%stages, ] else O$nest_stage = NA
