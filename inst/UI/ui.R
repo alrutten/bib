@@ -7,6 +7,7 @@
 #		column(3, right setting panel:
 #			tools common for all panels
 # 			conditionalPanel(condition = "input.tools == 'tab panel name'"
+require(bib)
 
 shinyUI(
 fluidPage(style="padding-top: 80px;",
