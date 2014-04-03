@@ -28,7 +28,7 @@ absolutePanel(
 				'<a href=', links("snb"), 'target="_blank" class="alert alert-info"> SNB </a> '
 			)),
 	# BUGS & WARNINGS		
-	bugsHTML(2) 
+	bib::bugsHTML(2) 
 
 
 	)
