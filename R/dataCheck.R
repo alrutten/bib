@@ -1,22 +1,46 @@
 
 
-# BUGS & WARNINGS
-bugs <- function(input, warnings = FALSE) {
-	date_ = input$date 
+# BUGS 
+bugs <- function(input, n_only = FALSE) {
+	if( missing(input) ) 
+		date_ = Sys.Date() else
+		date_ = input$date 
 	year = as.numeric(strftime(date_, format = "%Y"))
-  ff = list.files(system.file('SQL', package = 'bib'), full.names = TRUE)
-  
-	if(warnings) f = ff[grep('WARNINGS', ff)] else f = ff[grep('BUGS', ff)]
 	
-  
-  strg = paste(readLines(con = f, warn = FALSE), collapse = " ")
-	d = Q(year = year, strg)
+	f = system.file('SQL', 'BUGS.SQL', package = 'bib')
+
+	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
 	d = d[!is.na(d$boxes), ]
 	
-	if(nrow(d) == 0) d = data.frame(info =   if(warnings)   "There are no warnings for now." else "There are no bugs for now.", date = input$date )
-	row.names(d) = NULL
-	d
- } 
+	if(n_only) return(nrow(d)) else {
+		if(nrow(d) == 0) 
+			d = data.frame(info = "There are no bugs for now.", date = date_ )
+		row.names(d) = NULL
+		return(d)
+	}
+ }
+
+ # WARNINGS 
+warnings <- function(input, n_only = FALSE) {
+	if( missing(input) ) 
+		date_ = Sys.Date() else
+		date_ = input$date 
+	year = as.numeric(strftime(date_, format = "%Y"))
+	
+	f = system.file('SQL', 'WARNINGS.SQL', package = 'bib')
+
+	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
+	d = d[!is.na(d$boxes), ]
+	
+	if(n_only) return(nrow(d)) else {
+		if(nrow(d) == 0) 
+			d = data.frame(info = "There are no warnings for now.", date = date_ )
+		row.names(d) = NULL
+		return(d)
+	}
+ }
+
+
   
  
 # MESSAGES

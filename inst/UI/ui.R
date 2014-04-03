@@ -11,32 +11,28 @@
 shinyUI(
 fluidPage(style="padding-top: 80px;",
 	# js	
-	HTML("
-	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
-	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>
-	"),
+	includeScript( system.file('UI', 'js', 'bootstrap-tooltip.min.js', package = 'bib') ),
+	HTML("<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>"),
 
 # top fixed bar start >>>>>>>>>>>>>>>>
 absolutePanel(
     top = 0, left = 0, right = 0,
     fixed = TRUE,
-    div(style="padding: 8px; border-bottom: 1px solid #CCC; background: #FFFFEE;",
-	 class="row-fluid",
+    div(style="padding: 12px; border-bottom: 1px solid #CAD1E6;",
+	 class="row-fluid container",
+	# Title & links	
+	HTML(paste(
+			'<a data-toggle="tooltip" title=', shQuote(bib::bibDescription(), type ="sh") , '>', 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>',
+			icon("bookmark-o"), '<a href=', links("man"), 'target="_blank" class="alert alert-info"> Manual </a> ',
+				'<a href=', links("journal"), 'target="_blank" class="alert alert-info"> Journal </a> ',
+				'<a href=', links("snb"), 'target="_blank" class="alert alert-info"> SNB </a> '
+			)),
+	# BUGS & WARNINGS		
+	bugsHTML(2) 
 
-	div(class = "span12", 
+
+	)
 	
-	HTML( 	   
-		paste('<ul class="nav nav-pills">', 
-			paste('<li>', 
-				paste('<a data-toggle="tooltip" title=', shQuote(bib::bibDescription(), type ="sh") , '>'), 
-				 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
-			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
-			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
-			paste('<li class="active"><a href=', links("snb"), 'target="_blank"> SNB </a></li>'), 
-		 "</ul>")
-		)
-	 )
-  )
 ), #  top fixed bar end <<<<<<<<<
 
 

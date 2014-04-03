@@ -14,6 +14,13 @@ links <-function(nam) {
 }
 
 
+bugsHTML <-function( size = 1) {
+	n = bib::bugs(n_only=T)
+	if(n > 0) HTML(rep( paste0('<i class="fa fa-bug fa-', size, 'x fa-spin"></i>'), n ) )
+	
+	}
+
+
 westerholz <- function() {
   require(bib)
   require(shiny)
