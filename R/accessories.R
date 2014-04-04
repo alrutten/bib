@@ -34,8 +34,10 @@ Q <- function(year, query, db) {
     
 	if(missing(year)) 
 		year = format(Sys.Date(), format = "%Y")
-
-  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = yy2dbnam(year) )
+	if(missing(db)) 
+		db = yy2dbnam(year)	
+		
+  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = db )
   on.exit(  closeCon (CON)  )
   return(dbq(CON, query))
 }

@@ -141,7 +141,7 @@ marksmap <- function(input) {
 		
 # Nest history
 	nestGraph <- function(input, pdf = FALSE, ...) {
-	if(missing(input)) input = getInputCopy()		
+	
 			box1 = input$NestId
 			box2 = input$NestIdEntry 
 			
@@ -252,7 +252,7 @@ marksmap <- function(input) {
 
 # Forecasting graphs
 	forecastGraph <- function(input, pdf = FALSE, ...) {
-	if(missing(input)) input = getInputCopy()		
+
 			d = nestDataFetch(date_ = input$date, 
 						stagesNFO = stagesInfo, stages = input$nestStages, 
 						safeHatchCheck = input$safeHatchCheck, 
@@ -279,7 +279,6 @@ marksmap <- function(input) {
 		
 # phenology graphs
 	phenoGraph <- function(input) {
-		if(missing(input)) input = getInputCopy()
 		
 		require(ggplot2)
 		require(gridExtra)
