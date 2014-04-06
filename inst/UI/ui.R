@@ -57,20 +57,22 @@ column(9,
 column(3,
 	## REFERENCE DATE
 	   div(class="row", p(" ") , div(class="span1", icon("calendar")),
-	   dateInput('date', 
-		label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
-		min = '2007-03-01', max = Sys.Date()+7,
-		format = "dd-M-yyy",
-		value = Sys.Date(), 
-		startview = "decade"
-		), 
+	 div(class="span3",
+    dateInput('date', 
+      label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
+      min = '2007-03-01', max = Sys.Date()+7,
+      format = "dd-M-yyy",
+      value = Sys.Date(), 
+      startview = "decade"
+		)), 
     
 	# SERVER
+	div(class="span3",
 		selectInput("host", 
 		            label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Host!" > HOST</a>'), 
 		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scidb.orn.mpg.de', 'behavioural-ecology.orn.mpg.de'), 
 		            selected = "scidb.orn.mpg.de")
-    
+	)
     
     ) ,
 
