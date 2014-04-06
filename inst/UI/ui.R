@@ -14,7 +14,8 @@ fluidPage(style="padding-top: 80px;",
 	# js	
 	includeScript( system.file('UI', 'js', 'bootstrap-tooltip.min.js', package = 'bib') ),
 	HTML("<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>"),
-
+	HTML("<script type='text/javascript'>$(document).ready(function () {$('i').tooltip({'selector': '','placement': 'top', 'html': 'true'});});</script>"),
+  
 # top fixed bar start >>>>>>>>>>>>>>>>
 absolutePanel(top = 2, left = 5, right = 0,fixed = FALSE,
     div(style="padding: 15px; border-bottom: 1px solid #CAD1E6;",
@@ -56,25 +57,23 @@ column(9,
 
 column(3,
 	## REFERENCE DATE
-	   div(class="row", p(" ") , div(class="span1", icon("calendar")),
-	 div(class="span3",
-    dateInput('date', 
-      label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "This is the reference date, anything is done as if this date is today" >Date:</a>'),
-      min = '2007-03-01', max = Sys.Date()+7,
-      format = "dd-M-yyy",
-      value = Sys.Date(), 
-      startview = "decade"
-		)), 
-    
+	div(class="row", 
+  div(class = "span4", 
+  dateInput('date', 
+        label = HTML('<i class="fa fa-calendar" data-toggle="tooltip" class="label label-info" title="Reference date."> Date: </i>'),
+        min = '2007-03-01', max = Sys.Date()+30,
+        format = "dd-M-yyy",
+        value = Sys.Date(), 
+        startview = "decade")) , 
+  div(class = "span1"),  
 	# SERVER
-	div(class="span3",
+  div(class = "span6", 
 		selectInput("host", 
-		            label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Host!" > HOST</a>'), 
-		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scidb.orn.mpg.de', 'behavioural-ecology.orn.mpg.de'), 
-		            selected = "scidb.orn.mpg.de")
-	)
-    
-    ) ,
+		            label =  HTML('<i class="fa fa-home" data-toggle="tooltip" class="label label-info" title="Database server locaton"> Host: </i>'), 
+		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scicomp.orn.mpg.de', 'behavioural-ecology.orn.mpg.de'), 
+		            selected = 'scidb.orn.mpg.de') 
+  )
+    ),
 
 	# HELP MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'HELP'", 

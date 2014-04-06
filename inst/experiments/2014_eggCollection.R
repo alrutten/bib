@@ -50,6 +50,8 @@
 	  d[which(is.na(d$col)), "col"] = "grey"
 	  d[which(is.na(d$firstColDate)), "n"] = 1
 	 
+    # require(XLConnect) ;  writeWorksheetToFile("C:/Users/valcu/Desktop/samplingEggs2014.xlsx", d, sheet='Sheet1')
+    
     out = list(box = d$box, col = d$col, text = d$n)
 	 
     L = function() {
