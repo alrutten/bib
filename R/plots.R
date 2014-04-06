@@ -1,13 +1,28 @@
 
+addMarks <- function(marks) {
+
+	k = data.frame(marks[ c('box', 'col', 'text')], stringsAsFactors = FALSE)
+	m = merge( data.frame(boxes), k, by = 'box')
+	m$x = m$coords.x1+10
+	m$y = m$coords.x2-10
+	coordinates(m)  = ~ x+y
+	
+	points(m, pch = 15, col = m$col, cex = 1.7)
+	text(m, labels = m$text, cex = .8, col = 'white')
+	
+	if( !is.null(marks$legend) ) try(marks$legend() , silent = TRUE)
+	
+	
+}
+
 marksmap <- function(input) {
-	if(input$marks == "Yes") 
-		addMarks(marks = eval(parse(text = input$marksList)) )
-	print(input$experiments)
-	if( length(input$experiments) > 0  ) {
-		print('xxxxxxxx')
-		e = getExperiments(input$date)
-		print(e)
-		lapply(e, function(f) addMarks(f() )  )
+	year = dd2yy(input$date)
+  if(input$marks == "Yes") 
+		try( addMarks(marks = eval(parse(text = input$marksList)) ), silent = TRUE )
+	
+  if(length(input$experiments) > 0  ) {
+		e = getExperiments(year, input$experiments)
+		lapply(e, function(f) try( addMarks( f(input) ), silent = TRUE)  )
 		}
 	
 }
@@ -46,7 +61,7 @@ marksmap <- function(input) {
 			plot(boxes, pch = setmap$box.pch, col = add.alpha('#C0C0C0', input$transp)  , cex = setmap$box.cex)
 			plot(streets, col = "grey", add = TRUE)
 			plot(roads, add = TRUE, col = "grey")
-			if(!pdf) box(col = "grey")
+			box(col = "grey")
 			
 			# nest stages (point)
 			points(d, col = add.alpha(d@data$stageCol, input$transp) , pch = setmap$box.pch, cex = input$boxCex)
@@ -69,7 +84,7 @@ marksmap <- function(input) {
 				text(d, labels = d$maleID, cex = input$textCex, pos = setmap$hatchEst.pos , offset = setmap$hatchEst.offset, font = 1)
 			
 				
-			#NOW hathcing  
+			#NOW hatching  
 			if(input$hatchNow) points(d[ which(d$hatch_or_youngAge < 1 & d$nest_stage == 'E') ,], pch = setmap$hatchingNow$pch,cex = setmap$hatchingNow$cex, col = setmap$hatchingNow$col )
 			
 
@@ -80,9 +95,13 @@ marksmap <- function(input) {
 			LG = unique(d@data[order(d$stageRank),c("nest_stage","stageCol")])
 			LG = merge(LG,data.frame(xtabs(~nest_stage,d)),by = "nest_stage",sort = FALSE)
 			LG$nam = paste(LG$nest_stage, " ( ", LG$Freq, ")", sep = "")
-			legend(x = legend.pos[1],y = legend.pos[2], legend = LG$nam,  col = add.alpha(LG$stageCol, input$transp), pch = setmap$box.pch, pt.cex = input$boxCex, title = "Nest stages:", bty = "n") # 
-
-
+			legend(x = legend.pos[1],y = legend.pos[2], 
+						legend = LG$nam,  
+						col = add.alpha(LG$stageCol, input$transp), 
+						pch = setmap$box.pch, pt.cex = input$boxCex, 
+						title = paste("Nest stages(", sum(LG$Freq), ")"), 
+						bty = "n") # 
+			
 			# legend symbols
 			lc = list(x = info.pos[1] ,y = info.pos[2])   
 			points(lc,col   = "grey70",pch = setmap$box.pch,cex = setmap$box.cex)
@@ -103,7 +122,7 @@ marksmap <- function(input) {
 				mtext(strftime(input$date, format = "%Y"), side = 2, line = -6, cex = 8, col = "grey80", font = 4)
 			
 	
-	marksmap(input = input)
+			marksmap(input = input)
 			
 		if(pdf)  dev.off()
 		 
@@ -122,7 +141,7 @@ marksmap <- function(input) {
 		
 # Nest history
 	nestGraph <- function(input, pdf = FALSE, ...) {
-	if(missing(input)) input = getInputCopy()		
+	
 			box1 = input$NestId
 			box2 = input$NestIdEntry 
 			
@@ -233,7 +252,7 @@ marksmap <- function(input) {
 
 # Forecasting graphs
 	forecastGraph <- function(input, pdf = FALSE, ...) {
-	if(missing(input)) input = getInputCopy()		
+
 			d = nestDataFetch(date_ = input$date, 
 						stagesNFO = stagesInfo, stages = input$nestStages, 
 						safeHatchCheck = input$safeHatchCheck, 
@@ -260,7 +279,6 @@ marksmap <- function(input) {
 		
 # phenology graphs
 	phenoGraph <- function(input) {
-		if(missing(input)) input = getInputCopy()
 		
 		require(ggplot2)
 		require(gridExtra)

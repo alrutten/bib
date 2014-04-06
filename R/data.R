@@ -43,7 +43,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 	# data
 	O = Q(year = year, nestDataQuery(date_)   )				
 	
-	if(nrow(O) == 0) stop("There are no data available. Did you choose an invalid date?") 
+	if(nrow(O) == 0) stop("There are no data available on this date!") 
 					 
 	# selected nest stages
 	if(!is.null(stages) ) O = O[O$nest_stage%in%stages, ] else O$nest_stage = NA
@@ -101,6 +101,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 
 	}
 	
+
 # phenology ----
 phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 
@@ -172,7 +173,7 @@ ldPredictDataFetch <- function() {
 getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
   
   year = dd2yy(date_)
-  if(year < 2014) stop("For all years < 2014 go to the corresponding database and check `columns_dafinition´ table.")
+  if(year < 2014) stop("For years < 2014 go to the corresponding database and check `columns_dafinition´ table.")
 
   x = Q(year = year, paste("show full columns from", tab) )
   
@@ -180,26 +181,31 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
   
   }
 
-# get EXPERIMENT ID, functions etc  ----
-getExperiments <- function(date_ = Sys.Date() ) {
-  year = dd2yy(date_)
-	if(year < 2014) stop("For all years < 2014 check //ds/raw_data_kemp/FIELD")
-	
-	x = Q(year = year, "SELECT ID, Title, author, function fun FROM EXPERIMENTS where visible = 'YES'")
-	
-	funs = lapply(x$fun, function(x) {
-			tf = tempfile(); on.exit(file.remove(tf))
-			cat(x, file = tf)
-			try( eval( parse(file = tf ) ), silent = TRUE) }
-		)
-	names(funs)	= x$ID
-	
-	funs[sapply(funs, function(f) inherits(f, "function") )]
+# get EXPERIMENT  ----
+getExperiments <- function(year, expID) {
 
-	
-	
-	
-  }
+  x = Q(year = year, paste("SELECT ID, Title, author, function fun FROM EXPERIMENTS 
+					where visible = 'YES' and ID in (", 
+					paste(expID, collapse = "," ), ")"  ) )
+					
+	  if(nrow(x) > 0) {
+  
+	   # get function
+    funs = split(as.character(x$fun), x$ID)
+      for(i in 1:length(funs)) {
+      tf = tempfile()
+      cat(funs[[i]], file = tf)
+      funs[[i]] = try( eval( parse(file = tf ) ), silent = TRUE) 
+      file.remove(tf)
+      }
+    
+    funs = funs[sapply(funs, function(f) inherits(f, "function") )]
+
+    funs
+  			
+  	}
+
+}
   
   
   

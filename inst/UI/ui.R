@@ -7,40 +7,35 @@
 #		column(3, right setting panel:
 #			tools common for all panels
 # 			conditionalPanel(condition = "input.tools == 'tab panel name'"
+require(bib)
 
 shinyUI(
 fluidPage(style="padding-top: 80px;",
 	# js	
-	HTML("
-	<script src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tooltip.min.js'></script> 
-	<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>
-	"),
+	includeScript( system.file('UI', 'js', 'bootstrap-tooltip.min.js', package = 'bib') ),
+	HTML("<script type='text/javascript'>$(document).ready(function () {$('a').tooltip({'selector': '','placement': 'bottom', 'html': 'true'});});</script>"),
 
 # top fixed bar start >>>>>>>>>>>>>>>>
-absolutePanel(
-    top = 0, left = 0, right = 0,
-    fixed = TRUE,
-    div(style="padding: 8px; border-bottom: 1px solid #CCC; background: #FFFFEE;",
-	 class="row-fluid",
+absolutePanel(top = 2, left = 5, right = 0,fixed = FALSE,
+    div(style="padding: 15px; border-bottom: 1px solid #CAD1E6;",
+	 class="row-fluid container",
+	# Title & links	
+	HTML(paste(
+			'<a data-toggle="tooltip" title=', shQuote(bibDescription(), type ="sh") , '>', 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a>',
+			icon("bookmark-o"), '<a href=', links("man"), 'target="_blank" class="alert alert-info"> Manual </a> ',
+				'<a href=', links("journal"), 'target="_blank" class="alert alert-info"> Journal </a> ',
+				'<a href=', links("snb"), 'target="_blank" class="alert alert-info"> SNB </a> '
+			)),
+	# BUGS & WARNINGS		
+	HTML('&nbsp;'), bugsHTML(2) , HTML('&nbsp;'),
+	# TIPS
+	includeScript( system.file('UI', 'js', 'tips.js', package = 'bib') )
 
-	div(class = "span12", 
 	
-	HTML( 	   
-		paste('<ul class="nav nav-pills">', 
-			paste('<li>', 
-				paste('<a data-toggle="tooltip" title=', shQuote(bib::bibDescription(), type ="sh") , '>'), 
-				 'WESTERHOLZ', format(Sys.Date(), "%Y"), '</a> </li>'),
-			paste('<li class="active"><a href=', links("man"), 'target="_blank">Manual </a> </li>'),
-			paste('<li class="active"><a href=', links("journal"), 'target="_blank"> Journal </a></li>'), 
-			paste('<li class="active"><a href= "http://scicomp.orn.mpg.de:3838/shiny-server/SNB/" target="_blank"> snb </a> </li>'), 
-		 "</ul>")
-		)
-		
-	#	
-		
 
 	)
-	)), #  top fixed bar end <<<<<<<<<
+	
+), #  top fixed bar end <<<<<<<<<
 
 
 fluidRow(
@@ -111,10 +106,9 @@ column(3,
 	# display experiments
 	div(class="span3", 
 	    selectInput("experiments", 
-	                label = HTML('<a data-toggle="tooltip" class="label label-info" title=" [UNDER CONSTRUCTION!!] Experiment ID (see `EXPERIMENTS´ table.)  <hr> 
-                               ">Experiments:</a>'), 
-	                choices = experimentIDs(), 
-					selected = experimentIDs(), 
+	                label = HTML('<a data-toggle="tooltip" class="label label-info" title = "Experiment ID (see |EXPERIMENTS| table.)"> Experiments: </a>'), 
+	                choices  = 1:3, 
+					        selected = 1:3, 
                   multiple =  TRUE) ), 
   
 	# add marks
@@ -140,8 +134,8 @@ column(3,
 			  <textarea id="marksList" rows="10" cols="30">
 list( 
 	box = c(65, 137, 271, 277), 
-	col = c("red", "blue"), 
-	text = ( c(1,2,"x") )
+	col = c("red", "blue", "green", "black"), 
+	text = ( c(1,2,"y", "n") )
 	)
 			  </textarea>
 			</div>') )	
@@ -181,15 +175,15 @@ list(
 		HTML('<div class="span2 control-group">
               <label class="control-label" for="nestStages"><a data-toggle="tooltip" class="text-info" title=  "Nest stages" >Stages:</a></label>
               <input name="nestStages" type="checkbox" value="U"/> <a data-toggle="tooltip" class="text-success" title=  "Used" > U </a> <br/>
-              <input name="nestStages" type="checkbox" value="LT"/><a data-toggle="tooltip" class="text-success" title=  "Little" >LT</a> <br/>
-              <input name="nestStages" type="checkbox" value="R" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Ring" >R</a> <br/>
-              <input name="nestStages" type="checkbox" value="B" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Bottom" >B</a><br/>
-              <input name="nestStages" type="checkbox" value="BC" checked="checked"/> <a data-toggle="tooltip" class="text-success" title= "Bottom-Cup" >BC</a><br/>
-              <input name="nestStages" type="checkbox" value="C" checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Cup" >C</a><br/>
+              <input name="nestStages" type="checkbox" value="LT"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Little" >LT</a> <br/>
+              <input name="nestStages" type="checkbox" value="R"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Ring" >R</a> <br/>
+              <input name="nestStages" type="checkbox" value="B"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Bottom" >B</a><br/>
+              <input name="nestStages" type="checkbox" value="BC"  checked="checked"/> <a data-toggle="tooltip" class="text-success" title= "Bottom-Cup" >BC</a><br/>
+              <input name="nestStages" type="checkbox" value="C"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Cup" >C</a><br/>
               <input name="nestStages" type="checkbox" value="LIN" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Lining" >LIN</a><br/>
-              <input name="nestStages" type="checkbox" value="E" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Eggs" >E</a><br/>
-              <input name="nestStages" type="checkbox" value="WE" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Warm eggs" >WE</a><br/>
-              <input name="nestStages" type="checkbox" value="Y" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Young" >Y</a><br/>
+              <input name="nestStages" type="checkbox" value="E"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Eggs" >E</a><br/>
+              <input name="nestStages" type="checkbox" value="WE"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Warm eggs" >WE</a><br/>
+              <input name="nestStages" type="checkbox" value="Y"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Young" >Y</a><br/>
               <input name="nestStages" type="checkbox" value="NOTA"/><a data-toggle="tooltip" class="text-success" title=  "Not Active" >NOTA</a><br/>
               <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Wasp nest" >WSP</a> <br/> </div>'),
 			  

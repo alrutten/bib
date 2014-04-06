@@ -10,25 +10,52 @@ dayofyear2date <- function(dayofyear, year) {
 	
 	}
 
-dd2yy <-	function(date)  {
+dd2yy <- function(date)  {
 	as.numeric(strftime(date, format = "%Y"))
 	}	
-	
 
+# DB	
+credentials <-function(w) {
+	  switch(w,
+         user = 'bt',
+         pwd = 'bt')
+}
+	
+# find database name from year
+yy2dbnam <- function(year) {
+	if(year == format(Sys.Date(), format = "%Y") ) 
+		db = 'FIELD_BTatWESTERHOLZ' else 
+		db = paste('FIELD', year, 'BTatWESTERHOLZ', sep = "_")
+		return(db)
+}
+	
 ## query function
 Q <- function(year, query, db) {
     
-  if(missing(db)) {
-	if(missing(year)) year = format(Sys.Date(), format = "%Y")
-	if(year == format(Sys.Date(), format = "%Y") ) db = 'FIELD_BTatWESTERHOLZ' else db = paste('FIELD', year, 'BTatWESTERHOLZ', sep = "_")
-	}
-	
-  CON = dbcon(user = "bt", password = "bt", database = db)
-
+	if(missing(year)) 
+		year = format(Sys.Date(), format = "%Y")
+	if(missing(db)) 
+		db = yy2dbnam(year)	
+		
+  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = db )
   on.exit(  closeCon (CON)  )
-
   return(dbq(CON, query))
 }
+
+uef <-function(fun, ID, year) { 
+	# update function in the EXPERIMENTS table
+	stopifnot( inherits(fun, 'function') )
+	stopifnot( require('RMySQL') )
+	
+	fstring = paste(deparse(fun), collapse= "\n")
+	sql = paste("UPDATE EXPERIMENTS SET function=", shQuote(fstring, type ='sh') ," WHERE ID=", ID)
+
+	  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = yy2dbnam(year) )
+	
+	 dbSendQuery(CON, sql)
+	dbDisconnect(CON)
+	
+	}
 
 # ...
 is.breeding	<- function() {
@@ -38,28 +65,61 @@ is.breeding	<- function() {
 	
 add.alpha <- function (col,alpha) { sprintf("%s%02X",col,floor(alpha*256))	
 	}
-	
-	
-	
+		
 bibDescription <-function() {
 	x = packageDescription('bib', fields=c('Package', 'Type', 'Version', 'Date', 'Maintainer', 'Depends', 'Suggests','Description')) 
 	
 	print(xtable::xtable(data.frame(info = unlist(x))), type = 'html')
 }
 
-# marks is a list with 3 elements (box, col, text)
-# marks is an optional argument for basemap() and map()
-# e.g. marks = list( c(28,29,44), c(2,2,2), c(5,6,7) )
-addMarks <- function(marks, x_0 = 4500013L, y_0 = -8L) {
-	require(rgdal)
-	
-	m = boxes[boxes$box%in%marks[[1]], ]
-	m = spTransform(m, 
-		CRS(paste0("+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=",x_0," +y_0=",y_0," +datum=potsdam +units=m +no_defs") ) )
-	points(m, pch = 15, col = marks[[2]], cex = 1.7)
-	text(m, labels = marks[[3]], cex = .8, col = 'white')
-	
-	
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 
