@@ -68,7 +68,16 @@ column(3,
 		format = "dd-M-yyy",
 		value = Sys.Date(), 
 		startview = "decade"
-		)) ,
+		), 
+    
+	# SERVER
+		selectInput("host", 
+		            label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Host!" > HOST</a>'), 
+		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scidb.orn.mpg.de', 'behavioural-ecology.orn.mpg.de'), 
+		            selected = "scidb.orn.mpg.de")
+    
+    
+    ) ,
 
 	# HELP MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'HELP'", 
