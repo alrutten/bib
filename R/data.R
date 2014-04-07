@@ -38,10 +38,10 @@ paste(
 
 	}
 
-nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge) {
+nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatchCheck, youngAgeYN, youngAge, ...) {
 	year = dd2yy(date_)
 	# data
-	O = Q(year = year, nestDataQuery(date_)   )				
+	O = Q(year = year, nestDataQuery(date_), ...)				
 	
 	if(nrow(O) == 0) stop("There are no data available on this date!") 
 					 
@@ -103,7 +103,7 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 	
 
 # phenology ----
-phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
+phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ", ...) {
 
 	d = Q(query = 
 		paste("select year_, 
@@ -112,28 +112,28 @@ phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ") {
 				where", what ,
 					"is not NULL")
 				, 
-		db = db)
+		db = db, ...)
 	
 	 d$Year = factor(d$year_)
 	d
 	}
 
 # ID  (TO DO add to UI)----
-idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
+idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ", ...) {
 # TODO
   # transp = '67A741F9C66F0001'; id = 'B2F5444'
   
   if( !missing(transp) ) {
     ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
                           from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
-                            JOIN SEX s ON a.ID = s.ID where transponder = ", shQuote(transp) ), db = db)
+                            JOIN SEX s ON a.ID = s.ID where transponder = ", shQuote(transp) ), db = db, ...)
     id = ids$ID[1]
     }
     
   if( !missing(id) ) {
     ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
                           from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
-                          JOIN SEX s ON a.ID = s.ID where a.ID = ", shQuote(id) ), db = db)
+                          JOIN SEX s ON a.ID = s.ID where a.ID = ", shQuote(id) ), db = db, ...)
   }
   
   if( !missing(combo) ) {
@@ -145,7 +145,7 @@ idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
     SELECT box, date_time date_ , 0 age, 'capture' recorded FROM CHICKS a  where ID = ", shQuote(id),
     "UNION
     SELECT box, capture_date_time date_, age,'capture' recorded  FROM ADULTS a where ID = ", shQuote(id), " ) x 
-    order by date_ asc"), db = db)
+    order by date_ asc"), db = db, ...)
 
   list(ids, d)
 
@@ -153,7 +153,7 @@ idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ") {
 }
 
 # 1st egg Predict ----
-ldPredictDataFetch <- function() { 
+ldPredictDataFetch <- function(...) { 
     d = Q(query = "SELECT  F.year_, firstEgg, firstEgg_AprilDay, avg_temp FROM 
     ( SELECT year(firstEgg) year_, firstEgg, dayofyear(firstEgg) - 
   			dayofyear(STR_TO_DATE( concat_WS('-', year(firstEgg), 'Apr-1'), '%Y-%M-%d'))+1 firstEgg_AprilDay
@@ -165,28 +165,28 @@ ldPredictDataFetch <- function() {
        dayofyear(date_) BETWEEN 81 AND 100 group by year_ ) T
         
   ON 
-  F.year_= T.year_")
+  F.year_= T.year_", ...)
 
 }
 
 # get table comments ----
-getComments <- function(tab = "NESTS", date_ = Sys.Date() ) {
+getComments <- function(tab = "NESTS", date_ = Sys.Date(), ... ) {
   
   year = dd2yy(date_)
   if(year < 2014) stop("For years < 2014 go to the corresponding database and check `columns_dafinition´ table.")
 
-  x = Q(year = year, paste("show full columns from", tab) )
+  x = Q(year = year, paste("show full columns from", tab), ... )
   
   x[, c("Field" , "Comment")]
   
   }
 
 # get EXPERIMENT  ----
-getExperiments <- function(year, expID) {
+getExperiments <- function(year, expID, ...) {
 
   x = Q(year = year, paste("SELECT ID, Title, author, function fun FROM EXPERIMENTS 
 					where visible = 'YES' and ID in (", 
-					paste(expID, collapse = "," ), ")"  ) )
+					paste(expID, collapse = "," ), ")"  ), ...)
 					
 	  if(nrow(x) > 0) {
   

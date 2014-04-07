@@ -19,7 +19,7 @@ shinyServer( function(input, output, clientData, session) {
   output$colComments <- renderDataTable({ getComments(tab = input$tabNamHelp, date = input$date) } )
 		
 # print
-	output$info <- renderPrint({
+	output$settings <- renderPrint({
 
 	cat( paste(length(input$nestStages), 'out of', nrow(stagesInfo) , 'stages selected! <br>'))
 	  
@@ -31,7 +31,7 @@ shinyServer( function(input, output, clientData, session) {
 	x = data.frame(what = names(unlist(a)), v = unlist(a))
 	row.names(x) = NULL
 
-	if(input$tools == 'info') assign('input', a, .GlobalEnv)
+	if(input$tools == 'settings') assign('input', a, .GlobalEnv)
 	
 	cat('<hr> Current settings:')
 	print(xtable::xtable(x), type="html")

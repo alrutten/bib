@@ -1,7 +1,7 @@
 
 
 # BUGS 
-bugs <- function(input, n_only = FALSE) {
+bugs <- function(input, n_only = FALSE, ...) {
 	if( missing(input) ) 
 		date_ = Sys.Date() else
 		date_ = input$date 
@@ -9,7 +9,7 @@ bugs <- function(input, n_only = FALSE) {
 	
 	f = system.file('SQL', 'BUGS.SQL', package = 'bib')
 
-	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
+	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "), ...)
 	d = d[!is.na(d$boxes), ]
 	
 	if(n_only) return(nrow(d)) else {
@@ -21,7 +21,7 @@ bugs <- function(input, n_only = FALSE) {
  }
 
  # WARNINGS 
-warnings <- function(input, n_only = FALSE) {
+warnings <- function(input, n_only = FALSE, ...) {
 	if( missing(input) ) 
 		date_ = Sys.Date() else
 		date_ = input$date 
@@ -29,7 +29,7 @@ warnings <- function(input, n_only = FALSE) {
 	
 	f = system.file('SQL', 'WARNINGS.SQL', package = 'bib')
 
-	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "))
+	d = Q(year = year, paste(readLines(con = f, warn = FALSE), collapse = " "), ... )
 	d = d[!is.na(d$boxes), ]
 	
 	if(n_only) return(nrow(d)) else {

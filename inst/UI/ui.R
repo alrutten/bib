@@ -50,7 +50,7 @@ column(9,
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("info", htmlOutput("info") ) 
+		tabPanel("settings", htmlOutput("settings") ) 
 		)
 	), 
 
@@ -58,21 +58,14 @@ column(9,
 column(3,
 	## REFERENCE DATE
 	div(class="row", 
-  div(class = "span4", 
-  dateInput('date', 
-        label = HTML('<i class="fa fa-calendar" data-toggle="tooltip" class="label label-info" title="Reference date."> Date: </i>'),
-        min = '2007-03-01', max = Sys.Date()+30,
-        format = "dd-M-yyy",
-        value = Sys.Date(), 
-        startview = "decade")) , 
-  div(class = "span1"),  
-	# SERVER
-  div(class = "span6", 
-		selectInput("host", 
-		            label =  HTML('<i class="fa fa-home" data-toggle="tooltip" class="label label-info" title="Database server locaton"> Host: </i>'), 
-		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scicomp.orn.mpg.de', 'behavioural-ecology.orn.mpg.de'), 
-		            selected = 'scidb.orn.mpg.de') 
-  )
+	  div(class = "span4", 
+		dateInput('date', 
+			label = HTML('<i class="fa fa-calendar" data-toggle="tooltip" class="label label-info" title="Reference date."> Date: </i>'),
+			min = '2007-03-01', max = Sys.Date()+30,
+			format = "dd-M-yyy",
+			value = Sys.Date(), 
+			startview = "decade"))
+
     ),
 
 	# HELP MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -246,11 +239,21 @@ list(
 	# BUGS SQL list start  >>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'BUGS'", 
 	 includeMarkdown(system.file('UI', 'txt', 'block3.md', package = 'bib') )	
-	)
+	),
 	
 	# BUGS SQL list end  <<<<<<<<<<<<<<
 
+	# SETTINGS start >>>>>>>>>>>>
 	
+	conditionalPanel(condition = "input.tools == 'settings' ",
+		selectInput("host", 
+		            label =  HTML('<i class="fa fa-home" data-toggle="tooltip" class="label label-info" title=
+								"Database server location. Do not change unless the primary host scidb.orn.mpg.de does not work"> 
+								Host: </i>'), 
+		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scicomp.orn.mpg.de'), 
+		            selected = 'scidb.orn.mpg.de') 
+	)
+	# Settings end  <<<<<<<<<<<<<<
 	
 
 ) # tool right bar end <<<<<<<<<

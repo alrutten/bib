@@ -54,7 +54,8 @@ marksmap <- function(input) {
 			d = nestDataFetch(date_ = input$date, 
 						stagesNFO = stagesInfo, stages = input$nestStages, 
 						safeHatchCheck = input$safeHatchCheck, 
-						youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
+						youngAgeYN = input$youngAgeYN, youngAge = input$youngAge,
+						host = input$host
 						)
 
 			# map layout
@@ -161,13 +162,13 @@ marksmap <- function(input) {
 			d = Q(year = year,  paste(
 				'SELECT DISTINCT date_time, dayofyear(date_time) jd, nest_stage,eggs, author, female_inside_box, warm_eggs, eggs_covered, COALESCE(guessed, 0) guessed, laying_START, fledging_START, chicks
 					FROM NESTS where box =', box
-					) )
+					), host = input$host )
 			
 			#check 2
 			if(nrow(d) == 0) stop( paste("selected box", box, "is empty in", year))					   
 
 			# min laying date in pop
-			minFirstEgg = Q(year = year,  'SELECT MIN(DAYOFYEAR(date_time)) firstEgg FROM NESTS WHERE laying_START is not NULL')[1,1]
+			minFirstEgg = Q(year = year,  'SELECT MIN(DAYOFYEAR(date_time)) firstEgg FROM NESTS WHERE laying_START is not NULL', host = input$host)[1,1]
 			
 			d$date_time = as.POSIXct(d$date_time)
 			d = merge(d, stagesInfo, by = 'nest_stage',sort = FALSE)

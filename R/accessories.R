@@ -30,14 +30,14 @@ yy2dbnam <- function(year) {
 }
 	
 ## query function
-Q <- function(year, query, db) {
+Q <- function(year, query, db, host = "scidb.mpio.orn.mpg.de") {
     
 	if(missing(year)) 
 		year = format(Sys.Date(), format = "%Y")
 	if(missing(db)) 
 		db = yy2dbnam(year)	
 		
-  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = db )
+  CON = dbcon(user = credentials ('user'), password = credentials ('pwd'), database = db, host = host)
   on.exit(  closeCon (CON)  )
   return(dbq(CON, query))
 }
