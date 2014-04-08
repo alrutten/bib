@@ -14,9 +14,11 @@ shinyServer( function(input, output, clientData, session) {
 #    })      
   
 # data tables	
-	output$bugs      <- renderDataTable({ bugs(input = input) } )	
-	output$warnings  <- renderDataTable({ warnings(input = input) } )	
-  output$colComments <- renderDataTable({ getComments(tab = input$tabNamHelp, date = input$date) } )
+	output$bugs      <- renderDataTable( { bugs(input = input) } )	
+	output$warnings  <- renderDataTable( { warnings(input = input) } )	
+  output$colComments <- renderDataTable( { getComments(tab = input$tabNamHelp, date = input$date) } )
+		
+		   
 		
 # print
 	output$settings <- renderPrint({

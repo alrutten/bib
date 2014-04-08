@@ -50,7 +50,9 @@ column(9,
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("settings", htmlOutput("settings") ) 
+		tabPanel("settings", htmlOutput("settings") ),
+		tabPanel("experiments", htmlOutput("experiments") )
+		
 		)
 	), 
 

@@ -56,7 +56,7 @@
 	  
 	  
 	  
-	  # require(XLConnect) ;  writeWorksheetToFile("samplingEggs2014_1022pm.xlsx", d, sheet='Sheet1')
+	  # require(XLConnect) ;  writeWorksheetToFile(  paste0("samplingEggs2014", make.names(as.character(Sys.time() )) ,".xlsx")  , d, sheet='Sheet1')
 	  
 	  out = list(box = d$box, col = d$col, text = d$n)
 	  
