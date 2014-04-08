@@ -34,7 +34,7 @@
 	                    order by -firstColDate desc, box
 	                    "))
 	 
-    d$nestType = c( c("p", "p", "p", "p", "p", "s", "s"),  rep( c(rep("p", each = 3), "s"),  10)[-40] )
+    d$nestType = c( c(rep("p", 4), "s", rep("p", 8)),  rep("s", 3), c("p", "s"), rep( c(rep("p", each = 3), "s"),  7) )
 	 
     d[is.na(d$firstColDate), "nestType"] = NA
 	  d[which(d$nestType == "p" & d$daysSinceFirstCol == 7), "col"] = "blue"
@@ -50,7 +50,7 @@
 	  d[which(is.na(d$col)), "col"] = "grey"
 	  d[which(is.na(d$firstColDate)), "n"] = 1
 	 
-    # require(XLConnect) ;  writeWorksheetToFile("samplingEggs2014.xlsx", d, sheet='Sheet1')
+    # require(XLConnect) ;  writeWorksheetToFile("samplingEggs2014_1022pm.xlsx", d, sheet='Sheet1')
     
     out = list(box = d$box, col = d$col, text = d$n)
 	 
