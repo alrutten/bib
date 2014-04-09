@@ -1,10 +1,4 @@
 
-labHTML <- function(icon = 'circle', label = 'label', tip = ' I am a label') {
-	HTML(paste0('<i class="fa fa-', icon, '" data-toggle="tooltip" class="label label-info" title="', tip, '"> ', label, '</i>'))
-}
-
-
-
 
 # nest stages
 stagesInfo = data.frame(
