@@ -63,7 +63,8 @@ column(3,
 	div(class="row", p(""),
 	  div(class = "span4", 
 		dateInput('date', 
-			label = labHTML('calendar', 'Date:', 'Reference date.'),
+			label = HTML('<i class="fa fa-calendar" data-toggle="tooltip" class="label label-info" 
+					title="Reference date."> Date:</i>'),
 			min = '2007-03-01', max = Sys.Date()+30,
 			format = "dd-M-yyy",
 			value = Sys.Date(), 
@@ -76,8 +77,8 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label =  labHTML('info', 'DATA ENTRY HELP', 'Data entry help for each table and column!'),
-
+               label = HTML('i class="fa fa-info" data-toggle="tooltip" class="label label-info" 
+				title="Data entry help for each table and column!"> DATA ENTRY HELP</i>') ,
 			   
                choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
                selected = "NESTS"),                    
@@ -96,7 +97,8 @@ column(3,
 	# map type
 	div(class="span3", 
 		selectInput("mapType", 
-			label = labHTML('globe', 'Map type:', 'Map type:interactive or a simple base map with no decorations.'), 
+			label =HTML('<i class="fa fa-globe" data-toggle="tooltip" class="label label-info" 
+				title="Map type:interactive or a simple base map with no decorations."> Map type:</i> '), 
 			choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
 			selected = "activeMap") ), 
 			
@@ -104,7 +106,8 @@ column(3,
 	# add marks
 	div(class="span3", 
 	    radioButtons("marks", 
-	                 label = labHTML('compass', 'Markers', 'Add user defined markers to the current map.'),
+	                 label = HTML('<i class="fa fa-compass" data-toggle="tooltip" class="label label-info" 
+					 title="Add user defined markers to the current map."> Markers</i>'),
 	                 choices = c("Yes", "No") , selected = "No" )
 	)
   
@@ -142,17 +145,20 @@ list(
 	
 	#  visual settings start >>>>>>>>>>>>>>>>>>>
 	# text & box size
-	div(class="row", p(" ") ,
-		div(class="span5", sliderInput("textCex",
-						label = labHTML('gears', 'Text', 'Size of the text on screen map, it will also affect the pdf maps.'), 
+	div(class="row", 
+		div(class="span6", sliderInput("textCex",
+						label = HTML('<i class="fa fa-gears" data-toggle="tooltip" class="label label-info" 
+						title="Size of the text on screen map, it will also affect the pdf maps."> Text</i>'), 
 						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
-		div(class="span5", sliderInput("boxCex", 
-						label = labHTML('gears', 'Box size', 'Box size on screen map, it will also affect the pdf maps.'), 
-						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
+		div(class="span6", sliderInput("boxCex", 
+						label = HTML('<i class="fa fa-gears" data-toggle="tooltip" class="label label-info" title="Box size on screen map, it will also affect the pdf maps."> Box size</i>'), 
+						min = 0.5, max = 3, value = 2, step = 0.25) ) 
+		),
 	#transparency					
 	div(class="row", p(" ") ,
 		div(class="span5", sliderInput("transp", 
-						label = labHTML('gears', 'Transparency', 'Box transparency on screen map, it will also affect the pdf maps.'), 
+						label = HTML('<i class="fa fa-gears" data-toggle="tooltip" class="label label-info" 
+						title="Box transparency on screen map, it will also affect the pdf maps."> Transparency</i>'), 
 						min = 0, max = .95, value = 0.5, step = 0.05) ) ),
 	#  visual settings end <<<<<<<<<<<<<<<<<<<<<
 	
@@ -179,26 +185,31 @@ list(
 		#hatching estimation
 		div(class = "span3",
 			selectInput("safeHatchCheck", 
-				label = labHTML('wrench', 'Hatch check', 'How many days in advance to check for hatching. 0 selects the predicted hatching date') , 
+				label = HTML('<i class="fa fa-wrench" data-toggle="tooltip" class="label label-info" 
+					title="How many days in advance to check for hatching. 0 selects the predicted hatching date"> Hatch check</i> ') , 
 				choices = 0:-3, selected =  -3), 
 				hr(),
 			checkboxInput("hatchNow", 
-				label = labHTML('wrench', 'Hatching NOW:', 'Emphasise boxes where hatching is imminent'), 
+				label =HTML('<i class="fa fa-wrench" data-toggle="tooltip" class="label label-info"
+					title="Emphasise boxes where hatching is imminent"> Hatching NOW:</i>'), 
 				value = TRUE)), 
 		
 		#young age
 			div(class="span3", radioButtons("youngAgeYN", 
-			label = labHTML('wrench', 'Young age', 'Check SELECT to select nests with particular young ages.'),
+			label = HTML('<i class="fa fa-wrench" data-toggle="tooltip" class="label label-info" 
+					title="Check SELECT to select nests with particular young ages."> Young age</i>'),
 			choices = c("ALL", "SELECT") , selected = "ALL" ), 
 	
 	conditionalPanel(condition = "input.youngAgeYN == 'SELECT'",		
 		selectInput("youngAge", 
-			label = labHTML('wrench', 'Age on map', 'Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES'), 
+			label = HTML('<i class="fa fa-wrench" data-toggle="tooltip" class="label label-info" 
+				title="Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES"> Age on map</i>'), 
 				choices = 1:25, selected = 14, multiple =  TRUE) ) ), 
 				
 		# parents
 		div(class="span1", radioButtons("parents", 
-			label = labHTML('wrench', 'Parents', 'Show caught parents on the curent map.'),
+			label = HTML('<i class="fa fa-wrench" data-toggle="tooltip" class="label label-info" 
+				title="Show caught parents on the curent map."> Parents</i> '),
 			choices = c("YES", "NO") , selected = "NO" ) )
 	)	
 	)
@@ -254,11 +265,12 @@ list(
 	conditionalPanel(condition = "input.tools == 'experiments' ",
 	# experiments starts >>>>>>>>>>>>
 		selectInput("experiments", 
-						label = labHTML('bullseye', 'Experiment ID', 'Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment.'),
+						label = HTML('<i class="fa fa-bullseye" data-toggle="tooltip" class="label label-info" 
+							title="Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment."> Experiment ID</i> '),
 						choices  = 1:10, 
 								selected = 2, 
 					  multiple =  FALSE)
-	# downloadButton('experiments', HTML('<button class="btn btn-small btn-primary" type="button"> DATA </button>') )				  
+			  
 	
 	)
 	# experiments ends <<<<<<<<<<<<<<
