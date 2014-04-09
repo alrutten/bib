@@ -1,6 +1,6 @@
-
+require(bib)
 shinyServer( function(input, output, clientData, session) {
-
+require(bib)
 # load components	
 	source( system.file('components.R', package = 'bib') )
 	source( system.file('settings.R', package = 'bib') )
