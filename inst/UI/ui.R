@@ -10,6 +10,8 @@
 require(bib)
 
 shinyUI(
+invisible(require(bib)),
+
 fluidPage(style="padding-top: 80px;",
 	# js	
 	includeScript( system.file('UI', 'js', 'bootstrap-tooltip.min.js', package = 'bib') ),
