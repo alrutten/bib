@@ -16,14 +16,8 @@ addMarks <- function(marks) {
 }
 
 marksmap <- function(input) {
-	year = dd2yy(input$date)
   if(input$marks == "Yes") 
 		try( addMarks(marks = eval(parse(text = input$marksList)) ), silent = TRUE )
-	
-  if(length(input$experiments) > 0  ) {
-		e = getExperiments(year, input$experiments)
-		lapply(e, function(f) try( addMarks( f(input) ), silent = TRUE)  )
-		}
 	
 }
 
@@ -38,6 +32,7 @@ marksmap <- function(input) {
 			plot(roads, add = T, col = "grey")
 		
 		marksmap(input = input)
+		experimentsMap(input = input)
 		
 		  if(pdf) dev.off()
 
@@ -124,6 +119,7 @@ marksmap <- function(input) {
 			
 	
 			marksmap(input = input)
+			experimentsMap(input = input)
 			
 		if(pdf)  dev.off()
 		 

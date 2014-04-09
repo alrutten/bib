@@ -181,33 +181,7 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date(), ... ) {
   
   }
 
-# get EXPERIMENT  ----
-getExperiments <- function(year, expID, ...) {
 
-  x = Q(year = year, paste("SELECT ID, Title, author, function fun FROM EXPERIMENTS 
-					where visible = 'YES' and ID in (", 
-					paste(expID, collapse = "," ), ")"  ), ...)
-					
-	  if(nrow(x) > 0) {
-  
-	   # get function
-    funs = split(as.character(x$fun), x$ID)
-      for(i in 1:length(funs)) {
-      tf = tempfile()
-      cat(funs[[i]], file = tf)
-      funs[[i]] = try( eval( parse(file = tf ) ), silent = TRUE) 
-      file.remove(tf)
-      }
-    
-    funs = funs[sapply(funs, function(f) inherits(f, "function") )]
-
-    funs
-  			
-  	}
-
-}
-  
-  
   
   
   

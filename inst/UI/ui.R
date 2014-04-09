@@ -51,7 +51,7 @@ column(9,
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
 		tabPanel("settings", htmlOutput("settings") ),
-		tabPanel("experiments", htmlOutput("experiments") )
+		tabPanel("experiments", dataTableOutput("experiments") )
 		
 		)
 	), 
@@ -59,10 +59,10 @@ column(9,
 
 column(3,
 	## REFERENCE DATE
-	div(class="row", 
+	div(class="row", p(""),
 	  div(class = "span4", 
 		dateInput('date', 
-			label = HTML('<i class="fa fa-calendar" data-toggle="tooltip" class="label label-info" title="Reference date."> Date: </i>'),
+			label = LAB('calendar', 'Date:', 'Reference date.'),
 			min = '2007-03-01', max = Sys.Date()+30,
 			format = "dd-M-yyy",
 			value = Sys.Date(), 
@@ -75,7 +75,9 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Data entry help for each table and column!" > DATA ENTRY HELP </a>'), 
+               label =  LAB('info', 'DATA ENTRY HELP', 'Data entry help for each table and column!'),
+
+			   
                choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
                selected = "NESTS"),                    
   # data entry help
@@ -89,29 +91,19 @@ column(3,
 	# MAPPING MENU start >>>>>>>>>>>>>>>>>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'MAPPING'",
 	
-	div(class="row", p(" ") , div(class="span1", icon("bars")),
+	div(class="row", p(" ") ,
 	# map type
 	div(class="span3", 
 		selectInput("mapType", 
-			label =  HTML('<a data-toggle="tooltip" class="label label-info" title="Map type: 
-					interactive or a simple base map with no decorations." > Map type: </a>'), 
+			label = LAB('globe', 'Map type:', 'Map type:interactive or a simple base map with no decorations.'), 
 			choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
 			selected = "activeMap") ), 
 			
-	
-	# display experiments
-	div(class="span3", 
-	    selectInput("experiments", 
-	                label = HTML('<a data-toggle="tooltip" class="label label-info" title = "Experiment ID (see |EXPERIMENTS| table.)"> Experiments: </a>'), 
-	                choices  = 1:3, 
-					        selected = 1:3, 
-                  multiple =  TRUE) ), 
   
 	# add marks
 	div(class="span3", 
 	    radioButtons("marks", 
-	                 label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Add user defined markers to the current map." >
-				Markers:</a>'),
+	                 label = LAB('compass', 'Markers', 'Add user defined markers to the current map.'),
 	                 choices = c("Yes", "No") , selected = "No" )
 	)
   
@@ -141,25 +133,25 @@ list(
 	#  add marks end <<<<<<<<<<<<<<<<<<<<<
 	
 	# PDF start >>>> 
-	div(class="row", p(" "), div(class="span1", icon("print")),
-		div(class="span1", 
+	div(class="row",  p(""), 
+		div(class="span5", 
 		downloadButton('pdf', HTML('<button class="btn btn-small btn-primary" type="button"> PDF </button>') ) ) ), 
 	# PDF end <<<
 		
 	
 	#  visual settings start >>>>>>>>>>>>>>>>>>>
 	# text & box size
-	div(class="row", p(" ") , div(class="span1", icon("gears")),
+	div(class="row", p(" ") ,
 		div(class="span5", sliderInput("textCex",
-						label = div(HTML('<a data-toggle="tooltip" class="label label" title="Size of the text on screen map, it will also affect the pdf maps.">Text size: </a>')), 
+						label = LAB('gears', 'Text', 'Size of the text on screen map, it will also affect the pdf maps.'), 
 						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
 		div(class="span5", sliderInput("boxCex", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label"  title="Size of the box symbols on screen map, it will also affect the pdf maps.">Box size: </a>')), 
+						label = LAB('gears', 'Box size', 'Box size on screen map, it will also affect the pdf maps.'), 
 						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
 	#transparency					
-	div(class="row", p(" ") , div(class="span1", icon("gears")),
+	div(class="row", p(" ") ,
 		div(class="span5", sliderInput("transp", 
-						label = div(HTML('<a data-toggle="tooltip" class="label label" title="box transparency.">Transparency: </a>')), 
+						label = LAB('gears', 'Transparency', 'Box transparency on screen map, it will also affect the pdf maps.'), 
 						min = 0, max = .95, value = 0.5, step = 0.05) ) ),
 	#  visual settings end <<<<<<<<<<<<<<<<<<<<<
 	
@@ -167,45 +159,45 @@ list(
 	conditionalPanel(condition = "input.mapType == 'activeMap'", 
 	# nest stages
 	div(class="row", p(" "),
-		div(class="span1", icon("edit")),
-		HTML('<div class="span2 control-group">
-              <label class="control-label" for="nestStages"><a data-toggle="tooltip" class="text-info" title=  "Nest stages" >Stages:</a></label>
-              <input name="nestStages" type="checkbox" value="U"/> <a data-toggle="tooltip" class="text-success" title=  "Used" > U </a> <br/>
-              <input name="nestStages" type="checkbox" value="LT"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Little" >LT</a> <br/>
-              <input name="nestStages" type="checkbox" value="R"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Ring" >R</a> <br/>
-              <input name="nestStages" type="checkbox" value="B"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Bottom" >B</a><br/>
-              <input name="nestStages" type="checkbox" value="BC"  checked="checked"/> <a data-toggle="tooltip" class="text-success" title= "Bottom-Cup" >BC</a><br/>
-              <input name="nestStages" type="checkbox" value="C"   checked="checked"/><a data-toggle="tooltip" class="text-success" title= "Cup" >C</a><br/>
-              <input name="nestStages" type="checkbox" value="LIN" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Lining" >LIN</a><br/>
-              <input name="nestStages" type="checkbox" value="E"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Eggs" >E</a><br/>
-              <input name="nestStages" type="checkbox" value="WE"  checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Warm eggs" >WE</a><br/>
-              <input name="nestStages" type="checkbox" value="Y"   checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Young" >Y</a><br/>
-              <input name="nestStages" type="checkbox" value="NOTA"/><a data-toggle="tooltip" class="text-success" title=  "Not Active" >NOTA</a><br/>
-              <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><a data-toggle="tooltip" class="text-success" title=  "Wasp nest" >WSP</a> <br/> </div>'),
+		HTML('<div class="span2">  
+				  <label for="nestStages"> <i class="fa fa-circle" data-toggle="tooltip" class="label label-info" title="Nest stages"> Stages</i>   </label>
+				  <input name="nestStages" type="checkbox" value="U"/> <i data-toggle="tooltip"  title=  "Used" > U </i> <br/>
+				  <input name="nestStages" type="checkbox" value="LT"  checked="checked"/><i data-toggle="tooltip"  title=  "Little" >LT</i> <br/>
+				  <input name="nestStages" type="checkbox" value="R"   checked="checked"/><i data-toggle="tooltip"  title= "Ring" >R</i> <br/>
+				  <input name="nestStages" type="checkbox" value="B"   checked="checked"/><i data-toggle="tooltip"  title= "Bottom" >B</i><br/>
+				  <input name="nestStages" type="checkbox" value="BC"  checked="checked"/><i data-toggle="tooltip"  title= "Bottom-Cup" >BC</i><br/>
+				  <input name="nestStages" type="checkbox" value="C"   checked="checked"/><i data-toggle="tooltip"  title= "Cup" >C</i><br/>
+				  <input name="nestStages" type="checkbox" value="LIN" checked="checked"/><i data-toggle="tooltip"  title=  "Lining" >LIN</i><br/>
+				  <input name="nestStages" type="checkbox" value="E"   checked="checked"/><i data-toggle="tooltip"  title=  "Eggs" >E</i><br/>
+				  <input name="nestStages" type="checkbox" value="WE"  checked="checked"/><i data-toggle="tooltip"  title=  "Warm eggs" >WE</i><br/>
+				  <input name="nestStages" type="checkbox" value="Y"   checked="checked"/><i data-toggle="tooltip"  title=  "Young" >Y</i><br/>
+				  <input name="nestStages" type="checkbox" value="NOTA"                 /><i data-toggle="tooltip"  title=  "Not Active" >NOTA</i><br/>
+				  <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><i data-toggle="tooltip"  title=  "Wasp nest" >WSP</i> <br/> 
+			  </div>'),
 			  
 		#hatching estimation
-		div(class = "span3 control-group success",
+		div(class = "span3",
 			selectInput("safeHatchCheck", 
-				label = HTML('<a data-toggle="tooltip" class="label label-info" title=" How many days in advance to check for hatching. 0 selects the predicted hatching date" > Hatch check: </a>'), 
+				label = LAB('wrench', 'Hatch check', 'How many days in advance to check for hatching. 0 selects the predicted hatching date') , 
 				choices = 0:-3, selected =  -3), 
 				hr(),
 			checkboxInput("hatchNow", 
-				label = div(class = "control-group success", HTML('<a data-toggle="tooltip" class="label label-info" title="Emphasise boxes where hatching is imminent">Hatching NOW:</a>')), 
+				label = LAB('wrench', 'Hatching NOW:', 'Emphasise boxes where hatching is imminent'), 
 				value = TRUE)), 
 		
 		#young age
-			div(class="span3 control-group success", radioButtons("youngAgeYN", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Check  SELECT to select nests with particular young ages." >Young age:</a>'),
+			div(class="span3", radioButtons("youngAgeYN", 
+			label = LAB('wrench', 'Young age', 'Check SELECT to select nests with particular young ages.'),
 			choices = c("ALL", "SELECT") , selected = "ALL" ), 
 	
 	conditionalPanel(condition = "input.youngAgeYN == 'SELECT'",		
 		selectInput("youngAge", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title="Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES!">Age on map:</a>'), 
+			label = LAB('wrench', 'Age on map', 'Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES'), 
 				choices = 1:25, selected = 14, multiple =  TRUE) ) ), 
 				
 		# parents
-		div(class="span1 control-group success", radioButtons("parents", 
-			label = HTML('<a data-toggle="tooltip" class="label label-info" title=  "Show caught parents on the curent map." >Parents:</a>'),
+		div(class="span1", radioButtons("parents", 
+			label = LAB('wrench', 'Parents', 'Show caught parents on the curent map.'),
 			choices = c("YES", "NO") , selected = "NO" ) )
 	)	
 	)
@@ -254,8 +246,23 @@ list(
 								Host: </i>'), 
 		            choices = list('scidb.orn.mpg.de' , 'localhost', 'scicomp.orn.mpg.de'), 
 		            selected = 'scidb.orn.mpg.de') 
-	)
+	),
 	# Settings end  <<<<<<<<<<<<<<
+	
+	
+	conditionalPanel(condition = "input.tools == 'experiments' ",
+	# experiments starts >>>>>>>>>>>>
+		selectInput("experiments", 
+						label = LAB('bullseye', 'Experiment ID', 'Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment.'),
+						choices  = 1:10, 
+								selected = 2, 
+					  multiple =  FALSE)
+	# downloadButton('experiments', HTML('<button class="btn btn-small btn-primary" type="button"> DATA </button>') )				  
+	
+	)
+	# experiments ends <<<<<<<<<<<<<<
+	
+	
 	
 
 ) # tool right bar end <<<<<<<<<

@@ -14,9 +14,10 @@ shinyServer( function(input, output, clientData, session) {
 #    })      
   
 # data tables	
-	output$bugs      <- renderDataTable( { bugs(input = input) } )	
-	output$warnings  <- renderDataTable( { warnings(input = input) } )	
-  output$colComments <- renderDataTable( { getComments(tab = input$tabNamHelp, date = input$date) } )
+	output$bugs      	<- renderDataTable( { bugs(input = input) } )	
+	output$warnings  	<- renderDataTable( { warnings(input = input) } )	
+	output$colComments 	<- renderDataTable( { getComments(tab = input$tabNamHelp, date = input$date) } )
+	output$experiments 	<- renderDataTable( { fetchExperimentData(input = input) } )
 		
 		   
 		
@@ -60,6 +61,7 @@ shinyServer( function(input, output, clientData, session) {
 		content = function(file) {
 		maps(input = input, pdf = TRUE, file = file)
 	})
+
 
   
  })

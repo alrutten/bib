@@ -10,7 +10,7 @@
 	# edit(x)
 
 
-	s = function (input) {
+	s = function (input, returnData = FALSE) {
 	  x = c(10, 17, 21, 26, 29, 32, 36, 38, 50, 63, 64, 67, 68, 
 	        72, 84, 85, 109, 117, 121, 122, 123, 125, 131, 137, 138, 
 	        140, 152, 161, 167, 177, 178, 179, 180, 183, 198, 200, 214, 
@@ -69,7 +69,9 @@
 	  }
 	  
 	  out$legend = L
-	  return(out)
+	  
+	  if(returnData) return(d) else return(out)
+	  
 	}
 	
 	# update EXPERIMENTAL table		 
