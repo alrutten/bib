@@ -1,4 +1,10 @@
-
+fetchExperimentData <- function(input) {
+	year = dd2yy(input$date)
+	fun = getExperiments(year, input$experiments)[[1]]
+	if(is.null(fun)) o = data.frame(x = 1, note = paste('Experiment', input$experiments, 'returns no data')   ) else
+	o = fun(input, returnData = TRUE)
+	return(o)
+}
 
 getExperiments <- function(year, expID, ...) {
 
@@ -37,12 +43,6 @@ getExperiments <- function(year, expID, ...) {
 }		
 	 
 
-fetchExperimentData <- function(input) {
-	year = dd2yy(input$date)
-	fun = getExperiments(year, input$experiments)[[1]]
-	if(is.null(fun)) o = data.frame(x = 1, note = paste('Experiment', input$experiments, 'returns no data')   ) else
-	o = fun(input, returnData = TRUE)
-	return(o)
-}
+
 	 
 	 
