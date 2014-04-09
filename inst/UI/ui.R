@@ -62,7 +62,7 @@ column(3,
 	div(class="row", p(""),
 	  div(class = "span4", 
 		dateInput('date', 
-			label = bib:::LAB('calendar', 'Date:', 'Reference date.'),
+			label = labHTML('calendar', 'Date:', 'Reference date.'),
 			min = '2007-03-01', max = Sys.Date()+30,
 			format = "dd-M-yyy",
 			value = Sys.Date(), 
@@ -75,7 +75,7 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label =  bib:::LAB('info', 'DATA ENTRY HELP', 'Data entry help for each table and column!'),
+               label =  labHTML('info', 'DATA ENTRY HELP', 'Data entry help for each table and column!'),
 
 			   
                choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
@@ -95,7 +95,7 @@ column(3,
 	# map type
 	div(class="span3", 
 		selectInput("mapType", 
-			label = bib:::LAB('globe', 'Map type:', 'Map type:interactive or a simple base map with no decorations.'), 
+			label = labHTML('globe', 'Map type:', 'Map type:interactive or a simple base map with no decorations.'), 
 			choices = list('active' = 'activeMap', 'base'= 'baseMap'), 
 			selected = "activeMap") ), 
 			
@@ -103,7 +103,7 @@ column(3,
 	# add marks
 	div(class="span3", 
 	    radioButtons("marks", 
-	                 label = bib:::LAB('compass', 'Markers', 'Add user defined markers to the current map.'),
+	                 label = labHTML('compass', 'Markers', 'Add user defined markers to the current map.'),
 	                 choices = c("Yes", "No") , selected = "No" )
 	)
   
@@ -143,15 +143,15 @@ list(
 	# text & box size
 	div(class="row", p(" ") ,
 		div(class="span5", sliderInput("textCex",
-						label = bib:::LAB('gears', 'Text', 'Size of the text on screen map, it will also affect the pdf maps.'), 
+						label = labHTML('gears', 'Text', 'Size of the text on screen map, it will also affect the pdf maps.'), 
 						min = 0.5, max = 1.5, value = 0.8, step = 0.05) ), 
 		div(class="span5", sliderInput("boxCex", 
-						label = bib:::LAB('gears', 'Box size', 'Box size on screen map, it will also affect the pdf maps.'), 
+						label = labHTML('gears', 'Box size', 'Box size on screen map, it will also affect the pdf maps.'), 
 						min = 0.5, max = 3, value = 2, step = 0.25) ) ),
 	#transparency					
 	div(class="row", p(" ") ,
 		div(class="span5", sliderInput("transp", 
-						label = bib:::LAB('gears', 'Transparency', 'Box transparency on screen map, it will also affect the pdf maps.'), 
+						label = labHTML('gears', 'Transparency', 'Box transparency on screen map, it will also affect the pdf maps.'), 
 						min = 0, max = .95, value = 0.5, step = 0.05) ) ),
 	#  visual settings end <<<<<<<<<<<<<<<<<<<<<
 	
@@ -178,26 +178,26 @@ list(
 		#hatching estimation
 		div(class = "span3",
 			selectInput("safeHatchCheck", 
-				label = bib:::LAB('wrench', 'Hatch check', 'How many days in advance to check for hatching. 0 selects the predicted hatching date') , 
+				label = labHTML('wrench', 'Hatch check', 'How many days in advance to check for hatching. 0 selects the predicted hatching date') , 
 				choices = 0:-3, selected =  -3), 
 				hr(),
 			checkboxInput("hatchNow", 
-				label = bib:::LAB('wrench', 'Hatching NOW:', 'Emphasise boxes where hatching is imminent'), 
+				label = labHTML('wrench', 'Hatching NOW:', 'Emphasise boxes where hatching is imminent'), 
 				value = TRUE)), 
 		
 		#young age
 			div(class="span3", radioButtons("youngAgeYN", 
-			label = bib:::LAB('wrench', 'Young age', 'Check SELECT to select nests with particular young ages.'),
+			label = labHTML('wrench', 'Young age', 'Check SELECT to select nests with particular young ages.'),
 			choices = c("ALL", "SELECT") , selected = "ALL" ), 
 	
 	conditionalPanel(condition = "input.youngAgeYN == 'SELECT'",		
 		selectInput("youngAge", 
-			label = bib:::LAB('wrench', 'Age on map', 'Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES'), 
+			label = labHTML('wrench', 'Age on map', 'Select particular young ages <hr> HOLD CTR or SHIFT TO SELECT MULTIPLE VALUES'), 
 				choices = 1:25, selected = 14, multiple =  TRUE) ) ), 
 				
 		# parents
 		div(class="span1", radioButtons("parents", 
-			label = bib:::LAB('wrench', 'Parents', 'Show caught parents on the curent map.'),
+			label = labHTML('wrench', 'Parents', 'Show caught parents on the curent map.'),
 			choices = c("YES", "NO") , selected = "NO" ) )
 	)	
 	)
@@ -253,7 +253,7 @@ list(
 	conditionalPanel(condition = "input.tools == 'experiments' ",
 	# experiments starts >>>>>>>>>>>>
 		selectInput("experiments", 
-						label = bib:::LAB('bullseye', 'Experiment ID', 'Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment.'),
+						label = labHTML('bullseye', 'Experiment ID', 'Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment.'),
 						choices  = 1:10, 
 								selected = 2, 
 					  multiple =  FALSE)

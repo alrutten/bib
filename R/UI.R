@@ -1,3 +1,6 @@
+labHTML <- function(icon = 'circle', label = 'label', tip = ' I am a label') {
+	HTML(paste0('<i class="fa fa-', icon, '" data-toggle="tooltip" class="label label-info" title="', tip, '"> ', label, '</i>'))
+}
 
 
 hr <- function(...) { 
@@ -27,9 +30,6 @@ westerholz <- function() {
   shiny::runApp(system.file('UI', package = 'bib'))
 }
 
-LAB <- function(icon = 'circle', label = 'label', tip = ' I am a label') {
-	HTML(paste0('<i class="fa fa-', icon, '" data-toggle="tooltip" class="label label-info" title="', tip, '"> ', label, '</i>'))
-}
 
 
 
