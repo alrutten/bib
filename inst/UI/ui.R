@@ -50,9 +50,11 @@ column(9,
 		tabPanel("FORECASTING", plotOutput( 'forecastGraph',height = 1000, width = 1300)  ) , 
 		tabPanel("BUGS", dataTableOutput( 'bugs')  ), 
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
+		tabPanel("experiments", dataTableOutput("experiments") ),
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("settings", htmlOutput("settings") ),
-		tabPanel("experiments", dataTableOutput("experiments") )
+		tabPanel("ID_history", plotOutput( 'IDGraph',  height = 800, width = 1000 )  ), 
+		tabPanel("settings", htmlOutput("settings") )
+
 		
 		)
 	), 
@@ -261,21 +263,27 @@ list(
 	),
 	# Settings end  <<<<<<<<<<<<<<
 	
-	
+ # experiments starts >>>>>>>>>>>>
 	conditionalPanel(condition = "input.tools == 'experiments' ",
-	# experiments starts >>>>>>>>>>>>
 		selectInput("experiments", 
 						label = HTML('<i class="fa fa-bullseye" data-toggle="tooltip" class="label label-info" 
-							title="Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated with the selected experiment."> Experiment ID</i> '),
+							title="Experiment ID number (see |EXPERIMENTS| table. <hr> Displays experiment on the map and returns data associated 
+                         with the selected experiment."> Experiment ID</i> '),
 						choices  = 1:10, 
-								selected = 2, 
+						selected = 2, 
 					  multiple =  FALSE)
-			  
-	
-	)
+  ),
 	# experiments ends <<<<<<<<<<<<<<
 	
-	
+ # ID history starts >>>>>>>>>>>>
+ conditionalPanel(condition = "input.tools == 'ID_history' ",
+                  textInput("birdID", 
+                    label = HTML('<i class="fa fa-pencil" data-toggle="tooltip" class="label label-info" 
+						      	title="Bird ID: Enter ANY of the three IDs: ring number, color combination or transponder"> Bird ID</i> '),
+                    value  = "B1V3200")
+ )
+ # ID history ends <<<<<<<<<<<<<<
+ 
 	
 
 ) # tool right bar end <<<<<<<<<

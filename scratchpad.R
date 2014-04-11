@@ -2,7 +2,7 @@
 {  # runApp 
 	options(shiny.reactlog=TRUE)  
 	shiny::runApp('/home/valcu/M/SOFTWARE/R/PACKAGES/bib/inst/UI/')
-	runApp('~/git/bib/inst/UI/')
+	shiny::runApp('~/git/bib/inst/UI/')
 	shiny::runApp('/home/valcu/GITHUB/bib/inst/UI/')
 
 }

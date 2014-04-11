@@ -51,7 +51,7 @@ require(bib)
 	output$nestGraph <- renderPlot( {nestGraph(input = input)}  )
 	output$firstEggPrediction <- renderPlot( {egg1Graph(input = input)}  )
 	output$forecastGraph <- renderPlot( {forecastGraph(input = input)}  )
-
+  output$IDGraph <- renderPlot( {IDGraph(input = input)}  )
 
 # DOWNLOADS	
 	
