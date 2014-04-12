@@ -34,10 +34,7 @@ phenoGraph <- function(input) {
 # ID history
 
 IDGraph <- function(input) {
-  id = input$birdID
   
-  plot(1, main = 'UNDER CONSTRUCTION', sub = id)
-  
-  
+  idDataFetch(id = input$birdID)
   
   }
