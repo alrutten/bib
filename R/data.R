@@ -102,56 +102,6 @@ nestDataFetch <- function(date_, stages = NULL, stagesNFO = stagesInfo, safeHatc
 	}
 	
 
-# phenology ----
-phenologyDataFetch	<- function(what = 'firstEgg', db = "BTatWESTERHOLZ", ...) {
-
-	d = Q(query = 
-		paste("select year_, 
-		dayofyear(", what, ") - dayofyear(STR_TO_DATE( concat_WS('-', year(",what,"), 'Apr-1'), '%Y-%M-%d')) as var ",
-			"FROM BREEDING 
-				where", what ,
-					"is not NULL")
-				, 
-		db = db, ...)
-	
-	 d$Year = factor(d$year_)
-	d
-	}
-
-# ID  (TO DO add to UI)----
-idDataFetch <- function(id , transp, combo , db = "BTatWESTERHOLZ", ...) {
-# TODO
-  # transp = '67A741F9C66F0001'; id = 'B2F5444'
-  
-  if( !missing(transp) ) {
-    ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
-                          from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
-                            JOIN SEX s ON a.ID = s.ID where transponder = ", shQuote(transp) ), db = db, ...)
-    id = ids$ID[1]
-    }
-    
-  if( !missing(id) ) {
-    ids = Q(query = paste("select distinct a.ID, transponder, s.sex 
-                          from (SELECT distinct ID, transponder  FROM ADULTS UNION SELECT distinct ID, transponder  FROM CHICKS) a 
-                          JOIN SEX s ON a.ID = s.ID where a.ID = ", shQuote(id) ), db = db, ...)
-  }
-  
-  if( !missing(combo) ) {
-    stop("selecting by color combination not yet implemented!")
-  }
-  
-  
-  d =  Q(query = paste("select * from (
-    SELECT box, date_time date_ , 0 age, 'capture' recorded FROM CHICKS a  where ID = ", shQuote(id),
-    "UNION
-    SELECT box, capture_date_time date_, age,'capture' recorded  FROM ADULTS a where ID = ", shQuote(id), " ) x 
-    order by date_ asc"), db = db, ...)
-
-  list(ids, d)
-
-
-}
-
 # 1st egg Predict ----
 ldPredictDataFetch <- function(...) { 
     d = Q(query = "SELECT  F.year_, firstEgg, firstEgg_AprilDay, avg_temp FROM 
@@ -186,7 +136,55 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date(), ... ) {
   
   
 
+# nest history data ----
+nestData <- function(year, box, safeHatchCheck = -3, ...) {
+  d = Q(year = year,  paste(
+        'SELECT DISTINCT date_time, dayofyear(date_time) jd, nest_stage,eggs, author, female_inside_box, warm_eggs, eggs_covered, 
+          COALESCE(guessed, 0) guessed, laying_START, fledging_START, chicks
+            FROM NESTS where box =', box), ... )
 
+  #check
+  if(nrow(d) == 0) stop( paste("selected box", box, "is empty in", year))					   
+  
+  # min laying date in pop
+  minFirstEgg = Q(year = year,  'SELECT MIN(DAYOFYEAR(date_time)) firstEgg FROM NESTS WHERE laying_START is not NULL', ...)[1,1]
+  
+  d$date_time = as.Date(d$date_time)
+  d = merge(d, stagesInfo, by = 'nest_stage',sort = FALSE)
+  
+  dd = data.frame(date_time = seq.Date(min(d$date_time),max(d$date_time), by = 1) )
+  d = merge(dd, d, all.x = TRUE)
+  
+  # predict hatching
+  toPred = data.frame(clutch = max(d$eggs, na.rm = TRUE), firstEgg = dayOfyear( d[which(d$laying_START == 1), "date_time"][1] ) - minFirstEgg )
+  
+  ph = try( predict(hatchDateGLM, toPred ,  level = 0) , silent = TRUE)
+  
+  if( is.numeric(ph) ) {
+    ph = ph + minFirstEgg 	# back to Julian
+    ph = ph + as.numeric(safeHatchCheck)
+    phAbs = data.frame( date_time = dayofyear2date(floor(ph), year), predHatchDate = ph )
+    d = merge(d, phAbs, by = 'date_time', all.x = TRUE, all.y = TRUE)
+    d[!is.na(d$predHatchDate), 'nest_stage'] = 'estHatch'
+  }
+  
+  # prepare d
+  d[is.na(d$author), "author"] = ""
+  d[is.na(d$guessed), "guessed"] = ""
+  
+  d = d[order(d$date_time, decreasing  = TRUE), ]
+  d$ID = 1:nrow(d)
+  # size is prop with clutch and brood size
+  d$CBS = d$eggs
+  
+  cks = d[which(!is.na(d$chicks)), 'chicks']
+  if(length(cks) > 0) d[which(!is.na(d$chicks)), 'CBS'] = cks
+  d[is.na(d$CBS), "CBS"] = 0
+  
+  d
+  
+  
+ }
 
 
 

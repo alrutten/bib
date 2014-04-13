@@ -18,8 +18,7 @@ require(bib)
 	output$warnings  	<- renderDataTable( { warnings(input = input) } )	
 	output$colComments 	<- renderDataTable( { getComments(tab = input$tabNamHelp, date = input$date) } )
 	output$experiments 	<- renderDataTable( { fetchExperimentData(input = input) } )
-		
-		   
+  output$IDGraph <- renderDataTable( {IDGraph(input = input)}  )	
 		
 # print
 	output$settings <- renderPrint({
@@ -46,11 +45,11 @@ require(bib)
   })
  
 # graphics 
-	output$maps <- renderPlot( {maps(input = input)}  )
-	output$phenoGraph <- renderPlot( {phenoGraph(input = input)}  )
-	output$nestGraph <- renderPlot( {nestGraph(input = input)}  )
+	output$maps               <- renderPlot( {maps(input = input)}  )
+	output$phenoGraph         <- renderPlot( {phenoGraph(input = input)}  )
+	output$nestGraph          <- renderPlot( {nestGraph(input = input)}  )
 	output$firstEggPrediction <- renderPlot( {egg1Graph(input = input)}  )
-	output$forecastGraph <- renderPlot( {forecastGraph(input = input)}  )
+	output$forecastGraph      <- renderPlot( {forecastGraph(input = input)}  )
 
 
 # DOWNLOADS	

@@ -139,11 +139,17 @@ marksmap <- function(input) {
 # Nest history
 	nestGraph <- function(input) {
 	
+      # settings
+	    safeHatchCheck = input$safeHatchCheck
+	    year = dd2yy(input$date)
 			box1 = input$NestId
 			box2 = input$NestIdEntry 
+				if( is.na(box2) )  box  = box1 else  box = box2
 			
-			if( is.na(box2) )  box  = box1 else  box = box2
+      #check
+			if( nchar(box) == 0) stop("First choose a box!")	
 			
+<<<<<<< HEAD
 			
 			year = as.numeric(strftime(input$date, format = "%Y"))
 			safeHatchCheck = input$safeHatchCheck
@@ -153,46 +159,16 @@ marksmap <- function(input) {
 			
 			
 				
+=======
+>>>>>>> 0d1fc5db3d02c1985400ef049f3f6d72435ac377
 			#  data
-			d = Q(year = year,  paste(
-				'SELECT DISTINCT date_time, dayofyear(date_time) jd, nest_stage,eggs, author, female_inside_box, warm_eggs, eggs_covered, COALESCE(guessed, 0) guessed, laying_START, fledging_START, chicks
-					FROM NESTS where box =', box
-					), host = input$host )
-			
-			#check 2
-			if(nrow(d) == 0) stop( paste("selected box", box, "is empty in", year))					   
-
-			# min laying date in pop
-			minFirstEgg = Q(year = year,  'SELECT MIN(DAYOFYEAR(date_time)) firstEgg FROM NESTS WHERE laying_START is not NULL', host = input$host)[1,1]
-			
-			d$date_time = as.POSIXct(d$date_time)
-			d = merge(d, stagesInfo, by = 'nest_stage',sort = FALSE)
-			
-			# predict hatching
-			toPred = data.frame(clutch = max(d$eggs, na.rm = TRUE), firstEgg = dayOfyear( d[which(d$laying_START == 1), "date_time"][1] ) - minFirstEgg )
-			
-			ph = try( predict(hatchDateGLM, toPred ,  level = 0) , silent = TRUE)
-			
-			if( is.numeric(ph) ) {
-				ph = ph + minFirstEgg 				 # back to Julian
-				ph = ph + as.numeric(safeHatchCheck)
-				phAbs = data.frame( date_time = dayofyear2date(floor(ph), year), predHatchDate = ph )
-				d = merge(d, phAbs, by = 'date_time', all.x = TRUE, all.y = TRUE)
-				d[!is.na(d$predHatchDate), 'nest_stage'] = 'estHatch'
-			}
-			
-			# prepare d
-			d = d[order(d$date_time, decreasing  = TRUE), ]
-			d$ID = 1:nrow(d)
-			# size is prop with clutch and brood size
-			d$CBS = d$eggs; d[which(!is.na(d$chicks)), 'CBS'] = d[which(!is.na(d$chicks)), 'chicks']; d[is.na(d$CBS), "CBS"] = 0
-			
+	
+			d = nestData(year, box, safeHatchCheck = safeHatchCheck, host = input$host)
+      
 			# PLOT xlim =  c(1,8)
 			par(mai= c(2,2,0.5,0))
-			plot(ID ~ ID, d, axes = FALSE, type = 'n', ylab = '', xlab = '', sub = paste('box', box, 'in', year) , 
-					xlim =  c(1,8)
-					
-					)
+			plot(ID ~ ID, d, axes = FALSE, type = 'n', ylab = '', xlab = '',   xlim =  c(1,8),
+           sub = paste('box', box, 'in', year) )
 			
 			axis(2, at = 1:nrow(d), label = format(as.POSIXct(d$date_time), "%d-%b" ), las = 1)
 			
@@ -202,27 +178,32 @@ marksmap <- function(input) {
 
 			#2,  nest developement, predicted hatch, clutch/brood size
 			mtext("Nest\ndevelopement:", side = 3, at = 2, line = -1)
-			points(rep(2, nrow(d)), d$ID, col = d$stageCol, cex = round(sqrt(d$CBS))+1.2 , pch = 20)
+			points(rep(2, nrow(d)), d$ID, col = d$stageCol, cex = round(sqrt(d$CBS))+ 4 , pch = 20)
 			text(rep(2, nrow(d)), d$ID, label = d$CBS, col  = ifelse( d$nest_stage%in%c( "U", "LT" ,"NOTA", "E"), 'black', 'white') , font = 4   )
-			x = d[d$nest_stage == 'estHatch', ] ; if(nrow(x) > 0)  points(rep(2, nrow(x)), x$ID,col = 2, pch = 5, cex = 3.5)
+			x = d[d$nest_stage == 'estHatch', ]
+      if(nrow(x) > 0)
+        points(rep(2, nrow(x)), x$ID,col = 2, pch = 5, cex = 4)
 			
 			
 			
 			#3,  female_inside_box 
 			mtext("Female\nin box:", side = 3, at = 3, line = -1)
-			x = d[!is.na(d$female_inside_box), ]; if(nrow(x) > 0) points(rep(3, nrow(x)), x$ID,col = 2, pch = 13, cex = 2)
+			x = d[!is.na(d$female_inside_box), ]
+      if(nrow(x) > 0) 
+        points(rep(3, nrow(x)), x$ID,col = 2, pch = 13, cex = 2.5)
 			
 			#4,  warm_eggs
 			mtext("Warm\neggs:", side = 3, at = 4, line = -1)
-			x = d[ which(d$warm_eggs ==1) , ]; if(nrow(x) > 0) points(rep(4, nrow(x)), x$ID,col = 1, pch = 19, cex = 1)
+			x = d[ which(d$warm_eggs ==1) , ]
+      if(nrow(x) > 0) 
+        points(rep(4, nrow(x)), x$ID,col = 1, pch = 19, cex = 2)
 			
 			#5,  eggs_covered
 			mtext("Covered\neggs:", side = 3, at = 5, line = -1)
-			x = d[!is.na(d$eggs_covered), ]; if(nrow(x) > 0) points(rep(5, nrow(x)), x$ID,col = 1, pch = 19, cex = 1)
+			x = d[!is.na(d$eggs_covered), ]
+      if(nrow(x) > 0) 
+        points(rep(5, nrow(x)), x$ID,col = 1, pch = 19, cex = 2)
 			
-
-			
-
 			
 			#6,  TODO
 			mtext("Visits per day\n(SNB):", side = 3, at = 6, line = -1)
@@ -234,11 +215,14 @@ marksmap <- function(input) {
 			LG$point = 20
 			LG = rbind( LG, data.frame(nam = 'Estimated hatching date', col = 2, point = 5) )
 			legend('topright', legend = LG$nam,  col = LG$col, pch = LG$point, pt.cex = 3, title = "Nest stages:", bty = "n")
-			
 			legend('bottomright', legend = 1:12,  col = 2, pch = 20, pt.cex = sqrt(1:12)+1, title = "Clutch or\nbrood size:", bty = "n")
+<<<<<<< HEAD
 
 			
 			
+=======
+								
+>>>>>>> 0d1fc5db3d02c1985400ef049f3f6d72435ac377
 			}
 
 # Forecasting graphs
@@ -268,37 +252,5 @@ marksmap <- function(input) {
 			
 		}
 		
-# phenology graphs
-	phenoGraph <- function(input) {
-		
-		require(ggplot2)
-		require(gridExtra)
-		
-		what = input$phenoType
-		d = phenologyDataFetch(what)
-		
-		P = ggplot(d, aes(x= var , fill = Year), environment=environment()) + 
-										geom_density(alpha = 0.7) + 
-										xlab( paste(what, "(day 1 = April 1st)" ) )
-		
-		#first egg prediction based on Apr temperature
-		if( what == 'firstEgg') {
-		d = ldPredictDataFetch()
-		p2 = ggplot(d, aes(x = avg_temp, y = firstEgg_AprilDay, label= year_)) + theme_bw() + 
-			geom_text(vjust= -0.5, hjust = -0.4, size = 4) + 
-			geom_point(size = 5)  + 
-			ylab("First Egg (day 1 = 1st April)") + 
-			xlab("Average minimum daily temperature [14 Mar-1Apr]")+ 
-			scale_y_continuous(breaks=seq(1, 20, 1)) + 
-			xlim(-4,5)
-		}
-		
-		if( what == 'firstEgg')
-			grid.arrange(P, p2) else print(P) 
-		
-
-
-	}	
-
 
 
