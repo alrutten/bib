@@ -149,18 +149,6 @@ marksmap <- function(input) {
       #check
 			if( nchar(box) == 0) stop("First choose a box!")	
 			
-<<<<<<< HEAD
-			
-			year = as.numeric(strftime(input$date, format = "%Y"))
-			safeHatchCheck = input$safeHatchCheck
-			
-			#check 1
-			if( nchar(box) == 0) stop("First choose a box!")
-			
-			
-				
-=======
->>>>>>> 0d1fc5db3d02c1985400ef049f3f6d72435ac377
 			#  data
 	
 			d = nestData(year, box, safeHatchCheck = safeHatchCheck, host = input$host)
@@ -216,13 +204,7 @@ marksmap <- function(input) {
 			LG = rbind( LG, data.frame(nam = 'Estimated hatching date', col = 2, point = 5) )
 			legend('topright', legend = LG$nam,  col = LG$col, pch = LG$point, pt.cex = 3, title = "Nest stages:", bty = "n")
 			legend('bottomright', legend = 1:12,  col = 2, pch = 20, pt.cex = sqrt(1:12)+1, title = "Clutch or\nbrood size:", bty = "n")
-<<<<<<< HEAD
 
-			
-			
-=======
-								
->>>>>>> 0d1fc5db3d02c1985400ef049f3f6d72435ac377
 			}
 
 # Forecasting graphs
