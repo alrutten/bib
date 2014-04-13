@@ -137,7 +137,7 @@ marksmap <- function(input) {
 		}	
 		
 # Nest history
-	nestGraph <- function(input, pdf = FALSE, ...) {
+	nestGraph <- function(input) {
 	
 			box1 = input$NestId
 			box2 = input$NestIdEntry 
@@ -152,7 +152,6 @@ marksmap <- function(input) {
 			if( nchar(box) == 0) stop("First choose a box!")
 			
 			
-			if(pdf) pdf(..., width = 8.3, height = 11.7)
 				
 			#  data
 			d = Q(year = year,  paste(
@@ -237,12 +236,7 @@ marksmap <- function(input) {
 			legend('topright', legend = LG$nam,  col = LG$col, pch = LG$point, pt.cex = 3, title = "Nest stages:", bty = "n")
 			
 			legend('bottomright', legend = 1:12,  col = 2, pch = 20, pt.cex = sqrt(1:12)+1, title = "Clutch or\nbrood size:", bty = "n")
-			
-			
-			
-			
-			  if(pdf) dev.off()
-			
+
 			
 			
 			}
