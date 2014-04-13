@@ -34,7 +34,31 @@ phenoGraph <- function(input) {
 # ID history
 
 IDGraph <- function(input) {
+	require(gridExtra)
+	require(ggplot2)
   
-  idDataFetch(id = input$birdID)
+	d = idDataFetch(id = input$birdID)
+
+	# IDs
+	ids = data.frame(id = unique(na.omit(c( as.character(na.omit(d$ID )), as.character(na.omit(d$cb )), as.character(na.omit(d$transponder )) )))   )
+	ids = tableGrob(ids, h.even.alpha=1, h.odd.alpha=1,  v.even.alpha=0.5, v.odd.alpha=1,  show.rownames = FALSE)
+
+	# Tarsus
+	tl = tarsusDataFetch()
+	tl = ggplot(tl, aes(x=tarsus, fill= sex) ) + geom_density(alpha=.3) + geom_vline(mean(d$tarsus, na.rm = TRUE)) geom_hline(aes(yintercept = z), hline.data)
+	tl
+	
+	# Plots
+	grid.arrange
+	grid.draw(ids)
+
   
-  }
+  
+  
+  
+  
+  
+  
+  
+  
+ }

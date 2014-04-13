@@ -16,7 +16,7 @@ phenologyDataFetch  <- function(what = 'firstEgg', db = "BTatWESTERHOLZ", ...) {
 }
 
 # ID  (TO DO add to UI)----
-idDataFetch <- function(id , db = "BTatWESTERHOLZ", ...) {
+idDataFetch <- function(id , db = "BTatWESTERHOLZ") {
 
   # Adults table
     A = Q(query = paste('SELECT year_, capture_date_time dt, ID,  FUNCTIONS.COMBO(UL, LL, UR, LR) cb, transponder, tarsus, author
@@ -28,3 +28,19 @@ idDataFetch <- function(id , db = "BTatWESTERHOLZ", ...) {
   
   
 }
+
+tarsusDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
+
+   Q(query = '
+	SELECT avg(tarsus) tarsus, CASE when sex  = 1 THEN "male" when sex = 2 THEN "female" END sex
+		from (SELECT tarsus, s.sex, a.ID FROM ADULTS a JOIN SEX s on a.ID = s.ID where tarsus is not NULL) x 
+				group by ID, sex', db = db )
+	
+
+
+  
+}
+
+
+
+

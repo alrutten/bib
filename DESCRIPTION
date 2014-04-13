@@ -6,6 +6,6 @@ Date: 2014-Apr-12
 Author: Mihai Valcu
 Maintainer: Mihai Valcu <valcu@orn.mpg.de>
 Depends: methods, sp, rgdal, sdb
-Suggests: knitr, shiny, ggplot2, xtable
+Suggests: knitr, shiny, ggplot2, xtable, gridExtra
 Description: Breeding season field work planner
 License: CC-BY
