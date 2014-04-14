@@ -79,10 +79,8 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label = HTML('i class="fa fa-info" data-toggle="tooltip" class="label label-info" 
-				title="Data entry help for each table and column!"> DATA ENTRY HELP</i>') ,
-			   
-               choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
+               label = labHTML(info, 'DATA ENTRY HELP', "Data entry help for each table and column!") ,
+			   choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
                selected = "NESTS"),                    
   # data entry help
    includeHTML(system.file('UI', 'txt', 'block1.html', package = 'bib') ),
