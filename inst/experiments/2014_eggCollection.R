@@ -24,9 +24,9 @@
 	                    
 	                    from (", 
 	                    sqlf, ") d LEFT JOIN
-	                    (select box, max(date_time) as lastColDate from NESTS where collect_eggs = 1 group by box ) z ON d.box = z.box
+	                    (select box, max(date_time) as lastColDate from NESTS where collect_eggs > 0 group by box ) z ON d.box = z.box
 	                    LEFT JOIN
-	                    (select box, min(date_time) as firstColDate from NESTS where collect_eggs = 1 group by box ) a ON d.box = a.box
+	                    (select box, min(date_time) as firstColDate from NESTS where collect_eggs > 0  group by box ) a ON d.box = a.box
 	                    LEFT JOIN
 	                    (select box, max(eggs) as maxClutch from NESTS  group by box ) e ON d.box = e.box
 	                    order by -firstColDate desc, box
@@ -51,10 +51,6 @@
 	  d[which(is.na(d$firstColDate)), "n"] = 1
 	  
 	  d$n = sub('NA', '', paste0(d$nestType , d$n) )
-	  
-	  
-	  
-	  # require(XLConnect) ;  writeWorksheetToFile(  paste0("samplingEggs2014", make.names(as.character(Sys.time() )) ,".xlsx")  , d, sheet='Sheet1')
 	  
 	  out = list(box = d$box, col = d$col, text = d$n)
 	  

@@ -52,7 +52,7 @@ column(9,
 		tabPanel("WARNINGS", dataTableOutput( 'warnings')  ), 
 		tabPanel("experiments", dataTableOutput("experiments") ),
 		tabPanel("PHENOLOGY", plotOutput( 'phenoGraph',  height = 800, width = 1000 )  ), 
-		tabPanel("ID_history", dataTableOutput( 'IDGraph')  ), 
+		tabPanel("ID_history", plotOutput( 'IDGraph',height = 1000, width = 1000)  ), 
 		tabPanel("settings", htmlOutput("settings") )
 
 		

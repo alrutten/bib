@@ -32,33 +32,34 @@ phenoGraph <- function(input) {
 }	
 
 # ID history
-
 IDGraph <- function(input) {
 	require(gridExtra)
 	require(ggplot2)
   
 	d = idDataFetch(id = input$birdID)
+	d$x = d$x - min(d$x)
+	d$y = d$y - min(d$y)
 
 	# IDs
 	ids = data.frame(id = unique(na.omit(c( as.character(na.omit(d$ID )), as.character(na.omit(d$cb )), as.character(na.omit(d$transponder )) )))   )
+	names(ids) = d$sex[1]
 	ids = tableGrob(ids, h.even.alpha=1, h.odd.alpha=1,  v.even.alpha=0.5, v.odd.alpha=1,  show.rownames = FALSE)
 
 	# Tarsus
 	tl = tarsusDataFetch()
-	tl = ggplot(tl, aes(x=tarsus, fill= sex) ) + geom_density(alpha=.3) + geom_vline(mean(d$tarsus, na.rm = TRUE)) geom_hline(aes(yintercept = z), hline.data)
-	tl
+	tl = ggplot(tl, aes(x=tarsus, fill= sex) ) + geom_density(alpha=.3) + geom_vline(xintercept = mean(d$tarsus, na.rm = TRUE) ) +  theme(plot.margin = unit(c(0,0,0,0), "mm"))
 	
-	# Plots
-	grid.arrange
-	grid.draw(ids)
+	# Body mass
+	bm = massDataFetch()
+	bm = ggplot(bm, aes(x=weight, fill= sex) ) + geom_density(alpha=.3) + geom_vline(xintercept = mean(d$weight, na.rm = TRUE) ) +  theme(plot.margin = unit(c(0,0,0,0), "mm"))
+	
+	
+	# Boxes  & dates
+	mp = ggplot(d, aes(x, y, col = tab) ) +  geom_point(size = 5, alpha = .5) + geom_text( aes(label=box), hjust=.5,  vjust=-1) + geom_text( aes(label=year_), hjust=.5,  vjust=1) + 
+		xlab("x (meters)") + ylab("y (meters)") +  xlim(-10, max(d$x)+10  )  +  ylim(-10, max(d$y)+10  )  + theme(plot.margin = unit(c(0,0,0,0), "mm"))
+	
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
+	# Plots
+	print(grid.arrange(ids, mp, tl, bm, ncol = 2))
+	
  }
