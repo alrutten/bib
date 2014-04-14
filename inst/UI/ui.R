@@ -79,7 +79,7 @@ column(3,
 
    # table name
    selectInput("tabNamHelp", 
-               label = labHTML(info, 'DATA ENTRY HELP', "Data entry help for each table and column!") ,
+               label   = labHTML(info, 'DATA ENTRY HELP', "Data entry help for each table and column!") ,
 			   choices = list('NESTS' , 'ADULTS', 'CHICKS', 'AUTHORS', 'EXPERIMENTS'), 
                selected = "NESTS"),                    
   # data entry help
