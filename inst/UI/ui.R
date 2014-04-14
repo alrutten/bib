@@ -278,7 +278,14 @@ list(
                   textInput("birdID", 
                     label = HTML('<i class="fa fa-pencil" data-toggle="tooltip" class="label label-info" 
 						      	title="Bird ID: Enter ANY of the three IDs: ring number, color combination (UL/LL|UR/LR) or transponder"> Bird ID</i> '),
-                    value  = "B2F5444")
+                    value  = "B2F5444"),
+	
+	hr(),	
+	HTML(recordsTab())
+	
+	
+					
+					
  )
  # ID history ends <<<<<<<<<<<<<<
  

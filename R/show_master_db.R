@@ -63,3 +63,11 @@ IDGraph <- function(input) {
 	print(grid.arrange(ids, mp, tl, bm, ncol = 2))
 	
  }
+
+recordsTab <- function()  {
+	d = recordsDataFetch()
+	print(xtable::xtable(d), type="html", row.names = FALSE) 
+	
+
+	}
+ 

@@ -39,7 +39,7 @@ idDataFetch <- function(id , db = "BTatWESTERHOLZ") {
   
 }
 
-tarsusDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
+tarsusDataFetch  <- function(db = "BTatWESTERHOLZ", ...) {
 
    Q(query = '
 	SELECT avg(tarsus) tarsus, CASE when sex  = 1 THEN "male" when sex = 2 THEN "female" END sex
@@ -51,7 +51,7 @@ tarsusDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
   
 }
 
-massDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
+massDataFetch    <- function(db = "BTatWESTERHOLZ", ...) {
 
    Q(query = '
 	SELECT avg(weight) weight, CASE when sex  = 1 THEN "male" when sex = 2 THEN "female" END sex
@@ -62,6 +62,66 @@ massDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
 
   
 }
+
+recordsDataFetch <- function(db = "BTatWESTERHOLZ", ...) {
+   Q(query = "
+-- body mass & size
+	(SELECT 'Heaviest male' record, a.ID, weight measure, 'grams' comments 
+		FROM ADULTS a  JOIN SEX s on a.ID = s.ID where s.sex = 1 order by weight desc limit 1)
+	UNION
+	( SELECT 'Heaviest female' record, a.ID, weight measure , 'grams' comments  FROM ADULTS a  JOIN SEX s on a.ID = s.ID where s.sex = 2 order by weight desc limit 1)
+	UNION
+-- age
+	(SELECT 'Oldest male' record, x.ID, age  measure, 'years; using ADULTS' comments 
+	FROM
+	(SELECT dt1, dt2, ROUND(DATEDIFF(dt2, dt1)/365,1) age, a.ID
+	 FROM (SELECT min(capture_date_time) dt1, ID FROM ADULTS a GROUP BY ID ) a 
+		JOIN (SELECT max(capture_date_time) dt2, ID FROM ADULTS a GROUP BY ID ) b 
+			ON a.ID = b.ID where dt1 <> dt2 ) x
+		JOIN SEX s on s.ID = x.ID 
+			where sex = 1
+			order by age desc limit 1)
+	UNION		
+	(SELECT 'Oldest female' record, x.ID, age  measure, 'years; using ADULTS' comments 
+	FROM
+	(SELECT dt1, dt2, ROUND(DATEDIFF(dt2, dt1)/365,1) age, a.ID 
+	 FROM (SELECT min(capture_date_time) dt1, ID FROM ADULTS a GROUP BY ID ) a 
+		JOIN (SELECT max(capture_date_time) dt2, ID FROM ADULTS a GROUP BY ID ) b 
+			ON a.ID = b.ID where dt1 <> dt2 ) x
+		JOIN SEX s on s.ID = x.ID 
+			where sex = 2
+			order by age desc limit 1)
+-- promiscuity	
+	UNION
+	(select 'Most promiscuous male' record, father ID, sum(epy) measure, 'EPY (within-season)' comments 
+		FROM PATERNITY where father is not NULL group by father, year_ order by sum(epy) desc limit 1)	
+-- worst year
+UNION
+ (select 'Worst breeding season' record,  a.year_ ID, (failed/all_)*100 measure  ,'% failed nests' FROM 
+	(select year_, COUNT(box) failed FROM BREEDING where hatched = 0 group by year_) f
+	JOIN
+	(select year_, COUNT(box) all_ FROM BREEDING where hatched > 0 group by year_) a
+		ON f.year_ = a.year_ order by failed/all_ desc limit 1)
+		
+UNION
+ (select 'Best breeding season' record, a.year_ ID,  (failed/all_)*100 measure, '% failed nests' FROM 
+	(select year_, COUNT(box) failed FROM BREEDING where hatched = 0 group by year_) f
+	JOIN
+	(select year_, COUNT(box) all_ FROM BREEDING where hatched > 0 group by year_) a
+		ON f.year_ = a.year_ order by failed/all_ asc limit 1)
+		
+  ", db = db )
+   
+  
+}
+
+
+
+
+
+
+
+
 
 
 
