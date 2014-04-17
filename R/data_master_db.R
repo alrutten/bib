@@ -109,6 +109,22 @@ UNION
 	JOIN
 	(select year_, COUNT(box) all_ FROM BREEDING where hatched > 0 group by year_) a
 		ON f.year_ = a.year_ order by failed/all_ asc limit 1)
+
+UNION
+
+(SELECT 'Number of nest checks' record, NULL ID, 
+	(SELECT ( (SELECT COUNT(*) x FROM FIELD_2007_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2008_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2009_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2010_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2011_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2012_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_2013_BTatWESTERHOLZ.NESTS) +
+			(SELECT COUNT(*) x FROM FIELD_BTatWESTERHOLZ.NESTS) ) ) 	 measure, 
+			'nest checks since 13-Mar-2007' comments
+	)		
+		
+		
 		
   ", db = db )
    
