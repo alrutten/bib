@@ -49,6 +49,10 @@
 	  d[which(is.na(d$firstColDate)), "col"] = "red"
 	  d[which(is.na(d$col)), "col"] = "grey"
 	  d[which(is.na(d$firstColDate)), "n"] = 1
+    
+    # 2014-Apr-23 15:43:00
+    d[ which(d$box != 261 & !is.na(d$col) ), 'col'] = "grey"
+    
 	  
 	  d$n = sub('NA', '', paste0(d$nestType , d$n) )
 	  
