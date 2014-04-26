@@ -176,7 +176,6 @@ list(
 				  <input name="nestStages" type="checkbox" value="C"   checked="checked"/><i data-toggle="tooltip"  title= "Cup" >C</i><br/>
 				  <input name="nestStages" type="checkbox" value="LIN" checked="checked"/><i data-toggle="tooltip"  title=  "Lining" >LIN</i><br/>
 				  <input name="nestStages" type="checkbox" value="E"   checked="checked"/><i data-toggle="tooltip"  title=  "Eggs" >E</i><br/>
-				  <input name="nestStages" type="checkbox" value="WE"  checked="checked"/><i data-toggle="tooltip"  title=  "Warm eggs" >WE</i><br/>
 				  <input name="nestStages" type="checkbox" value="Y"   checked="checked"/><i data-toggle="tooltip"  title=  "Young" >Y</i><br/>
 				  <input name="nestStages" type="checkbox" value="NOTA"                 /><i data-toggle="tooltip"  title=  "Not Active" >NOTA</i><br/>
 				  <input name="nestStages" type="checkbox" value="WSP" checked="checked"/><i data-toggle="tooltip"  title=  "Wasp nest" >WSP</i> <br/> 

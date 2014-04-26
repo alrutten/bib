@@ -22,7 +22,7 @@ marksmap <- function(input) {
 }
 
 # mapping
-	basemap <- function(input, pdf = FALSE, ...) {
+basemap <- function(input, pdf = FALSE, ...) {
 		
 		if(pdf) pdf(..., width = 8.3, height = 11.7)
 		 par(mai = c(0,0,0,0))
@@ -38,8 +38,9 @@ marksmap <- function(input) {
 
 		}
 
-	map <- function(input,  pdf = FALSE, ...) {
-		 
+map <- function(input,  pdf = FALSE, ...) {
+     options(stringAsFactors = FALSE)	 
+     
 		 if(pdf) pdf(..., width = 8.3, height = 11.7) 
 
 			
@@ -52,7 +53,10 @@ marksmap <- function(input) {
 						youngAgeYN = input$youngAgeYN, youngAge = input$youngAge,
 						host = input$host
 						)
-
+     # day of hatching = day1
+     d$youngAge = d$youngAge + 1
+     
+     
 			# map layout
 			plot(boxes, pch = setmap$box.pch, col = add.alpha('#C0C0C0', input$transp)  , cex = setmap$box.cex)
 			plot(streets, col = "grey", add = TRUE)
@@ -87,10 +91,10 @@ marksmap <- function(input) {
 			
 			###########################
 			
-			# legend
+			# Nest stages legend
 			LG = unique(d@data[order(d$stageRank),c("nest_stage","stageCol")])
 			LG = merge(LG,data.frame(xtabs(~nest_stage,d)),by = "nest_stage",sort = FALSE)
-			LG$nam = paste(LG$nest_stage, " ( ", LG$Freq, ")", sep = "")
+			LG$nam = paste0(LG$nest_stage, " (", LG$Freq, ")")
 			legend(x = legend.pos[1],y = legend.pos[2], 
 						legend = LG$nam,  
 						col = add.alpha(LG$stageCol, input$transp), 
@@ -98,7 +102,24 @@ marksmap <- function(input) {
 						title = paste("Nest stages(", sum(LG$Freq), ")"), 
 						bty = "n") # 
 			
-			# legend symbols
+     # TODO legend
+     d[ which(d$hatch_or_youngAge < 1 & d$nest_stage == 'E') , "TO_DO"] = "hatch check"
+     if( any(!is.na(d$TO_DO)) ) {
+     TD = data.frame(xtabs(~TO_DO,d))
+     
+		 legend(x = "topleft", 
+		        legend = paste0(TD$TO_DO, " (", TD$Freq, ")") ,  
+		        col = setmap$hatchingNow$col, 
+		        pch = setmap$hatchingNow$pch, pt.cex = setmap$hatchingNow$cex, 
+		        title = "TO DO", 
+		        bty = "n")
+		 # todo: add n parents to catch, hatch check
+     
+     }
+     
+      
+     
+			#  info around boxes
 			lc = list(x = info.pos[1] ,y = info.pos[2])   
 			points(lc,col   = "grey70",pch = setmap$box.pch,cex = setmap$box.cex)
 			text(lc, labels = "box", cex = .7, pos = 4,offset = .4)
@@ -111,7 +132,8 @@ marksmap <- function(input) {
 			when = difftime(rfd, Sys.Date() , units = 'days')
 			
 			mtext(   paste('Reference date:', format(rfd, "%d-%b-%Y" ) ) , side = 3, line = -1, font = 4 )
-			mtext(   paste('[ printed on',  format(Sys.Date(), "%d-%b-%Y") ,"]") , side = 1, line = -2, font = 2,  cex = if (when > 2) 2 else 1, col =  if (when > 2) 2 else 1)
+			mtext(   paste('[ printed on',  format(Sys.Date(), "%d-%b-%Y") ,"]") , side = 1, line = -2, font = 2,  
+               cex = if (when > 2) 2 else 1, col =  if (when > 2) 2 else 1)
 			
 			
 			if(as.numeric(strftime(input$date, format = "%Y"))  < as.numeric(format(Sys.Date(), format = "%Y"))  ) 
@@ -129,7 +151,7 @@ marksmap <- function(input) {
 		}
 
 #  active and base map
-	maps <- function(input, pdf = FALSE, ...) {
+maps <- function(input, pdf = FALSE, ...) {
 
 			if(input$mapType == 'activeMap')  	map(input = input, pdf = pdf, ...)
 			if(input$mapType == 'baseMap')  	basemap(input = input, pdf = pdf, ...)
@@ -137,7 +159,7 @@ marksmap <- function(input) {
 		}	
 		
 # Nest history
-	nestGraph <- function(input) {
+nestGraph <- function(input) {
 	
       # settings
 	    safeHatchCheck = input$safeHatchCheck
@@ -208,7 +230,7 @@ marksmap <- function(input) {
 			}
 
 # Forecasting graphs
-	forecastGraph <- function(input, pdf = FALSE, ...) {
+forecastGraph <- function(input, pdf = FALSE, ...) {
 
 			d = nestDataFetch(date_ = input$date, 
 						stagesNFO = stagesInfo, stages = input$nestStages, 
