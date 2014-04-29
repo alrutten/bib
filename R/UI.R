@@ -30,6 +30,7 @@ bugsHTML <-function( size = 1) {
 westerholz <- function() {
   require(bib)
   require(shiny)
+  options(stringsAsFactors = FALSE)
   shiny::runApp(system.file('UI', package = 'bib'))
 	}
 

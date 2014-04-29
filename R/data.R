@@ -132,13 +132,10 @@ getComments <- function(tab = "NESTS", date_ = Sys.Date(), ... ) {
   }
 
 
-  
-  
-  
-
 # nest history data ----
 nestData <- function(year, box, safeHatchCheck = -3, ...) {
-  d = Q(year = year,  paste(
+options(stringAsFactors = FALSE) 
+ d = Q(year = year,  paste(
         'SELECT DISTINCT date_time, dayofyear(date_time) jd, nest_stage,eggs, author, female_inside_box, warm_eggs, eggs_covered, 
           COALESCE(guessed, 0) guessed, laying_START, fledging_START, chicks
             FROM NESTS where box =', box), ... )

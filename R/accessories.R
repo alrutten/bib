@@ -31,7 +31,7 @@ yy2dbnam <- function(year) {
 	
 ## query function
 Q <- function(year, query, db, host = "scidb.mpio.orn.mpg.de") {
-    
+ options(stringAsFactors = FALSE)   
 	if(missing(year)) 
 		year = format(Sys.Date(), format = "%Y")
 	if(missing(db)) 

@@ -64,7 +64,7 @@ IDGraph <- function(input) {
 	
  }
 
-recordsTab <- function()  {
+recordsTab <- function(input)  {
 	d = recordsDataFetch()
 	print(xtable::xtable(d), type="html", row.names = FALSE) 
 	

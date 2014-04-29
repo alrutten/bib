@@ -53,9 +53,9 @@ map <- function(input,  pdf = FALSE, ...) {
 						youngAgeYN = input$youngAgeYN, youngAge = input$youngAge,
 						host = input$host
 						)
-     # day of hatching = day1
-     d$youngAge = d$youngAge + 1
-     
+			# day of hatching = day1
+			d@data[!is.na(d$youngAge), 'hatch_or_youngAge'] = d@data[!is.na(d$youngAge), 'hatch_or_youngAge'] + 1
+			 
      
 			# map layout
 			plot(boxes, pch = setmap$box.pch, col = add.alpha('#C0C0C0', input$transp)  , cex = setmap$box.cex)
@@ -89,34 +89,35 @@ map <- function(input,  pdf = FALSE, ...) {
 			
 
 			
-			###########################
-			
+			### LEGENDS ###
+
 			# Nest stages legend
 			LG = unique(d@data[order(d$stageRank),c("nest_stage","stageCol")])
 			LG = merge(LG,data.frame(xtabs(~nest_stage,d)),by = "nest_stage",sort = FALSE)
 			LG$nam = paste0(LG$nest_stage, " (", LG$Freq, ")")
-			legend(x = legend.pos[1],y = legend.pos[2], 
-						legend = LG$nam,  
-						col = add.alpha(LG$stageCol, input$transp), 
-						pch = setmap$box.pch, pt.cex = input$boxCex, 
-						title = paste("Nest stages(", sum(LG$Freq), ")"), 
-						bty = "n") # 
+			lg1 = legend("topleft", 
+				legend = LG$nam,  
+				col = add.alpha(LG$stageCol, input$transp), 
+				pch = setmap$box.pch, pt.cex = input$boxCex, 
+				title = paste("Nest stages(", sum(LG$Freq), ")"), 
+				bty = "n") # 
 			
-     # TODO legend
-     d[ which(d$hatch_or_youngAge < 1 & d$nest_stage == 'E') , "TO_DO"] = "hatch check"
-     if( any(!is.na(d$TO_DO)) ) {
-     TD = data.frame(xtabs(~TO_DO,d))
-     
-		 legend(x = "topleft", 
-		        legend = paste0(TD$TO_DO, " (", TD$Freq, ")") ,  
-		        col = setmap$hatchingNow$col, 
-		        pch = setmap$hatchingNow$pch, pt.cex = setmap$hatchingNow$cex, 
-		        title = "TO DO", 
-		        bty = "n")
-		 # todo: add n parents to catch, hatch check
-     
-     }
-     
+						
+			# TO-DOs legend
+			d[ which(d$hatch_or_youngAge < 1 & d$nest_stage == 'E') , "TO_DO"] = "hatch check"
+			if( any(!is.na(d$TO_DO)) ) {
+			
+			TD = data.frame(xtabs(~TO_DO,d))
+				
+			legend( list(x = lg1$rect$left,y = lg1$rect$top - lg1$rect$h) , 
+				legend = paste0(TD$TO_DO, " (", TD$Freq, ")") ,  
+				col = setmap$hatchingNow$col, 
+				pch = setmap$hatchingNow$pch, pt.cex = setmap$hatchingNow$cex, 
+				title = "TO DO", 
+				bty = "n")
+			# todo: add n parents to catch, hatch check
+			}
+			
       
      
 			#  info around boxes
@@ -191,8 +192,8 @@ nestGraph <- function(input) {
 			points(rep(2, nrow(d)), d$ID, col = d$stageCol, cex = round(sqrt(d$CBS))+ 4 , pch = 20)
 			text(rep(2, nrow(d)), d$ID, label = d$CBS, col  = ifelse( d$nest_stage%in%c( "U", "LT" ,"NOTA", "E"), 'black', 'white') , font = 4   )
 			x = d[d$nest_stage == 'estHatch', ]
-      if(nrow(x) > 0)
-        points(rep(2, nrow(x)), x$ID,col = 2, pch = 5, cex = 4)
+			if(nrow(x) > 0)
+				points(rep(2, nrow(x)), x$ID,col = 2, pch = 5, cex = 4)
 			
 			
 			
@@ -230,31 +231,26 @@ nestGraph <- function(input) {
 			}
 
 # Forecasting graphs
-forecastGraph <- function(input, pdf = FALSE, ...) {
+forecastGraph <- function(input, ...) {
 
-			d = nestDataFetch(date_ = input$date, 
-						stagesNFO = stagesInfo, stages = input$nestStages, 
-						safeHatchCheck = input$safeHatchCheck, 
-						youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
-						)	
-			d = d[which(is.na(d$guessed)), ]
-			
-			d$predHatchDate = as.Date(d$predHatchDate)
-			x = subset(data.frame(xtabs(~  predHatchDate + nest_stage, d)), nest_stage%in%c('E', 'Y') )
-			
+	d = nestDataFetch(date_ = input$date, 
+			stagesNFO = stagesInfo, stages = input$nestStages, 
+			safeHatchCheck = input$safeHatchCheck, 
+			youngAgeYN = input$youngAgeYN, youngAge = input$youngAge
+			)	
+	d = d[which(is.na(d$guessed)), ]
 
-			par(mar = c(5,5,5,0) )
-			 if(pdf) pdf(..., width = 8.3, height = 11.7) 
+	d$predHatchDate = as.Date(d$predHatchDate)
+	x = subset(data.frame(xtabs(~  predHatchDate + nest_stage, d)), nest_stage%in%c('E', 'Y') )
 
-			barplot(x$Freq, names.arg = strftime (as.Date(x$predHatchDate ), '%d-%b') , horiz = TRUE, cex.names = .9, width = 1, xlab = "No of nests", main = 'Predicted hatch date')
-			
 
-		 
-			if(pdf)  dev.off()
+	par(mar = c(5,5,5,0) )
 
-			
-			
-		}
+	barplot(x$Freq, names.arg = strftime (as.Date(x$predHatchDate ), '%d-%b') , horiz = TRUE, 
+		cex.names = .9, width = 1, xlab = "No of nests", main = 'Predicted hatch date')
+
+
+	}
 		
 
 

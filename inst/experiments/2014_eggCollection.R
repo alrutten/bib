@@ -50,8 +50,8 @@
 	  d[which(is.na(d$col)), "col"] = "grey"
 	  d[which(is.na(d$firstColDate)), "n"] = 1
     
-    # 2014-Apr-23 15:43:00
-    d[ which(d$box != 261 & !is.na(d$col) ), 'col'] = "grey"
+    # 
+    d[ which(!is.na(d$col) ), 'col'] = "grey"
     
 	  
 	  d$n = sub('NA', '', paste0(d$nestType , d$n) )
@@ -66,7 +66,7 @@
 	      col = c("red", "blue", "grey"), bty = "n", title = "Egg collection:")
 	  }
 	  
-	  out$legend = L
+	  # out$legend = L
 	  
 	  if(returnData) return(d) else return(out)
 	  
